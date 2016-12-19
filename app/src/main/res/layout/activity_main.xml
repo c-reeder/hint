@@ -8,14 +8,17 @@
     tools:context="com.wordpress.simpledevelopments.password.MainActivity">
 
     <RelativeLayout
-        android:layout_width="0dp"
         android:id="@+id/topBar"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:background="@android:color/holo_green_dark"
         tools:alpha="1"
-        app:layout_constraintRight_toRightOf="parent"
         android:layout_height="55dp"
-        tools:layout_editor_absoluteY="0dp">
+        android:layout_width="0dp"
+        tools:layout_constraintTop_creator="1"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
@@ -38,12 +41,15 @@
 
     <RelativeLayout
         android:id="@+id/teamNameBar"
+        android:layout_height="50dp"
+        android:background="@android:color/holo_green_light"
         android:layout_width="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_height="50dp"
-        android:background="@android:color/holo_green_light">
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintLeft_creator="1">
 
         <TextView
             android:text="Team Awesome"
@@ -51,7 +57,48 @@
             android:layout_height="wrap_content"
             android:id="@+id/teamName"
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:layout_centerVertical="false"
+            android:layout_alignParentEnd="false"
             android:layout_centerInParent="true" />
     </RelativeLayout>
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/buttonRow"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:background="@color/colorAccent"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/teamNameBar"
+        android:layout_marginBottom="8dp">
+
+        <ImageButton
+            app:srcCompat="@android:drawable/checkbox_on_background"
+            android:id="@+id/successButton"
+            android:contentDescription="Click when Word is Guessed"
+            android:layout_height="50dp"
+            android:layout_marginStart="88dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            tools:layout_editor_absoluteY="407dp"
+            android:layout_weight="1"
+            android:layout_width="50dp" />
+
+        <ImageButton
+            app:srcCompat="@android:drawable/ic_delete"
+            android:id="@+id/failureButton"
+            android:layout_height="50dp"
+            android:layout_marginEnd="16dp"
+            app:layout_constraintRight_toRightOf="parent"
+            android:layout_marginStart="8dp"
+            app:layout_constraintLeft_toRightOf="@+id/successButton"
+            app:layout_constraintHorizontal_bias="0.46"
+            android:layout_width="50dp"
+            app:layout_constraintBottom_toTopOf="@+id/teamNameBar"
+            android:layout_marginBottom="8dp"
+            android:layout_weight="1" />
+    </LinearLayout>
 
 </android.support.constraint.ConstraintLayout>
