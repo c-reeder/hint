@@ -21,7 +21,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:text="Round #1"
+            android:text="Round #X"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/roundText"
@@ -32,7 +32,7 @@
             android:textSize="18sp" />
 
         <TextView
-            android:text="5:2"
+            android:text="X:X"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/scoreText"
@@ -40,7 +40,7 @@
             android:layout_centerInParent="true" />
 
         <TextView
-            android:text="9"
+            android:text="X"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/possPointsText"
@@ -52,7 +52,7 @@
     </RelativeLayout>
 
     <TextView
-        android:text="Scrumptious"
+        android:text="Word"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/wordText"
@@ -85,14 +85,16 @@
             app:srcCompat="@android:drawable/checkbox_on_background"
             android:id="@+id/successButton"
             android:layout_weight="1"
-            android:layout_width="50dp" />
+            android:layout_width="50dp"
+            android:onClick="guessMade" />
 
         <ImageButton
             android:layout_width="50dp"
             android:layout_height="50dp"
             app:srcCompat="@android:drawable/ic_delete"
             android:id="@+id/failureButton"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:onClick="guessMade" />
 
     </LinearLayout>
 
@@ -109,10 +111,10 @@
         tools:layout_constraintLeft_creator="1">
 
         <TextView
-            android:text="A"
+            android:text="X"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/partnerLetter"
+            android:id="@+id/partnerLetterText"
             android:textSize="26sp"
             android:layout_marginStart="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -120,14 +122,14 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:text="Team Awesome"
+            android:text="Team Name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/teamName"
             android:textSize="26sp"
             app:layout_constraintRight_toRightOf="parent"
             android:layout_marginStart="8dp"
-            app:layout_constraintLeft_toRightOf="@+id/partnerLetter"
+            app:layout_constraintLeft_toRightOf="@+id/partnerLetterText"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
     </android.support.constraint.ConstraintLayout>

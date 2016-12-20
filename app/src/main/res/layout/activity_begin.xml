@@ -32,14 +32,15 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:inputType="textNoSuggestions|textPersonName"
         android:ems="10"
         android:id="@+id/team1NameBox"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleView"
         app:layout_constraintLeft_toLeftOf="parent"
         android:imeOptions="flagNoFullscreen|flagNoExtractUi"
-        android:layout_marginTop="112dp" />
+        android:layout_marginTop="112dp"
+        android:text="Team Awesome" />
 
     <TextView
         android:text="Team 2"
@@ -53,7 +54,7 @@
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
+        android:inputType="textNoSuggestions|textPersonName"
         android:ems="10"
         android:id="@+id/team2NameBox"
         app:layout_constraintRight_toRightOf="parent"
@@ -61,7 +62,8 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintBottom_toTopOf="@+id/beginButton"
         android:layout_marginBottom="8dp"
-        app:layout_constraintVertical_bias="0.59" />
+        app:layout_constraintVertical_bias="0.58000004"
+        android:text="Team Tasty" />
 
     <Button
         android:text="Begin"

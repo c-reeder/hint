@@ -22,7 +22,6 @@ public class BeginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_begin);
-
     }
     @Override
     protected void onResume() {
@@ -31,6 +30,10 @@ public class BeginActivity extends AppCompatActivity {
     }
     public void begin(View view) {
         Intent intent = new Intent(this, TurnActivity.class);
+        EditText nameText1 = (EditText) findViewById(R.id.team1NameBox);
+        EditText nameText2 = (EditText) findViewById(R.id.team2NameBox);
+        intent.putExtra("teamName1", nameText1.getText().toString());
+        intent.putExtra("teamName2", nameText2.getText().toString());
         startActivity(intent);
     }
 }
