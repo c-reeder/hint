@@ -38,11 +38,11 @@ public class TurnActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_turn);
-        Intent intent = getIntent();
+        Intent parentIntent = getIntent();
 
         // Init Game Values
-        teamName1 = intent.getStringExtra("teamName1");
-        teamName2 = intent.getStringExtra("teamName2");
+        teamName1 = parentIntent.getStringExtra("teamName1");
+        teamName2 = parentIntent.getStringExtra("teamName2");
         currRound = 1;
         currPP = 10;
         currWord = "Magnificent";
@@ -106,8 +106,48 @@ public class TurnActivity extends AppCompatActivity {
         if (view.getId() == R.id.successButton) {
             Log.d(TAG, "Correct!");
 
+            // Score Addition Logic
+            if (!isTeam2)
+                currScore1 += currPP;
+            else
+                currScore2 += currPP;
+            currPP = 10;
+
+            // Next Turn Logic
+            //-------CHANGE WORD HERE----------
+            if (isPartnerB)
+                currRound++;
+            isPartnerB = !isPartnerB;
+            isTeam2 = false;
         } else if (view.getId() == R.id.failureButton) {
             Log.d(TAG, "Failure!");
+            currPP--;
+
+            // Next Turn Logic
+            if (currPP < 1) {
+                // if the word was not guessed AT ALL
+                //-------CHANGE WORD HERE----------
+                currPP = 10;
+                if (isPartnerB)
+                    currRound++;
+                isPartnerB = !isPartnerB;
+            } else {
+                isTeam2 = !isTeam2;
+            }
         }
+
+        // Check if end of game
+        if (currRound > 5) {
+            //Launch Winner Activity
+            Intent winnerIntent = new Intent(this, WinnerActivity.class);
+            if (currScore1 > currScore2)
+                winnerIntent.putExtra("winnerTeamName", teamName1);
+            else if (currScore2 > currScore1)
+                winnerIntent.putExtra("winnerTeamName", teamName2);
+            startActivity(winnerIntent);
+        }
+
+
+        updateDisplay();
     }
 }
