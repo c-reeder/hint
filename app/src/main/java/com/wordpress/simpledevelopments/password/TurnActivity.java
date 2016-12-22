@@ -1,12 +1,19 @@
 package com.wordpress.simpledevelopments.password;
 
+import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class TurnActivity extends AppCompatActivity {
 
@@ -64,6 +71,35 @@ public class TurnActivity extends AppCompatActivity {
         updateDisplay();
 
         Log.d(TAG, "Beginning Game!");
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnected()) {
+            JSONTask task = new JSONTask() {
+                @Override
+                protected void onPostExecute(String result) {
+                    try {
+                        JSONObject response = new JSONObject(result);
+                        if(response.getBoolean("success")) {
+                            JSONArray wordArray = response.getJSONArray("words");
+                            for (int i = 0; i < wordArray.length(); i++) {
+                                Log.v(TAG, "WORD: " + wordArray.getString(i));
+                            }
+                        } else {
+                            Log.d(TAG, "No Words Given!!!");
+                        }
+                    } catch (JSONException ex) {
+                        ex.printStackTrace();
+                    }
+                    //Log.d(TAG, "RESULT: " + result);
+                }
+            };
+
+            task.execute("https://www.thegamegal.com/wordgenerator/generator.php?game=2&category=6");
+        } else {
+            Log.e(TAG, "Not connected to network");
+        }
+
+
     }
     @Override
     protected void onResume() {
