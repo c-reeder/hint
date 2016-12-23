@@ -12,10 +12,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/progressBar"
-        app:layout_constraintBottom_toBottomOf="@+id/wordText"
-        app:layout_constraintRight_toRightOf="@+id/wordText"
-        app:layout_constraintTop_toTopOf="@+id/wordText"
-        app:layout_constraintLeft_toRightOf="@+id/wordText" />
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="@+id/pager"
+        app:layout_constraintLeft_toLeftOf="@+id/pager"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <RelativeLayout
         android:id="@+id/topBar"
@@ -23,12 +23,9 @@
         tools:alpha="1"
         android:layout_height="55dp"
         android:layout_width="0dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        app:layout_constraintRight_toRightOf="parent"
-        tools:layout_constraintLeft_creator="1"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
 
         <TextView
             android:layout_width="wrap_content"
@@ -36,9 +33,12 @@
             android:id="@+id/roundText"
             android:layout_centerInParent="false"
             android:layout_centerVertical="true"
+            android:textSize="18sp"
+            android:text="Round #X"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="20dp"
-            android:textSize="18sp" />
+            tools:layout_editor_absoluteY="0dp"
+            tools:layout_editor_absoluteX="0dp"
+            android:layout_marginLeft="20dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -51,28 +51,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/possPointsText"
-            android:layout_alignParentRight="true"
             android:layout_marginRight="20dp"
             android:layout_centerVertical="true"
-            android:textSize="18sp" />
+            android:textSize="18sp"
+            android:layout_alignParentRight="true"
+            android:text="10" />
 
     </RelativeLayout>
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/wordText"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-        android:layout_marginTop="177dp"
-        app:layout_constraintTop_toBottomOf="@+id/topBar"
-        app:layout_constraintBottom_toTopOf="@+id/teamNameBar"
-        android:layout_marginBottom="176dp"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        tools:layout_constraintBottom_creator="1"
-        tools:layout_constraintLeft_creator="1" />
 
     <LinearLayout
         android:orientation="horizontal"
@@ -106,7 +91,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:id="@+id/teamNameBar"
-        android:layout_height="50dp"
+        android:layout_height="55dp"
         android:background="@android:color/holo_green_light"
         android:layout_width="0dp"
         app:layout_constraintRight_toRightOf="parent"
@@ -136,6 +121,18 @@
             app:layout_constraintLeft_toRightOf="@+id/partnerLetterText"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent" />
+
     </android.support.constraint.ConstraintLayout>
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/pager"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintRight_toRightOf="@+id/buttonRow"
+        app:layout_constraintLeft_toLeftOf="@+id/buttonRow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="55dp"
+        android:layout_marginTop="55dp"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.constraint.ConstraintLayout>

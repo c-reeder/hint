@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,15 +34,15 @@ public class TurnActivity extends AppCompatActivity {
     private int currScore2;
 
     // Values Constant for the Entirety of one Game
+    private boolean inPlay;
     private String teamName1;
     private String teamName2;
-    private List<String> wordList;
+    private String[] wordList;
 
     // Components of the Display
     private TextView roundView;
     private TextView scoreView;
     private TextView ppView;
-    private TextView wordView;
     private TextView partnerLetterView;
     private TextView teamNameView;
 
@@ -56,7 +57,6 @@ public class TurnActivity extends AppCompatActivity {
         roundView = (TextView) findViewById(R.id.roundText);
         scoreView = (TextView) findViewById(R.id.scoreText);
         ppView = (TextView) findViewById(R.id.possPointsText);
-        wordView = (TextView) findViewById(R.id.wordText);
         partnerLetterView = (TextView) findViewById(R.id.partnerLetterText);
         teamNameView = (TextView) findViewById(R.id.teamName);
 
@@ -84,15 +84,18 @@ public class TurnActivity extends AppCompatActivity {
                 protected void onPostExecute(String result) {
                     try {
                         //Change later to statically sized array once server is updated
-                        wordList = new ArrayList<>();
                         JSONArray response = new JSONArray(result);
+                        wordList = new String[response.length()];
                         for (int i = 0; i < response.length(); i++) {
-                            Log.v(TAG, "WORD: " + response.getString(i));
-                            wordList.add(response.getString(i));
+                            //Log.v(TAG, "WORD: " + response.getString(i));
+                            wordList[i] = response.getString(i);
                         }
+                        Log.d(TAG, "Got " + wordList.length + " words!");
                         ProgressBar loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
                         loadingIcon.setVisibility(View.GONE);
+                        initWords();
                         updateDisplay();
+                        inPlay = true;
                         Log.d(TAG, "Beginning Game!");
                     } catch (JSONException ex) {
                         ex.printStackTrace();
@@ -109,6 +112,13 @@ public class TurnActivity extends AppCompatActivity {
 
 
     }
+    public void initWords() {
+        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager.setAdapter(new TextPagerAdapter(this, wordList));
+        Log.d(TAG, "Words Initialized!");
+    }
+
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -131,7 +141,6 @@ public class TurnActivity extends AppCompatActivity {
         roundView.setText("Round #" + currRound);
         scoreView.setText(currScore1 + ":" + currScore2);
         ppView.setText("" + currPP);
-        wordView.setText(wordList.get(currWordIndex));
         if(!isPartnerB)
             partnerLetterView.setText("A");
         else
@@ -147,6 +156,8 @@ public class TurnActivity extends AppCompatActivity {
      * @param view The button pressed to signal a guess has been made
      */
     public void guessMade(View view) {
+        if (!inPlay)
+            return;
         if (view.getId() == R.id.successButton) {
             Log.d(TAG, "Correct!");
 
@@ -159,6 +170,7 @@ public class TurnActivity extends AppCompatActivity {
 
             // Next Turn Logic
             //-------CHANGE WORD HERE----------
+            currWordIndex++;
             if (isPartnerB)
                 currRound++;
             isPartnerB = !isPartnerB;
@@ -171,6 +183,7 @@ public class TurnActivity extends AppCompatActivity {
             if (currPP < 1) {
                 // if the word was not guessed AT ALL
                 //-------CHANGE WORD HERE----------
+                currWordIndex++;
                 currPP = 10;
                 if (isPartnerB)
                     currRound++;
@@ -182,6 +195,7 @@ public class TurnActivity extends AppCompatActivity {
 
         // Check if end of game
         if (currRound > 5) {
+            inPlay = false;
             //Launch Winner Activity
             Intent winnerIntent = new Intent(this, WinnerActivity.class);
             if (currScore1 > currScore2)
