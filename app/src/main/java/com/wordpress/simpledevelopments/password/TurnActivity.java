@@ -9,11 +9,15 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class TurnActivity extends AppCompatActivity {
 
@@ -22,7 +26,7 @@ public class TurnActivity extends AppCompatActivity {
     // Ever-Changing "Current" Variables
     private int currRound;
     private int currPP;
-    private String currWord;
+    private int currWordIndex;
     private boolean isPartnerB;
     private boolean isTeam2;
     private int currScore1;
@@ -31,6 +35,7 @@ public class TurnActivity extends AppCompatActivity {
     // Values Constant for the Entirety of one Game
     private String teamName1;
     private String teamName2;
+    private List<String> wordList;
 
     // Components of the Display
     private TextView roundView;
@@ -47,18 +52,6 @@ public class TurnActivity extends AppCompatActivity {
         setContentView(R.layout.activity_turn);
         Intent parentIntent = getIntent();
 
-        // Init Game Values
-        teamName1 = parentIntent.getStringExtra("teamName1");
-        teamName2 = parentIntent.getStringExtra("teamName2");
-        currRound = 1;
-        currPP = 10;
-        currWord = "Magnificent";
-        isPartnerB = false;
-        isTeam2 = false;
-        currScore1 = 0;
-        currScore2 = 0;
-
-
         // Setup Display
         roundView = (TextView) findViewById(R.id.roundText);
         scoreView = (TextView) findViewById(R.id.scoreText);
@@ -67,10 +60,22 @@ public class TurnActivity extends AppCompatActivity {
         partnerLetterView = (TextView) findViewById(R.id.partnerLetterText);
         teamNameView = (TextView) findViewById(R.id.teamName);
 
-        // Init Display Values
-        updateDisplay();
+        // Init Game Values
+        teamName1 = parentIntent.getStringExtra("teamName1");
+        teamName2 = parentIntent.getStringExtra("teamName2");
+        currRound = 1;
+        currPP = 10;
+        //currWord = "Magnificent";
+        currWordIndex = 0;
+        isPartnerB = false;
+        isTeam2 = false;
+        currScore1 = 0;
+        currScore2 = 0;
 
-        Log.d(TAG, "Beginning Game!");
+        // Init Display Values
+        //updateDisplay();
+
+        Log.d(TAG, "Getting Words!");
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         if (netInfo != null && netInfo.isConnected()) {
@@ -78,15 +83,17 @@ public class TurnActivity extends AppCompatActivity {
                 @Override
                 protected void onPostExecute(String result) {
                     try {
-                        JSONObject response = new JSONObject(result);
-                        if(response.getBoolean("success")) {
-                            JSONArray wordArray = response.getJSONArray("words");
-                            for (int i = 0; i < wordArray.length(); i++) {
-                                Log.v(TAG, "WORD: " + wordArray.getString(i));
-                            }
-                        } else {
-                            Log.d(TAG, "No Words Given!!!");
+                        //Change later to statically sized array once server is updated
+                        wordList = new ArrayList<>();
+                        JSONArray response = new JSONArray(result);
+                        for (int i = 0; i < response.length(); i++) {
+                            Log.v(TAG, "WORD: " + response.getString(i));
+                            wordList.add(response.getString(i));
                         }
+                        ProgressBar loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
+                        loadingIcon.setVisibility(View.GONE);
+                        updateDisplay();
+                        Log.d(TAG, "Beginning Game!");
                     } catch (JSONException ex) {
                         ex.printStackTrace();
                     }
@@ -94,7 +101,8 @@ public class TurnActivity extends AppCompatActivity {
                 }
             };
 
-            task.execute("https://www.thegamegal.com/wordgenerator/generator.php?game=2&category=6");
+            //task.execute("https://www.thegamegal.com/wordgenerator/generator.php?game=2&category=6");
+            task.execute("https://wordvault.herokuapp.com/passwords");
         } else {
             Log.e(TAG, "Not connected to network");
         }
@@ -123,7 +131,7 @@ public class TurnActivity extends AppCompatActivity {
         roundView.setText("Round #" + currRound);
         scoreView.setText(currScore1 + ":" + currScore2);
         ppView.setText("" + currPP);
-        wordView.setText(currWord);
+        wordView.setText(wordList.get(currWordIndex));
         if(!isPartnerB)
             partnerLetterView.setText("A");
         else

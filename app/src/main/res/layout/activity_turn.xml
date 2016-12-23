@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     tools:context="com.wordpress.simpledevelopments.password.TurnActivity">
 
+    <ProgressBar
+        style="?android:attr/progressBarStyleLarge"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        app:layout_constraintBottom_toBottomOf="@+id/wordText"
+        app:layout_constraintRight_toRightOf="@+id/wordText"
+        app:layout_constraintTop_toTopOf="@+id/wordText"
+        app:layout_constraintLeft_toRightOf="@+id/wordText" />
+
     <RelativeLayout
         android:id="@+id/topBar"
         android:background="@android:color/holo_green_dark"
@@ -21,7 +31,6 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:text="Round #X"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/roundText"
@@ -32,7 +41,6 @@
             android:textSize="18sp" />
 
         <TextView
-            android:text="X:X"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/scoreText"
@@ -40,7 +48,6 @@
             android:layout_centerInParent="true" />
 
         <TextView
-            android:text="X"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/possPointsText"
@@ -52,7 +59,6 @@
     </RelativeLayout>
 
     <TextView
-        android:text="Word"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/wordText"
@@ -111,7 +117,6 @@
         tools:layout_constraintLeft_creator="1">
 
         <TextView
-            android:text="X"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/partnerLetterText"
@@ -122,7 +127,6 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
-            android:text="Team Name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/teamName"
