@@ -44,10 +44,6 @@ public class TextPagerAdapter extends PagerAdapter {
         container.removeView((View) object);
     }
 
-    public void removeView(int index) {
-        textList.remove(index);
-//        notifyDataSetChanged();
-    }
 
     @Override
     public int getItemPosition(Object object) {

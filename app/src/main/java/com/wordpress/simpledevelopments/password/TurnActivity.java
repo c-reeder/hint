@@ -131,10 +131,6 @@ public class TurnActivity extends AppCompatActivity {
     }
     private void onSwiped(int newIndex) {
         Log.d(TAG, "onSwiped, newIndex: " + newIndex);
-        /*adapter.removeView(newIndex - 1);
-        adapter.notifyDataSetChanged();
-        adapter.setPrimaryItem(viewPager, 3, viewPager.getChildAt(3));*/
-        //adapter.destroyItem(viewPager,newIndex - 1,viewPager.getChildAt(viewPager.getCurrentItem() - 1));
 
     }
 
@@ -189,7 +185,7 @@ public class TurnActivity extends AppCompatActivity {
 
             // Next Turn Logic
             //-------CHANGE WORD HERE----------
-            currWordIndex++;
+            nextWord();
             if (isPartnerB)
                 currRound++;
             isPartnerB = !isPartnerB;
@@ -202,7 +198,7 @@ public class TurnActivity extends AppCompatActivity {
             if (currPP < 1) {
                 // if the word was not guessed AT ALL
                 //-------CHANGE WORD HERE----------
-                currWordIndex++;
+                nextWord();
                 currPP = 10;
                 if (isPartnerB)
                     currRound++;
@@ -226,5 +222,10 @@ public class TurnActivity extends AppCompatActivity {
 
 
         updateDisplay();
+    }
+    private void nextWord() {
+        currWordIndex++;
+        viewPager.setCurrentItem(currWordIndex, true);
+
     }
 }
