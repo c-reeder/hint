@@ -27,7 +27,6 @@ public class TurnActivity extends AppCompatActivity {
     // Ever-Changing "Current" Variables
     private int currRound;
     private int currPP;
-    private int currWordIndex;
     private boolean isPartnerB;
     private boolean isTeam2;
     private int currScore1;
@@ -70,7 +69,6 @@ public class TurnActivity extends AppCompatActivity {
         currRound = 1;
         currPP = 10;
         //currWord = "Magnificent";
-        currWordIndex = 0;
         isPartnerB = false;
         isTeam2 = false;
         currScore1 = 0;
@@ -130,8 +128,8 @@ public class TurnActivity extends AppCompatActivity {
         Log.d(TAG, "Words Initialized!");
     }
     private void onSwiped(int newIndex) {
-        Log.d(TAG, "onSwiped, newIndex: " + newIndex);
-
+        //Log.d(TAG, "onSwiped, newIndex: " + newIndex);
+        //Maybe Do Something with this callback
     }
 
     @Override
@@ -224,8 +222,6 @@ public class TurnActivity extends AppCompatActivity {
         updateDisplay();
     }
     private void nextWord() {
-        currWordIndex++;
-        viewPager.setCurrentItem(currWordIndex, true);
-
+        viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
     }
 }
