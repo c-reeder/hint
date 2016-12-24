@@ -9,6 +9,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.List;
+
 /**
  * Created by connor on 12/23/16.
  */
@@ -16,14 +18,14 @@ import android.widget.TextView;
 public class TextPagerAdapter extends PagerAdapter {
 
     private Context context;
-    private String[] textList;
+    private List<String> textList;
     private static final String TAG = "TextPagerAdapter";
 
 
-    public TextPagerAdapter(Context context, String[] textList) {
+    public TextPagerAdapter(Context context, List<String> textList) {
         this.context = context;
         this.textList = textList;
-        Log.d(TAG, "Constructing TextPageAdaptor with textList size: " + textList.length);
+        Log.d(TAG, "Constructing TextPageAdaptor with textList size: " + textList.size());
     }
 
     @Override
@@ -31,8 +33,8 @@ public class TextPagerAdapter extends PagerAdapter {
         LayoutInflater inflater = LayoutInflater.from(context);
         ViewGroup newbie = (ViewGroup) inflater.inflate(R.layout.single_text, container, false);
         TextView singleTextView = (TextView) newbie.findViewById(R.id.singleTextView);
-        singleTextView.setText(textList[position]);
-        Log.d(TAG, "Instantiating Item with text: " + textList[position]);
+        singleTextView.setText(textList.get(position));
+        Log.d(TAG, "Instantiating Item with text: " + textList.get(position));
         container.addView(newbie);
         return newbie;
     }
@@ -42,10 +44,23 @@ public class TextPagerAdapter extends PagerAdapter {
         container.removeView((View) object);
     }
 
+    public void removeView(int index) {
+        textList.remove(index);
+//        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        if (textList.contains((View)object)) {
+            return textList.indexOf((View)object);
+        } else {
+            return POSITION_NONE;
+        }
+    }
 
     @Override
     public int getCount() {
-        return textList.length;
+        return textList.size();
     }
 
     @Override

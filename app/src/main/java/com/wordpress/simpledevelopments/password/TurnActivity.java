@@ -37,7 +37,7 @@ public class TurnActivity extends AppCompatActivity {
     private boolean inPlay;
     private String teamName1;
     private String teamName2;
-    private String[] wordList;
+    private List<String> wordList;
 
     // Components of the Display
     private TextView roundView;
@@ -45,6 +45,9 @@ public class TurnActivity extends AppCompatActivity {
     private TextView ppView;
     private TextView partnerLetterView;
     private TextView teamNameView;
+    ViewPager viewPager;
+    TextPagerAdapter adapter;
+
 
 
     @Override
@@ -59,6 +62,7 @@ public class TurnActivity extends AppCompatActivity {
         ppView = (TextView) findViewById(R.id.possPointsText);
         partnerLetterView = (TextView) findViewById(R.id.partnerLetterText);
         teamNameView = (TextView) findViewById(R.id.teamName);
+        viewPager = (ViewPager) findViewById(R.id.pager);
 
         // Init Game Values
         teamName1 = parentIntent.getStringExtra("teamName1");
@@ -84,13 +88,13 @@ public class TurnActivity extends AppCompatActivity {
                 protected void onPostExecute(String result) {
                     try {
                         //Change later to statically sized array once server is updated
+                        wordList = new ArrayList<>();
                         JSONArray response = new JSONArray(result);
-                        wordList = new String[response.length()];
                         for (int i = 0; i < response.length(); i++) {
                             //Log.v(TAG, "WORD: " + response.getString(i));
-                            wordList[i] = response.getString(i);
+                            wordList.add(response.getString(i));
                         }
-                        Log.d(TAG, "Got " + wordList.length + " words!");
+                        Log.d(TAG, "Got " + wordList.size() + " words!");
                         ProgressBar loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
                         loadingIcon.setVisibility(View.GONE);
                         initWords();
@@ -113,11 +117,26 @@ public class TurnActivity extends AppCompatActivity {
 
     }
     public void initWords() {
-        ViewPager viewPager = (ViewPager) findViewById(R.id.pager);
-        viewPager.setAdapter(new TextPagerAdapter(this, wordList));
+        adapter = new TextPagerAdapter(this, wordList);
+        viewPager.setAdapter(adapter);
+        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                if (state == ViewPager.SCROLL_STATE_IDLE) {
+                    onSwiped(viewPager.getCurrentItem());
+                }
+            }
+        });
         Log.d(TAG, "Words Initialized!");
     }
+    private void onSwiped(int newIndex) {
+        Log.d(TAG, "onSwiped, newIndex: " + newIndex);
+        /*adapter.removeView(newIndex - 1);
+        adapter.notifyDataSetChanged();
+        adapter.setPrimaryItem(viewPager, 3, viewPager.getChildAt(3));*/
+        //adapter.destroyItem(viewPager,newIndex - 1,viewPager.getChildAt(viewPager.getCurrentItem() - 1));
 
+    }
 
     @Override
     protected void onResume() {
