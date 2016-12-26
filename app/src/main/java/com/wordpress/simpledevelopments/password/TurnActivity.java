@@ -20,7 +20,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TurnActivity extends AppCompatActivity {
+public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwypeController {
 
     private static final String TAG = "TurnActivity";
 
@@ -44,7 +44,7 @@ public class TurnActivity extends AppCompatActivity {
     private TextView ppView;
     private TextView partnerLetterView;
     private TextView teamNameView;
-    ViewPager viewPager;
+    OneDirectionViewPager viewPager;
     TextPagerAdapter adapter;
 
 
@@ -61,7 +61,8 @@ public class TurnActivity extends AppCompatActivity {
         ppView = (TextView) findViewById(R.id.possPointsText);
         partnerLetterView = (TextView) findViewById(R.id.partnerLetterText);
         teamNameView = (TextView) findViewById(R.id.teamName);
-        viewPager = (ViewPager) findViewById(R.id.pager);
+        viewPager = (OneDirectionViewPager) findViewById(R.id.pager);
+        viewPager.setSwypeController(this);
 
         // Init Game Values
         teamName1 = parentIntent.getStringExtra("teamName1");
@@ -223,5 +224,10 @@ public class TurnActivity extends AppCompatActivity {
     }
     private void nextWord() {
         viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
+    }
+
+    @Override
+    public boolean canSwype() {
+        return currPP == 10;
     }
 }

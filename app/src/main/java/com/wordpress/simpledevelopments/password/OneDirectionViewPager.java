@@ -18,8 +18,8 @@ public class OneDirectionViewPager extends ViewPager {
     private static final String TAG = "OneDirectionViewPager";
 
     private float oldXVal;
-
     private GestureDetector gestureDetector;
+    private SwypeController swypeController;
 
     public OneDirectionViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -30,17 +30,26 @@ public class OneDirectionViewPager extends ViewPager {
                if (delta < 0) {
                    //Log.d(TAG, "Slide!!!");
                    //Flip to Next Word
-                   setCurrentItem(getCurrentItem() + 1, true);
+                   if (swypeController.canSwype())
+                       setCurrentItem(getCurrentItem() + 1, true);
+                   else
+                       Log.d(TAG, "Cannot skip word anymore!!!");
                }
                return false;
            }
         });
     }
-
+    public void setSwypeController(SwypeController swypeController) {
+        this.swypeController = swypeController;
+    }
 
     @Override
     public boolean onTouchEvent (MotionEvent event) {
         gestureDetector.onTouchEvent(event);
         return true;
+    }
+
+    public interface SwypeController {
+        public boolean canSwype ();
     }
 }
