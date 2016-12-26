@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -241,10 +242,14 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         if (isPartnerB) {
             boolean canSkip =  (currPP == 10) && currSkipCountB < 5;
             Log.d(TAG, "B canSwipe: " + canSkip);
+            if (!canSkip)
+                Toast.makeText(this,"No Skips left!",Toast.LENGTH_SHORT).show();
             return canSkip;
         } else {
             boolean canSkip = (currPP == 10) && currSkipCountA < 5;
             Log.d(TAG, "A canSwipe: " + canSkip);
+            if(!canSkip)
+                Toast.makeText(this,"No Skips left!",Toast.LENGTH_SHORT).show();
             return canSkip;
         }
     }
