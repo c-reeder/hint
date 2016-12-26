@@ -15,12 +15,11 @@ import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwypeController {
+public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController {
 
     private static final String TAG = "TurnActivity";
 
@@ -31,6 +30,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private boolean isTeam2;
     private int currScore1;
     private int currScore2;
+    private int currSkipCountA;
+    private int currSkipCountB;
 
     // Values Constant for the Entirety of one Game
     private boolean inPlay;
@@ -62,7 +63,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         partnerLetterView = (TextView) findViewById(R.id.partnerLetterText);
         teamNameView = (TextView) findViewById(R.id.teamName);
         viewPager = (OneDirectionViewPager) findViewById(R.id.pager);
-        viewPager.setSwypeController(this);
+        viewPager.setSwipeController(this);
 
         // Init Game Values
         teamName1 = parentIntent.getStringExtra("teamName1");
@@ -74,6 +75,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         isTeam2 = false;
         currScore1 = 0;
         currScore2 = 0;
+        currSkipCountA = 0;
+        currSkipCountB = 0;
 
         // Init Display Values
         //updateDisplay();
@@ -118,19 +121,26 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     public void initWords() {
         adapter = new TextPagerAdapter(this, wordList);
         viewPager.setAdapter(adapter);
-        viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
+        /*viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
             @Override
             public void onPageScrollStateChanged(int state) {
                 if (state == ViewPager.SCROLL_STATE_IDLE) {
                     onSwiped(viewPager.getCurrentItem());
                 }
             }
-        });
+        });*/
         Log.d(TAG, "Words Initialized!");
     }
-    private void onSwiped(int newIndex) {
-        //Log.d(TAG, "onSwiped, newIndex: " + newIndex);
-        //Maybe Do Something with this callback
+    @Override
+    public void onSwiped(int newIndex) {
+        Log.d(TAG, "onSwiped, newIndex: " + newIndex);
+        if (isPartnerB) {
+            currSkipCountB++;
+            Log.d(TAG, "Partner B swiped, new SkipCount is: " + currSkipCountB);
+        } else {
+            currSkipCountA++;
+            Log.d(TAG, "Partner A swiped, new SkipCount is: " + currSkipCountA);
+        }
     }
 
     @Override
@@ -227,7 +237,15 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     }
 
     @Override
-    public boolean canSwype() {
-        return currPP == 10;
+    public boolean canSwipe() {
+        if (isPartnerB) {
+            boolean canSkip =  (currPP == 10) && currSkipCountB < 5;
+            Log.d(TAG, "B canSwipe: " + canSkip);
+            return canSkip;
+        } else {
+            boolean canSkip = (currPP == 10) && currSkipCountA < 5;
+            Log.d(TAG, "A canSwipe: " + canSkip);
+            return canSkip;
+        }
     }
 }

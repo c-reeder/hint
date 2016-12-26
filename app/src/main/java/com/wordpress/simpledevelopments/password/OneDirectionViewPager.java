@@ -19,7 +19,7 @@ public class OneDirectionViewPager extends ViewPager {
 
     private float oldXVal;
     private GestureDetector gestureDetector;
-    private SwypeController swypeController;
+    private SwipeController swipeController;
 
     public OneDirectionViewPager(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -30,17 +30,18 @@ public class OneDirectionViewPager extends ViewPager {
                if (delta < 0) {
                    //Log.d(TAG, "Slide!!!");
                    //Flip to Next Word
-                   if (swypeController.canSwype())
+                   if (swipeController.canSwipe()) {
                        setCurrentItem(getCurrentItem() + 1, true);
-                   else
+                        swipeController.onSwiped(getCurrentItem() + 1);
+                   } else
                        Log.d(TAG, "Cannot skip word anymore!!!");
                }
                return false;
            }
         });
     }
-    public void setSwypeController(SwypeController swypeController) {
-        this.swypeController = swypeController;
+    public void setSwipeController(SwipeController swipeController) {
+        this.swipeController = swipeController;
     }
 
     @Override
@@ -49,7 +50,8 @@ public class OneDirectionViewPager extends ViewPager {
         return true;
     }
 
-    public interface SwypeController {
-        public boolean canSwype ();
+    public interface SwipeController {
+        public boolean canSwipe();
+        public void onSwiped(int newIndex);
     }
 }
