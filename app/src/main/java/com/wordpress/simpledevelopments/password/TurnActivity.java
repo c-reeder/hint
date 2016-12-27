@@ -1,13 +1,18 @@
 package com.wordpress.simpledevelopments.password;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.GestureDetector;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
@@ -16,11 +21,12 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController {
+public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener {
 
     private static final String TAG = "TurnActivity";
 
@@ -33,6 +39,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private int currScore2;
     private int currSkipCountA;
     private int currSkipCountB;
+    private boolean wordTransition;
 
     // Values Constant for the Entirety of one Game
     private boolean inPlay;
@@ -48,6 +55,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private TextView teamNameView;
     OneDirectionViewPager viewPager;
     TextPagerAdapter adapter;
+    private GestureDetector gestureDetector;
 
 
 
@@ -78,6 +86,24 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         currScore2 = 0;
         currSkipCountA = 0;
         currSkipCountB = 0;
+        wordTransition = false;
+        gestureDetector = new GestureDetector(this,new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapConfirmed(MotionEvent event) {
+                Log.d(TAG, "onSingleTapConfirmed");
+                if (wordTransition) {
+                    Log.d(TAG, "wordTransition");
+                    nextWord();
+                    wordTransition = false;
+                    return true;
+                } else {
+                    Log.d(TAG, "Not wordTransition");
+                    return false;
+                }
+            }
+        });
+        viewPager.setOnTouchListener(this);
+
 
         // Init Display Values
         //updateDisplay();
@@ -119,22 +145,17 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
 
     }
+    /**
+     * Initialize the Word Viewpager (for swiping/skipping through words
+     */
     public void initWords() {
         adapter = new TextPagerAdapter(this, wordList);
         viewPager.setAdapter(adapter);
-        /*viewPager.addOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
-            @Override
-            public void onPageScrollStateChanged(int state) {
-                if (state == ViewPager.SCROLL_STATE_IDLE) {
-                    onSwiped(viewPager.getCurrentItem());
-                }
-            }
-        });*/
-        Log.d(TAG, "Words Initialized!");
+        Log.d(TAG, "Words Initialized! " + viewPager.getCurrentItem());
     }
     @Override
     public void onSwiped(int newIndex) {
-        Log.d(TAG, "onSwiped, newIndex: " + newIndex);
+        Log.d(TAG, "onSwiped, newIndex: " + newIndex + ", " + viewPager.getCurrentItem());
         if (isPartnerB) {
             currSkipCountB++;
             Log.d(TAG, "Partner B swiped, new SkipCount is: " + currSkipCountB);
@@ -195,7 +216,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
             // Next Turn Logic
             //-------CHANGE WORD HERE----------
-            nextWord();
+            transitionToNextWord(true);
+
             if (isPartnerB)
                 currRound++;
             isPartnerB = !isPartnerB;
@@ -208,7 +230,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             if (currPP < 1) {
                 // if the word was not guessed AT ALL
                 //-------CHANGE WORD HERE----------
-                nextWord();
+                transitionToNextWord(false);
                 currPP = 10;
                 if (isPartnerB)
                     currRound++;
@@ -233,12 +255,29 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
         updateDisplay();
     }
+
+    private void transitionToNextWord(boolean success) {
+        View currentView = adapter.getCurrentView();
+        TextView textView = (TextView) currentView.findViewById(R.id.singleTextView);
+        Log.d(TAG, "Word Complete: " + viewPager.getCurrentItem() + ", " + textView.getText().toString());
+        if (success)
+            currentView.setBackgroundColor(Color.GREEN);
+        else
+            currentView.setBackgroundColor(Color.RED);
+        wordTransition = true;
+
+    }
+
     private void nextWord() {
         viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
     }
 
     @Override
     public boolean canSwipe() {
+        Log.d(TAG, "canSwipe: " + wordTransition);
+        if (wordTransition) {
+            return false;
+        }
         if (isPartnerB) {
             boolean canSkip =  (currPP == 10) && currSkipCountB < 5;
             Log.d(TAG, "B canSwipe: " + canSkip);
@@ -252,5 +291,30 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 Toast.makeText(this,"No Skips left!",Toast.LENGTH_SHORT).show();
             return canSkip;
         }
+    }
+    private void successDialog() {
+        AlertDialog.Builder aDBuilder = new AlertDialog.Builder(this);
+        aDBuilder.setMessage("This is my message!");
+        aDBuilder.setPositiveButton("yes",
+            new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface arg0, int arg1) {
+                        Toast.makeText(getApplicationContext(),"You clicked yes button",Toast.LENGTH_LONG).show();
+                        }
+            });
+        aDBuilder.setNegativeButton("No",new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Toast.makeText(getApplicationContext(),"You clicked no button",Toast.LENGTH_LONG).show();
+                }
+            });
+        AlertDialog alertDialog = aDBuilder.create();
+        alertDialog.show();
+    }
+
+    @Override
+    public boolean onTouch(View view, MotionEvent motionEvent) {
+        gestureDetector.onTouchEvent(motionEvent);
+        return false;
     }
 }

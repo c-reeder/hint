@@ -32,9 +32,9 @@ public class OneDirectionViewPager extends ViewPager {
                    //Flip to Next Word
                    if (swipeController.canSwipe()) {
                        setCurrentItem(getCurrentItem() + 1, true);
-                        swipeController.onSwiped(getCurrentItem() + 1);
+                        swipeController.onSwiped(getCurrentItem());
                    } else
-                       Log.d(TAG, "Cannot skip word anymore!!!");
+                       Log.d(TAG, "Cannot swipe!!!");
                }
                return false;
            }
@@ -50,8 +50,20 @@ public class OneDirectionViewPager extends ViewPager {
         return true;
     }
 
+    /**
+     * Interface definining the interaction between a OneDirectionViewPager and its containing Activity or Fragment
+     */
     public interface SwipeController {
+        /**
+         * Determines whether swiping is currently allowed on this OneDirectionalViewPager
+         * @return whether or not swiping is allowed
+         */
         public boolean canSwipe();
+
+        /**
+         * Callback for when this OneDirectionViewPager has been swiped
+         * @param newIndex the index of the OneDirectionViewPager after being swiped.
+         */
         public void onSwiped(int newIndex);
     }
 }

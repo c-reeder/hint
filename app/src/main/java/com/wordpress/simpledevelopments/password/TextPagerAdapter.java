@@ -20,6 +20,7 @@ public class TextPagerAdapter extends PagerAdapter {
     private Context context;
     private List<String> textList;
     private static final String TAG = "TextPagerAdapter";
+    private ViewGroup currentView;
 
 
     public TextPagerAdapter(Context context, List<String> textList) {
@@ -62,5 +63,15 @@ public class TextPagerAdapter extends PagerAdapter {
     @Override
     public boolean isViewFromObject(View view, Object object) {
         return view == object;
+    }
+
+    @Override
+    public void setPrimaryItem(ViewGroup container, int position, Object object) {
+        Log.d(TAG, "setPrimaryItem " + position);
+        currentView = (ViewGroup) object;
+        super.setPrimaryItem(container,position,object);
+    }
+    public ViewGroup getCurrentView() {
+        return currentView;
     }
 }
