@@ -202,7 +202,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      * @param view The button pressed to signal a guess has been made
      */
     public void guessMade(View view) {
-        if (!inPlay)
+        if (wordTransition || !inPlay)
             return;
         if (view.getId() == R.id.successButton) {
             Log.d(TAG, "Correct!");
