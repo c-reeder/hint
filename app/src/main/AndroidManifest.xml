@@ -22,7 +22,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".WinnerActivity"></activity>
+        <activity android:name=".WinnerActivity"
+            android:exported="true"></activity>
     </application>
 
 </manifest>
