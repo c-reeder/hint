@@ -114,14 +114,17 @@ public class DiagonalDoubleTextView extends View {
                 case TEXT_ALIGNMENT_CENTER:
                     //do main thing here using origX and origY
                     //also make sure to start using origX and origY in the onDraw body
+                    origX = (viewWidth - realWidth) / 2;
                     break;
                 case TEXT_ALIGNMENT_VIEW_START:
                 case TEXT_ALIGNMENT_TEXT_START:
                     //left align
+                    origX = 0;
                     break;
                 case TEXT_ALIGNMENT_TEXT_END:
                 case TEXT_ALIGNMENT_VIEW_END:
                     //right align
+                    origX = viewWidth - realWidth;
                     break;
             }
         }
@@ -142,25 +145,25 @@ public class DiagonalDoubleTextView extends View {
 //        Log.d(TAG, "textWidth: " + textWidth + ", textHeight: " + textHeight);
         paint.setTextAlign(Paint.Align.LEFT);
         paint.setStyle(Paint.Style.STROKE);
-        canvas.drawRect(0,0,
-                (.75f * textWidth) + 2 * textWidth,
-                (.75f * textHeight) + 2 * textHeight,
+        canvas.drawRect(origX,origY,
+                origX + (.75f * textWidth) + 2 * textWidth,
+                origY + (.75f * textHeight) + 2 * textHeight,
                 paint);
         paint.setStyle(Paint.Style.FILL);
         paint.setAntiAlias(true);
         canvas.drawText(text1,
-                (.25f * textWidth),
-                (.25f * textHeight) - metrics.top,
+                origX + (.25f * textWidth),
+                origY + (.25f * textHeight) - metrics.top,
                 paint);
         canvas.drawText(text2,
-                (.50f * textWidth) + textWidth,
-                (.50f * textHeight) + textHeight - metrics.top,
+                origX + (.50f * textWidth) + textWidth,
+                origY + (.50f * textHeight) + textHeight - metrics.top,
                 paint);
         paint.setStrokeWidth(2);
-        canvas.drawLine(0,
-                (.75f * textHeight) + 2 * textHeight,
-                (.75f * textWidth) + 2 * textWidth,
-                0,
+        canvas.drawLine(origX,
+                origY + (.75f * textHeight) + 2 * textHeight,
+                origX + (.75f * textWidth) + 2 * textWidth,
+                origY,
                 paint);
 
 
