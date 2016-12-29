@@ -30,6 +30,10 @@ public class DiagonalDoubleTextView extends View {
     float textHeight;
     float viewWidth;
     float viewHeight;
+    float realWidth;
+    float realHeight;
+    float origX;
+    float origY;
     Paint.FontMetrics metrics;
 
     public DiagonalDoubleTextView(Context context, AttributeSet attrs) {
@@ -78,22 +82,54 @@ public class DiagonalDoubleTextView extends View {
         textWidth = paint.measureText(text1) > paint.measureText(text2) ? paint.measureText(text1) : paint.measureText(text2);
         float desiredWidth = (.75f * textWidth) + (2 * textWidth);
         float desiredHeight = (.75f * textHeight) + (2 * textHeight);
+        realWidth = desiredWidth;
+        realHeight = desiredHeight;
 
 
-        if (widthMode == MeasureSpec.UNSPECIFIED)
+        if (widthMode == MeasureSpec.UNSPECIFIED) {
+            Log.d(TAG, "Width UNSPECIFIED");
             viewWidth = desiredWidth;
-        else if (widthMode == MeasureSpec.EXACTLY)
+        } else if (widthMode == MeasureSpec.EXACTLY) {
+            Log.d(TAG, "Width EXACTLY");
             viewWidth = parentWidth;
-        else if (widthMode == MeasureSpec.AT_MOST)
+        } else if (widthMode == MeasureSpec.AT_MOST) {
+            Log.d(TAG, "Width AT_MOST");
             viewWidth = desiredWidth < parentWidth ? desiredWidth : parentWidth;
+        }
 
-        if (heightMode == MeasureSpec.UNSPECIFIED)
+        if (heightMode == MeasureSpec.UNSPECIFIED) {
+            Log.d(TAG, "Height UNSPECIFIED");
             viewHeight = desiredHeight;
-        else if (heightMode == MeasureSpec.EXACTLY)
+        } else if (heightMode == MeasureSpec.EXACTLY) {
+            Log.d(TAG, "Height EXACTLY");
             viewHeight = parentHeight;
-        else if (heightMode == MeasureSpec.AT_MOST)
-            viewHeight = desiredHeight < parentHeight ? desiredHeight :parentHeight;
+        } else if (heightMode == MeasureSpec.AT_MOST) {
+            Log.d(TAG, "Height AT_MOST");
+            viewHeight = desiredHeight < parentHeight ? desiredHeight : parentHeight;
+        }
 
+        //Do logic to center item if the width is larger than the "real" width
+        if (viewWidth > realWidth) {
+            switch (getTextAlignment()) {
+                case TEXT_ALIGNMENT_CENTER:
+                    //do main thing here using origX and origY
+                    //also make sure to start using origX and origY in the onDraw body
+                    break;
+                case TEXT_ALIGNMENT_VIEW_START:
+                case TEXT_ALIGNMENT_TEXT_START:
+                    //left align
+                    break;
+                case TEXT_ALIGNMENT_TEXT_END:
+                case TEXT_ALIGNMENT_VIEW_END:
+                    //right align
+                    break;
+            }
+        }
+
+        //Do logic to center item if the height is larger than the "real" height
+        if (viewHeight > realHeight) {
+            //is this even necessary since this should be only horizontal??
+        }
 
         Log.d(TAG, "setMeasuredDimension: " + (int)viewWidth + ", " + (int)viewHeight);
         setMeasuredDimension((int)viewWidth,(int)viewHeight);
@@ -101,18 +137,10 @@ public class DiagonalDoubleTextView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.d(TAG, "onDraw: " + canvas.getWidth() + ", " + canvas.getHeight());
-        //canvas.drawLine(0,canvas.getHeight(),canvas.getWidth(),0,linePaint);
+//        Log.d(TAG, "onDraw: " + canvas.getWidth() + ", " + canvas.getHeight());
 
-        //canvas.drawRect(0,0,canvas.getWidth(),canvas.getHeight(), linePaint);
-        //
+//        Log.d(TAG, "textWidth: " + textWidth + ", textHeight: " + textHeight);
         paint.setTextAlign(Paint.Align.LEFT);
-        //Log.d(TAG, "onDraw measureText(My Text): " + linePaint.measureText(text1));
-
-
-
-        Log.d(TAG, "textWidth: " + textWidth + ", textHeight: " + textHeight);
-
         paint.setStyle(Paint.Style.STROKE);
         canvas.drawRect(0,0,
                 (.75f * textWidth) + 2 * textWidth,
@@ -135,13 +163,6 @@ public class DiagonalDoubleTextView extends View {
                 0,
                 paint);
 
-
-
-        Log.d(TAG, "ascent: " + metrics.ascent);
-        Log.d(TAG, "bottom: " + metrics.bottom);
-        Log.d(TAG, "descent: " + metrics.descent);
-        Log.d(TAG, "leading: " + metrics.leading);
-        Log.d(TAG, "top: " + metrics.top);
 
     }
 

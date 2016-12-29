@@ -90,19 +90,19 @@
                 android:textAlignment="center"
                 android:layout_gravity="center_vertical" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <TextView
+                android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:textAlignment="center"
-                app:textSize="@dimen/diagonalTextSize"/>
+                android:layout_gravity="center_vertical" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <TextView
+                android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:textAlignment="center"
-                app:textSize="@dimen/diagonalTextSize"/>
+                android:layout_gravity="center_vertical" />
 
             <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
@@ -126,26 +126,26 @@
                 android:textAlignment="center"
                 android:layout_gravity="center_vertical" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <TextView
+                android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:textAlignment="center"
-                app:textSize="@dimen/diagonalTextSize"/>
+                android:layout_gravity="center_vertical" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <TextView
+                android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:textAlignment="center"
-                app:textSize="@dimen/diagonalTextSize"/>
+                android:layout_gravity="center_vertical" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <TextView
+                android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                app:textSize="@dimen/diagonalTextSize"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:layout_gravity="center_vertical" />
         </TableRow>
 
         <TableRow
@@ -162,26 +162,26 @@
                 android:textAlignment="center"
                 android:layout_gravity="center_vertical" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <TextView
+                android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:textAlignment="center"
-                app:textSize="@dimen/diagonalTextSize"/>
+                android:layout_gravity="center_vertical" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <TextView
+                android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:textAlignment="center"
-                app:textSize="@dimen/diagonalTextSize"/>
+                android:layout_gravity="center_vertical" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <TextView
+                android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                app:textSize="@dimen/diagonalTextSize"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:layout_gravity="center_vertical" />
         </TableRow>
 
         <TableRow
@@ -196,27 +196,26 @@
                 android:textAlignment="center"
                 android:layout_gravity="center_vertical" />
 
-
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <TextView
+                android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:textAlignment="center"
-                app:textSize="@dimen/diagonalTextSize"/>
+                android:layout_gravity="center_vertical" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <TextView
+                android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:textAlignment="center"
-                app:textSize="@dimen/diagonalTextSize"/>
+                android:layout_gravity="center_vertical" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <TextView
+                android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                app:textSize="@dimen/diagonalTextSize"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:layout_gravity="center_vertical" />
         </TableRow>
 
         <TableRow
@@ -231,27 +230,28 @@
                 android:textAlignment="center"
                 android:layout_gravity="center_vertical" />
 
-
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <TextView
+                android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:textAlignment="center"
-                app:textSize="@dimen/diagonalTextSize"/>
+                android:layout_gravity="center_vertical" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <TextView
+                android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
                 android:textAlignment="center"
-                app:textSize="@dimen/diagonalTextSize"/>
+                android:layout_gravity="center_vertical" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <TextView
+                android:text="TextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                app:textSize="@dimen/diagonalTextSize"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:layout_gravity="center_vertical" />
+
+
         </TableRow>
 
     </TableLayout>
