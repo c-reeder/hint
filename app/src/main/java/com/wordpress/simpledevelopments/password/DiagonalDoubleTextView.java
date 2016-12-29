@@ -66,6 +66,9 @@ public class DiagonalDoubleTextView extends View {
     }
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int widthMode = MeasureSpec.getMode(widthMeasureSpec);
+        int heightMode = MeasureSpec.getMode(heightMeasureSpec);
+
         int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
         int parentHeight = MeasureSpec.getSize(heightMeasureSpec);
         Log.d(TAG, "onMeasure: " + parentWidth + ", " + parentHeight);
@@ -75,8 +78,23 @@ public class DiagonalDoubleTextView extends View {
         textWidth = paint.measureText(text1) > paint.measureText(text2) ? paint.measureText(text1) : paint.measureText(text2);
         float desiredWidth = (.75f * textWidth) + (2 * textWidth);
         float desiredHeight = (.75f * textHeight) + (2 * textHeight);
-        viewWidth = desiredWidth < parentWidth ? desiredWidth : parentWidth;
-        viewHeight = desiredHeight < parentHeight ? desiredHeight :parentHeight;
+
+
+        if (widthMode == MeasureSpec.UNSPECIFIED)
+            viewWidth = desiredWidth;
+        else if (widthMode == MeasureSpec.EXACTLY)
+            viewWidth = parentWidth;
+        else if (widthMode == MeasureSpec.AT_MOST)
+            viewWidth = desiredWidth < parentWidth ? desiredWidth : parentWidth;
+
+        if (heightMode == MeasureSpec.UNSPECIFIED)
+            viewHeight = desiredHeight;
+        else if (heightMode == MeasureSpec.EXACTLY)
+            viewHeight = parentHeight;
+        else if (heightMode == MeasureSpec.AT_MOST)
+            viewHeight = desiredHeight < parentHeight ? desiredHeight :parentHeight;
+
+
         Log.d(TAG, "setMeasuredDimension: " + (int)viewWidth + ", " + (int)viewHeight);
         setMeasuredDimension((int)viewWidth,(int)viewHeight);
     }
@@ -88,7 +106,7 @@ public class DiagonalDoubleTextView extends View {
 
         //canvas.drawRect(0,0,canvas.getWidth(),canvas.getHeight(), linePaint);
         //
-        // linePaint.setTextAlign(Paint.Align.CENTER);
+        paint.setTextAlign(Paint.Align.LEFT);
         //Log.d(TAG, "onDraw measureText(My Text): " + linePaint.measureText(text1));
 
 
@@ -96,13 +114,26 @@ public class DiagonalDoubleTextView extends View {
         Log.d(TAG, "textWidth: " + textWidth + ", textHeight: " + textHeight);
 
         paint.setStyle(Paint.Style.STROKE);
-        canvas.drawRect(0,0,viewWidth,viewHeight,paint);
+        canvas.drawRect(0,0,
+                (.75f * textWidth) + 2 * textWidth,
+                (.75f * textHeight) + 2 * textHeight,
+                paint);
         paint.setStyle(Paint.Style.FILL);
         paint.setAntiAlias(true);
-        canvas.drawText(text1, (.25f * textWidth), (.25f * textHeight) - metrics.top, paint);
-        canvas.drawText(text2, .50f * textWidth + textWidth,.50f * textHeight + textHeight - metrics.top,paint);
+        canvas.drawText(text1,
+                (.25f * textWidth),
+                (.25f * textHeight) - metrics.top,
+                paint);
+        canvas.drawText(text2,
+                (.50f * textWidth) + textWidth,
+                (.50f * textHeight) + textHeight - metrics.top,
+                paint);
         paint.setStrokeWidth(2);
-        canvas.drawLine(0,viewHeight,viewWidth,0,paint);
+        canvas.drawLine(0,
+                (.75f * textHeight) + 2 * textHeight,
+                (.75f * textWidth) + 2 * textWidth,
+                0,
+                paint);
 
 
 
