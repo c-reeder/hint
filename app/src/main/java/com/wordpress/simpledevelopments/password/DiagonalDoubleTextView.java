@@ -30,11 +30,9 @@ public class DiagonalDoubleTextView extends View {
     float textHeight;
     float viewWidth;
     float viewHeight;
-    float realWidth;
-    float realHeight;
-    float origX;
-    float origY;
     Paint.FontMetrics metrics;
+    boolean exactWidth;
+    boolean exactHeight;
 
     public DiagonalDoubleTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -80,58 +78,45 @@ public class DiagonalDoubleTextView extends View {
         metrics = paint.getFontMetrics();
         textHeight = metrics.bottom - metrics.top;
         textWidth = paint.measureText(text1) > paint.measureText(text2) ? paint.measureText(text1) : paint.measureText(text2);
-        float desiredWidth = (.75f * textWidth) + (2 * textWidth);
-        float desiredHeight = (.75f * textHeight) + (2 * textHeight);
-        realWidth = desiredWidth;
-        realHeight = desiredHeight;
+        float minWidth = (.75f * textWidth) + (2 * textWidth);
+        float minHeight = (.75f * textHeight) + (2 * textHeight);
 
 
         if (widthMode == MeasureSpec.UNSPECIFIED) {
             Log.d(TAG, "Width UNSPECIFIED");
-            viewWidth = desiredWidth;
+            viewWidth = minWidth;
         } else if (widthMode == MeasureSpec.EXACTLY) {
             Log.d(TAG, "Width EXACTLY");
             viewWidth = parentWidth;
         } else if (widthMode == MeasureSpec.AT_MOST) {
             Log.d(TAG, "Width AT_MOST");
-            viewWidth = desiredWidth < parentWidth ? desiredWidth : parentWidth;
+            viewWidth = minWidth < parentWidth ? minWidth : parentWidth;
         }
 
         if (heightMode == MeasureSpec.UNSPECIFIED) {
             Log.d(TAG, "Height UNSPECIFIED");
-            viewHeight = desiredHeight;
+            viewHeight = minHeight;
         } else if (heightMode == MeasureSpec.EXACTLY) {
             Log.d(TAG, "Height EXACTLY");
             viewHeight = parentHeight;
         } else if (heightMode == MeasureSpec.AT_MOST) {
             Log.d(TAG, "Height AT_MOST");
-            viewHeight = desiredHeight < parentHeight ? desiredHeight : parentHeight;
+            viewHeight = minHeight < parentHeight ? minHeight : parentHeight;
         }
 
         //Do logic to center item if the width is larger than the "real" width
-        if (viewWidth > realWidth) {
-            switch (getTextAlignment()) {
-                case TEXT_ALIGNMENT_CENTER:
-                    //do main thing here using origX and origY
-                    //also make sure to start using origX and origY in the onDraw body
-                    origX = (viewWidth - realWidth) / 2;
-                    break;
-                case TEXT_ALIGNMENT_VIEW_START:
-                case TEXT_ALIGNMENT_TEXT_START:
-                    //left align
-                    origX = 0;
-                    break;
-                case TEXT_ALIGNMENT_TEXT_END:
-                case TEXT_ALIGNMENT_VIEW_END:
-                    //right align
-                    origX = viewWidth - realWidth;
-                    break;
-            }
+        if (viewWidth != minWidth) {
+            exactWidth = true;
+        } else {
+            exactWidth = false;
         }
 
         //Do logic to center item if the height is larger than the "real" height
-        if (viewHeight > realHeight) {
+        if (viewHeight != minHeight) {
             //is this even necessary since this should be only horizontal??
+            exactHeight = true;
+        } else {
+            exactHeight = false;
         }
 
         Log.d(TAG, "setMeasuredDimension: " + (int)viewWidth + ", " + (int)viewHeight);
@@ -140,33 +125,59 @@ public class DiagonalDoubleTextView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-//        Log.d(TAG, "onDraw: " + canvas.getWidth() + ", " + canvas.getHeight());
 
-//        Log.d(TAG, "textWidth: " + textWidth + ", textHeight: " + textHeight);
-        paint.setTextAlign(Paint.Align.LEFT);
-        paint.setStyle(Paint.Style.STROKE);
-        canvas.drawRect(origX,origY,
-                origX + (.75f * textWidth) + 2 * textWidth,
-                origY + (.75f * textHeight) + 2 * textHeight,
-                paint);
+
+        // Draw Outer-bounding Rectangle
+//        paint.setStyle(Paint.Style.STROKE);
+//        canvas.drawRect(0,0,
+//                viewWidth,
+//                viewHeight,
+//                paint);
+
+        float x1 = 0;
+        float y1 = 0;
+        float x2 = 0;
+        float y2 = 0;
+
+        if (exactWidth) {
+            paint.setTextAlign(Paint.Align.CENTER);
+            x1 = (.25f * viewWidth);
+            x2 = (.75f * viewWidth);
+        } else {
+            paint.setTextAlign(Paint.Align.LEFT);
+            x1 = (.25f * textWidth);
+            x2 = (.50f * textWidth) + textWidth;
+        }
+
+        if (exactHeight) {
+            y1 = (.25f * viewHeight) + (textHeight / 2);
+            y2 = (.75f * viewHeight) + (textHeight / 2);
+        } else {
+            y1 = (.25f * textHeight) - metrics.top;
+            y2 = (.50f * textHeight) + textHeight - metrics.top;
+        }
+
+        // Draw Text 1
         paint.setStyle(Paint.Style.FILL);
         paint.setAntiAlias(true);
         canvas.drawText(text1,
-                origX + (.25f * textWidth),
-                origY + (.25f * textHeight) - metrics.top,
+                x1,
+                y1,
                 paint);
+
+        // Draw Text 2
         canvas.drawText(text2,
-                origX + (.50f * textWidth) + textWidth,
-                origY + (.50f * textHeight) + textHeight - metrics.top,
+                x2,
+                y2,
                 paint);
+
+        // Draw diagonal line
         paint.setStrokeWidth(2);
-        canvas.drawLine(origX,
-                origY + (.75f * textHeight) + 2 * textHeight,
-                origX + (.75f * textWidth) + 2 * textWidth,
-                origY,
+        canvas.drawLine(0,
+                viewHeight,
+                viewWidth,
+                0,
                 paint);
-
-
     }
 
 }
