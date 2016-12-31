@@ -39,7 +39,7 @@ public class BeginActivity extends AppCompatActivity {
         }
 
         if (parentIntent.getStringExtra("teamName2") != null) {
-            teamName1 = parentIntent.getStringExtra("teamName2");
+            teamName2 = parentIntent.getStringExtra("teamName2");
             nameText2.setText(teamName2);
         } else {
             Log.d(TAG, "teamName2 not passed correctly!");

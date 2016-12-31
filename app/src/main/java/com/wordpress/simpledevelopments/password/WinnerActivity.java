@@ -8,6 +8,9 @@ import android.widget.FrameLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.view.View;
+
+import static android.support.v7.appcompat.R.styleable.View;
 
 public class WinnerActivity extends AppCompatActivity {
 
@@ -94,7 +97,7 @@ public class WinnerActivity extends AppCompatActivity {
         }
 
         if (parentIntent.getStringExtra("teamName2") != null) {
-            teamName1 = parentIntent.getStringExtra("teamName2");
+            teamName2 = parentIntent.getStringExtra("teamName2");
         } else {
             Log.d(TAG, "teamName2 not passed to WinnerActivity correctly!");
         }
@@ -121,5 +124,13 @@ public class WinnerActivity extends AppCompatActivity {
         sum1View.setText("" + score1);
         sum2View.setText("" + score2);
 
+    }
+    public void restartGame(View view) {
+        Intent restartIntent = new Intent(this, BeginActivity.class);
+
+        restartIntent.putExtra("teamName1", teamName1);
+        restartIntent.putExtra("teamName2", teamName2);
+
+        startActivity(restartIntent);
     }
 }
