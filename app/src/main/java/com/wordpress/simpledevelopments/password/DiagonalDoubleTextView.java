@@ -74,7 +74,7 @@ public class DiagonalDoubleTextView extends View {
 
         int parentWidth = MeasureSpec.getSize(widthMeasureSpec);
         int parentHeight = MeasureSpec.getSize(heightMeasureSpec);
-        Log.d(TAG, "onMeasure: " + parentWidth + ", " + parentHeight);
+//        Log.d(TAG, "onMeasure: " + parentWidth + ", " + parentHeight);
 
         metrics = paint.getFontMetrics();
         textHeight = metrics.bottom - metrics.top;
@@ -84,24 +84,24 @@ public class DiagonalDoubleTextView extends View {
 
 
         if (widthMode == MeasureSpec.UNSPECIFIED) {
-            Log.d(TAG, "Width UNSPECIFIED");
+//            Log.d(TAG, "Width UNSPECIFIED");
             viewWidth = minWidth;
         } else if (widthMode == MeasureSpec.EXACTLY) {
-            Log.d(TAG, "Width EXACTLY");
+//            Log.d(TAG, "Width EXACTLY");
             viewWidth = parentWidth;
         } else if (widthMode == MeasureSpec.AT_MOST) {
-            Log.d(TAG, "Width AT_MOST");
+//            Log.d(TAG, "Width AT_MOST");
             viewWidth = minWidth < parentWidth ? minWidth : parentWidth;
         }
 
         if (heightMode == MeasureSpec.UNSPECIFIED) {
-            Log.d(TAG, "Height UNSPECIFIED");
+//            Log.d(TAG, "Height UNSPECIFIED");
             viewHeight = minHeight;
         } else if (heightMode == MeasureSpec.EXACTLY) {
-            Log.d(TAG, "Height EXACTLY");
+//            Log.d(TAG, "Height EXACTLY");
             viewHeight = parentHeight;
         } else if (heightMode == MeasureSpec.AT_MOST) {
-            Log.d(TAG, "Height AT_MOST");
+//            Log.d(TAG, "Height AT_MOST");
             viewHeight = minHeight < parentHeight ? minHeight : parentHeight;
         }
 
@@ -120,7 +120,7 @@ public class DiagonalDoubleTextView extends View {
             exactHeight = false;
         }
 
-        Log.d(TAG, "setMeasuredDimension: " + (int)viewWidth + ", " + (int)viewHeight);
+//        Log.d(TAG, "setMeasuredDimension: " + (int)viewWidth + ", " + (int)viewHeight);
         setMeasuredDimension((int)viewWidth,(int)viewHeight);
     }
     @Override

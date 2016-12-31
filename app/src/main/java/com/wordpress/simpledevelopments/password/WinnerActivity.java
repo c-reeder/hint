@@ -21,6 +21,8 @@ public class WinnerActivity extends AppCompatActivity {
     private int[] bScores2;
     private int score1;
     private int score2;
+    private String teamName1;
+    private String teamName2;
 
 
 
@@ -83,6 +85,18 @@ public class WinnerActivity extends AppCompatActivity {
             score2 = parentIntent.getIntExtra("score2", 0);
         } else {
             Log.d(TAG, "score2 not passed correctly!");
+        }
+
+        if (parentIntent.getStringExtra("teamName1") != null) {
+            teamName1 = parentIntent.getStringExtra("teamName1");
+        } else {
+            Log.d(TAG, "teamName1 not passed to WinnerActivity correctly!");
+        }
+
+        if (parentIntent.getStringExtra("teamName2") != null) {
+            teamName1 = parentIntent.getStringExtra("teamName2");
+        } else {
+            Log.d(TAG, "teamName2 not passed to WinnerActivity correctly!");
         }
 
 

@@ -285,12 +285,12 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             winnerIntent.putExtra("bWords", bWords);
             winnerIntent.putExtra("score1", currScore1);
             winnerIntent.putExtra("score2", currScore2);
+            winnerIntent.putExtra("teamName1", teamName1);
+            winnerIntent.putExtra("teamName2", teamName2);
 
             startActivity(winnerIntent);
-        }
-
-
-        updateDisplay();
+        } else
+            updateDisplay();
     }
 
     private void storeResult() {
