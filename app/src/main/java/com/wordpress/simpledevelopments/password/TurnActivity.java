@@ -57,6 +57,14 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     TextPagerAdapter adapter;
     private GestureDetector gestureDetector;
 
+    // Results Variables to be Passed to the Winner Screen
+    private String[] aWords;
+    private String[] bWords;
+    private int[] aScores1;
+    private int[] aScores2;
+    private int[] bScores1;
+    private int[] bScores2;
+
 
 
     @Override
@@ -104,9 +112,13 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         });
         viewPager.setOnTouchListener(this);
 
-
-        // Init Display Values
-        //updateDisplay();
+        // Init Results Variables
+        aWords = new String[5];
+        bWords = new String[5];
+        aScores1 = new int[5];
+        aScores2 = new int[5];
+        bScores1 = new int[5];
+        bScores2 = new int[5];
 
         Log.d(TAG, "Getting Words!");
         ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
@@ -206,12 +218,14 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             return;
         if (view.getId() == R.id.successButton) {
             Log.d(TAG, "Correct!");
+            storeResult();
 
             // Score Addition Logic
-            if (!isTeam2)
+            if (!isTeam2) {
                 currScore1 += currPP;
-            else
+            } else {
                 currScore2 += currPP;
+            }
             currPP = 10;
 
             // Next Turn Logic
@@ -224,6 +238,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             isTeam2 = false;
         } else if (view.getId() == R.id.failureButton) {
             Log.d(TAG, "Failure!");
+            storeResult();
             currPP--;
 
             // Next Turn Logic
@@ -245,16 +260,52 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             inPlay = false;
             //Launch Winner Activity
             Intent winnerIntent = new Intent(this, WinnerActivity.class);
+
             if (currScore1 > currScore2)
                 winnerIntent.putExtra("winnerTeamName", teamName1);
             else if (currScore2 > currScore1)
                 winnerIntent.putExtra("winnerTeamName", teamName2);
+
+            winnerIntent.putExtra("aScores1", aScores1);
+            winnerIntent.putExtra("aScores2", aScores2);
+            winnerIntent.putExtra("bScores1", bScores1);
+            winnerIntent.putExtra("bScores2", bScores2);
+            winnerIntent.putExtra("aWords", aWords);
+            winnerIntent.putExtra("bWords", bWords);
+            winnerIntent.putExtra("score1", currScore1);
+            winnerIntent.putExtra("score2", currScore2);
+
             startActivity(winnerIntent);
         }
 
 
         updateDisplay();
     }
+
+    private void storeResult() {
+        TextView currentView = (TextView) adapter.getCurrentView().findViewById(R.id.singleTextView);
+        String currWord = currentView.getText().toString();
+        if (isPartnerB) {
+            bWords[currRound - 1] = currWord;
+            if (isTeam2) {
+                bScores1[currRound - 1] = 0;
+                bScores2[currRound - 1] = currPP;
+            } else {
+                bScores1[currRound - 1] = currPP;
+                bScores2[currRound - 1] = 0;
+            }
+        } else {
+            aWords[currRound - 1] = currWord;
+            if (isTeam2) {
+                aScores1[currRound - 1] = 0;
+                aScores2[currRound - 1] = currPP;
+            } else {
+                aScores1[currRound - 1] = currPP;
+                aScores2[currRound - 1] = 0;
+            }
+        }
+    }
+
 
     private void transitionToNextWord(boolean success) {
         View currentView = adapter.getCurrentView();
