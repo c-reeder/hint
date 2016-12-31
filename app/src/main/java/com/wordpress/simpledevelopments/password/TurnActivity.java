@@ -229,16 +229,19 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             } else {
                 currScore2 += currPP;
             }
-            currPP = 10;
 
             // Next Turn Logic
             //-------CHANGE WORD HERE----------
             transitionToNextWord(true);
-
+            currPP = 10;
             if (isPartnerB)
                 currRound++;
+            isTeam2 = ((currRound % 2) == 0);//false;
+            if (isTeam2)
+                Log.d(TAG, "Now Team 2's Turn!: " + currRound);
+            else
+                Log.d(TAG, "Now Team 1's Turn!: " + currRound);
             isPartnerB = !isPartnerB;
-            isTeam2 = false;
         } else if (view.getId() == R.id.failureButton) {
             Log.d(TAG, "Failure!");
             storeResult();
@@ -252,6 +255,11 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 currPP = 10;
                 if (isPartnerB)
                     currRound++;
+                isTeam2 = ((currRound % 2) == 0);//false;
+                if (isTeam2)
+                    Log.d(TAG, "Now Team 2's Turn!: " + currRound);
+                else
+                    Log.d(TAG, "Now Team 1's Turn!: " + currRound);
                 isPartnerB = !isPartnerB;
             } else {
                 isTeam2 = !isTeam2;
