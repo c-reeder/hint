@@ -135,6 +135,9 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                             //Log.v(TAG, "WORD: " + response.getString(i));
                             wordList.add(response.getString(i));
                         }
+                        if (wordList.size() != 20) {
+                            Log.e(TAG, "DID NOT GET 20 WORDS!!!");
+                        }
                         Log.d(TAG, "Got " + wordList.size() + " words!");
                         ProgressBar loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
                         loadingIcon.setVisibility(View.GONE);
