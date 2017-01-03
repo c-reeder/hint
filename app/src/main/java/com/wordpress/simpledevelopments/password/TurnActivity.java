@@ -45,7 +45,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private boolean inPlay;
     private String teamName1;
     private String teamName2;
-    private List<String> wordList;
+    private ArrayList<String> wordList;
 
     // Components of the Display
     private TextView roundView;
@@ -82,19 +82,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         viewPager = (OneDirectionViewPager) findViewById(R.id.pager);
         viewPager.setSwipeController(this);
 
-        // Init Game Values
-        teamName1 = parentIntent.getStringExtra("teamName1");
-        teamName2 = parentIntent.getStringExtra("teamName2");
-        currRound = 1;
-        currPP = 10;
-        //currWord = "Magnificent";
-        isPartnerB = false;
-        isTeam2 = false;
-        currScore1 = 0;
-        currScore2 = 0;
-        currSkipCountA = 0;
-        currSkipCountB = 0;
-        wordTransition = false;
         gestureDetector = new GestureDetector(this,new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapConfirmed(MotionEvent event) {
@@ -112,54 +99,136 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         });
         viewPager.setOnTouchListener(this);
 
-        // Init Results Variables
-        aWords = new String[5];
-        bWords = new String[5];
-        aScores1 = new int[5];
-        aScores2 = new int[5];
-        bScores1 = new int[5];
-        bScores2 = new int[5];
 
-        Log.d(TAG, "Getting Words!");
-        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnected()) {
-            JSONTask task = new JSONTask() {
-                @Override
-                protected void onPostExecute(String result) {
-                    try {
-                        //Change later to statically sized array once server is updated
-                        wordList = new ArrayList<>();
-                        JSONArray response = new JSONArray(result);
-                        for (int i = 0; i < response.length(); i++) {
-                            //Log.v(TAG, "WORD: " + response.getString(i));
-                            wordList.add(response.getString(i));
+        if (savedInstanceState == null) {
+            // Init Game Values
+            teamName1 = parentIntent.getStringExtra("teamName1");
+            teamName2 = parentIntent.getStringExtra("teamName2");
+            currRound = 1;
+            currPP = 10;
+            isPartnerB = false;
+            isTeam2 = false;
+            currScore1 = 0;
+            currScore2 = 0;
+            currSkipCountA = 0;
+            currSkipCountB = 0;
+            wordTransition = false;
+
+            // Init Results Variables
+            aWords = new String[5];
+            bWords = new String[5];
+            aScores1 = new int[5];
+            aScores2 = new int[5];
+            bScores1 = new int[5];
+            bScores2 = new int[5];
+
+            Log.d(TAG, "Getting Words!");
+            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo netInfo = cm.getActiveNetworkInfo();
+            if (netInfo != null && netInfo.isConnected()) {
+                JSONTask task = new JSONTask() {
+                    @Override
+                    protected void onPostExecute(String result) {
+                        try {
+                            //Change later to statically sized array once server is updated
+                            wordList = new ArrayList<>();
+                            JSONArray response = new JSONArray(result);
+                            for (int i = 0; i < response.length(); i++) {
+                                //Log.v(TAG, "WORD: " + response.getString(i));
+                                wordList.add(response.getString(i));
+                            }
+                            if (wordList.size() != 20) {
+                                Log.e(TAG, "DID NOT GET 20 WORDS!!!");
+                            }
+                            Log.d(TAG, "Got " + wordList.size() + " words!");
+                            ProgressBar loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
+                            loadingIcon.setVisibility(View.GONE);
+                            initWords();
+                            updateDisplay();
+                            inPlay = true;
+                            Log.d(TAG, "Beginning Game!");
+                        } catch (JSONException ex) {
+                            ex.printStackTrace();
                         }
-                        if (wordList.size() != 20) {
-                            Log.e(TAG, "DID NOT GET 20 WORDS!!!");
-                        }
-                        Log.d(TAG, "Got " + wordList.size() + " words!");
-                        ProgressBar loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
-                        loadingIcon.setVisibility(View.GONE);
-                        initWords();
-                        updateDisplay();
-                        inPlay = true;
-                        Log.d(TAG, "Beginning Game!");
-                    } catch (JSONException ex) {
-                        ex.printStackTrace();
                     }
-                    //Log.d(TAG, "RESULT: " + result);
-                }
-            };
+                };
+                task.execute("https://wordvault.herokuapp.com/passwords");
+            } else {
+                Log.e(TAG, "Not connected to network");
+            }
+        } else { //if savedInstanceState != null  -----> We are RE-starting our activity
+            // Ever-Changing "Current" Variables
+            currRound = savedInstanceState.getInt("currRound");
+            currPP = savedInstanceState.getInt("currPP");
+            isPartnerB = savedInstanceState.getBoolean("isPartnerB");
+            isTeam2 = savedInstanceState.getBoolean("isTeam2");
+            currScore1 = savedInstanceState.getInt("currScore1");
+            currScore2 = savedInstanceState.getInt("currScore2");
+            currSkipCountA = savedInstanceState.getInt("currSkipCountA");
+            currSkipCountB = savedInstanceState.getInt("currSkipCountB");
+            wordTransition = savedInstanceState.getBoolean("wordTransition");
 
-            //task.execute("https://www.thegamegal.com/wordgenerator/generator.php?game=2&category=6");
-            task.execute("https://wordvault.herokuapp.com/passwords");
-        } else {
-            Log.e(TAG, "Not connected to network");
+            // Values Constant for the Entirety of one Game
+            inPlay = savedInstanceState.getBoolean("inPlay");
+            teamName1 = savedInstanceState.getString("teamName1");
+            teamName2 = savedInstanceState.getString("teamName2");
+            wordList = savedInstanceState.getStringArrayList("wordList");
+
+            // Results Variables to be Passed to the Winner Screen
+            aWords = savedInstanceState.getStringArray("aWords");
+            bWords = savedInstanceState.getStringArray("bWords");
+            aScores1 = savedInstanceState.getIntArray("aScores1");
+            aScores2 = savedInstanceState.getIntArray("aScores2");
+            bScores1 = savedInstanceState.getIntArray("bScores1");
+            bScores2 = savedInstanceState.getIntArray("bScores2");
+
+            ProgressBar loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
+            loadingIcon.setVisibility(View.GONE);
+            initWords();
+            updateDisplay();
+
+
+            Log.d(TAG, "Restarting activity with saved values!");
         }
 
 
+
+
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Ever-Changing "Current" Variables
+        savedInstanceState.putInt("currRound",currRound);
+        savedInstanceState.putInt("currPP",currPP);
+        savedInstanceState.putBoolean("isPartnerB",isPartnerB);
+        savedInstanceState.putBoolean("isTeam2",isTeam2);
+        savedInstanceState.putInt("currScore1",currScore1);
+        savedInstanceState.putInt("currScore2",currScore2);
+        savedInstanceState.putInt("currSkipCountA",currSkipCountA);
+        savedInstanceState.putInt("currSkipCountB",currSkipCountB);
+        savedInstanceState.putBoolean("wordTransition",wordTransition);
+
+        // Values Constant for the Entirety of one Game
+        savedInstanceState.putBoolean("inPlay",inPlay);
+        savedInstanceState.putString("teamName1",teamName1);
+        savedInstanceState.putString("teamName2",teamName2);
+        savedInstanceState.putStringArrayList("wordList",wordList);
+
+        // Results Variables to be Passed to the Winner Screen
+        savedInstanceState.putStringArray("aWords",aWords);
+        savedInstanceState.putStringArray("bWords",bWords);
+        savedInstanceState.putIntArray("aScores1",aScores1);
+        savedInstanceState.putIntArray("aScores2",aScores2);
+        savedInstanceState.putIntArray("bScores1",bScores1);
+        savedInstanceState.putIntArray("bScores2",bScores2);
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+
+
+
     /**
      * Initialize the Word Viewpager (for swiping/skipping through words
      */
