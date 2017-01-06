@@ -51,6 +51,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private TextView roundView;
     private TextView scoreView;
     private TextView ppView;
+    private TenSpinner ppSpinnerView;
     private TextView partnerLetterView;
     private TextView teamNameView;
     OneDirectionViewPager viewPager;
@@ -76,7 +77,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         // Setup Display
         roundView = (TextView) findViewById(R.id.roundText);
         scoreView = (TextView) findViewById(R.id.scoreText);
-        ppView = (TextView) findViewById(R.id.possPointsText);
+        //ppView = (TextView) findViewById(R.id.possPointsText);
+        ppSpinnerView = (TenSpinner) findViewById(R.id.ppSpinner);
         partnerLetterView = (TextView) findViewById(R.id.partnerLetterText);
         teamNameView = (TextView) findViewById(R.id.teamName);
         viewPager = (OneDirectionViewPager) findViewById(R.id.pager);
@@ -270,7 +272,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private void updateDisplay() {
         roundView.setText("Round #" + currRound);
         scoreView.setText(currScore1 + ":" + currScore2);
-        ppView.setText("" + currPP);
+        //ppView.setText("" + currPP);
         if(!isPartnerB)
             partnerLetterView.setText("A");
         else
@@ -358,8 +360,10 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             winnerIntent.putExtra("teamName2", teamName2);
 
             startActivity(winnerIntent);
-        } else
+        } else {
+            ppSpinnerView.spinToNext();
             updateDisplay();
+        }
     }
 
     private void storeResult() {
