@@ -76,6 +76,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
         // Setup Display
         roundView = (TextView) findViewById(R.id.roundText);
+        roundView.setTextSize(25);
         scoreView = (TextView) findViewById(R.id.scoreText);
         //ppView = (TextView) findViewById(R.id.possPointsText);
         ppSpinnerView = (TenSpinner) findViewById(R.id.ppSpinner);
@@ -187,6 +188,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             ProgressBar loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
             loadingIcon.setVisibility(View.GONE);
             initWords();
+            ppSpinnerView.setSpinner(currPP);
             updateDisplay();
 
 
@@ -270,7 +272,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
     }
     private void updateDisplay() {
-        roundView.setText("Round #" + currRound);
+        roundView.setText("#" + currRound);
         scoreView.setText(currScore1 + ":" + currScore2);
         //ppView.setText("" + currPP);
         if(!isPartnerB)
@@ -303,6 +305,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
             // Next Turn Logic
             //-------CHANGE WORD HERE----------
+            ppSpinnerView.resetSpinner();
             transitionToNextWord(true);
             currPP = 10;
             if (isPartnerB)
@@ -322,6 +325,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             if (currPP < 1) {
                 // if the word was not guessed AT ALL
                 //-------CHANGE WORD HERE----------
+                ppSpinnerView.resetSpinner();
                 transitionToNextWord(false);
                 currPP = 10;
                 if (isPartnerB)
@@ -334,6 +338,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 isPartnerB = !isPartnerB;
             } else {
                 isTeam2 = !isTeam2;
+                ppSpinnerView.spinToNext();
             }
         }
 
@@ -361,7 +366,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
             startActivity(winnerIntent);
         } else {
-            ppSpinnerView.spinToNext();
             updateDisplay();
         }
     }

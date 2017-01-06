@@ -18,4 +18,7 @@
             <enum name="bottom" value="4" />
         </attr>
     </declare-styleable>
+    <declare-styleable name="ArcShapeView">
+        <attr name="arcColor" format="color" />
+    </declare-styleable>
 </resources>

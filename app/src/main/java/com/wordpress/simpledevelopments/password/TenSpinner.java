@@ -195,14 +195,29 @@ public class TenSpinner extends View {
         });
         valueAnimator.start();
     }
-
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
-            spinToNext();
-            return true;
-        }
-        return false;
+    public void resetSpinner() {
+        Log.d(TAG, "Resetting!");
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(spinOffset,0);
+        valueAnimator.setDuration(1000);
+        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+            @Override
+            public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                spinOffset = (Integer) valueAnimator.getAnimatedValue();
+                invalidate();
+            }
+        });
+        valueAnimator.start();
     }
+    public void setSpinner(int value) {
+        Log.d(TAG, "setSpinner: " + value);
+        int index = 10 - (value % 10);
 
+        if (index == 10) {
+            resetSpinner();
+            return;
+        }
+
+        spinOffset = index * 36;
+        invalidate();
+    }
 }
