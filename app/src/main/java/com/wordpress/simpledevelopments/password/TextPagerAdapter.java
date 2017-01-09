@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -26,7 +27,13 @@ public class TextPagerAdapter extends PagerAdapter {
     public TextPagerAdapter(Context context, List<String> textList) {
         this.context = context;
         this.textList = textList;
-        Log.d(TAG, "Constructing TextPageAdaptor with textList size: " + textList.size());
+    }
+    public TextPagerAdapter(Context context, String[] textList) {
+        this.context = context;
+        this.textList = new ArrayList<>(textList.length);
+        for (int i = 0; i < textList.length; i++) {
+            this.textList.add(textList[i]);
+        }
     }
 
     @Override
