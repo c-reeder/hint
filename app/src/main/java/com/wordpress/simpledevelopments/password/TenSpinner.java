@@ -1,5 +1,6 @@
 package com.wordpress.simpledevelopments.password;
 
+import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -43,6 +44,12 @@ public class TenSpinner extends View {
     private int radius;
 
 
+    private ValueAnimator valueAnimator;
+    private ValueAnimator.AnimatorUpdateListener updateListener;
+    private MyAnimatorListener animatorListener;
+    private int pendingNextSpinCount;
+
+
     public TenSpinner(Context context) {
         super(context);
         rDiameter = 15;
@@ -71,6 +78,9 @@ public class TenSpinner extends View {
         textPaint.setAntiAlias(true);
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setTextSize(100);
+        pendingNextSpinCount = 0;
+        animatorListener = new MyAnimatorListener();
+        updateListener = new MyUpdateListener();
     }
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -81,7 +91,6 @@ public class TenSpinner extends View {
         } else {
             int desiredWidth = getPaddingLeft() + getPaddingRight() + rDiameter;
             if (widthMode == MeasureSpec.EXACTLY) {
-                Log.d(TAG, "width EXACTLY");
                 viewWidth = MeasureSpec.getSize(widthMeasureSpec);
             } else if (widthMode == MeasureSpec.AT_MOST) {
                 viewWidth = desiredWidth < MeasureSpec.getSize(widthMeasureSpec) ? desiredWidth : MeasureSpec.getSize(widthMeasureSpec);
@@ -98,7 +107,6 @@ public class TenSpinner extends View {
         } else {
             int desiredHeight = getPaddingBottom() + getPaddingTop() + rDiameter;
             if (heightMode == MeasureSpec.EXACTLY) {
-                Log.d(TAG, "height EXACTLY");
                 viewHeight = MeasureSpec.getSize(heightMeasureSpec);
             } else if (heightMode == MeasureSpec.AT_MOST) {
                 viewHeight = desiredHeight < MeasureSpec.getSize(heightMeasureSpec) ? desiredHeight : MeasureSpec.getSize(heightMeasureSpec);
@@ -183,33 +191,36 @@ public class TenSpinner extends View {
 
     }
     public void spinToNext() {
-        Log.d(TAG, "Rotating!");
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(spinOffset,spinOffset + 36);
-        valueAnimator.setDuration(1000);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                spinOffset = (Integer) valueAnimator.getAnimatedValue();
-                invalidate();
-            }
-        });
-        valueAnimator.start();
+        if (valueAnimator != null) {
+            pendingNextSpinCount++;
+        } else {
+            valueAnimator = ValueAnimator.ofInt(spinOffset,spinOffset + 36);
+            valueAnimator.setDuration(1000);
+            valueAnimator.addUpdateListener(updateListener);
+            valueAnimator.addListener(animatorListener);
+            valueAnimator.start();
+        }
+
     }
     public void resetSpinner() {
-        Log.d(TAG, "Resetting!");
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(spinOffset,0);
+        if (valueAnimator != null) {
+            valueAnimator.cancel();
+            pendingNextSpinCount = 0;
+        }
+        valueAnimator = ValueAnimator.ofInt(spinOffset,0);
         valueAnimator.setDuration(1000);
-        valueAnimator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-            @Override
-            public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                spinOffset = (Integer) valueAnimator.getAnimatedValue();
-                invalidate();
-            }
-        });
+        valueAnimator.addUpdateListener(updateListener);
+        valueAnimator.addListener(animatorListener);
         valueAnimator.start();
     }
     public void setSpinner(int value) {
-        Log.d(TAG, "setSpinner: " + value);
+
+        if (valueAnimator != null) {
+            valueAnimator.cancel();
+            pendingNextSpinCount = 0;
+            valueAnimator = null;
+        }
+
         int index = 10 - (value % 10);
 
         if (index == 10) {
@@ -219,5 +230,44 @@ public class TenSpinner extends View {
 
         spinOffset = index * 36;
         invalidate();
+    }
+    private class MyAnimatorListener implements Animator.AnimatorListener {
+
+        @Override
+        public void onAnimationStart(Animator animator) {
+
+        }
+
+        @Override
+        public void onAnimationEnd(Animator animator) {
+            if (pendingNextSpinCount > 0) {
+                pendingNextSpinCount--;
+                valueAnimator = ValueAnimator.ofInt(spinOffset,spinOffset + 36);
+                valueAnimator.setDuration(1000);
+                valueAnimator.addUpdateListener(updateListener);
+                valueAnimator.addListener(animatorListener);
+                valueAnimator.start();
+            } else {
+                valueAnimator = null;
+            }
+        }
+
+        @Override
+        public void onAnimationCancel(Animator animator) {
+
+        }
+
+        @Override
+        public void onAnimationRepeat(Animator animator) {
+
+        }
+    }
+    private class MyUpdateListener implements  ValueAnimator.AnimatorUpdateListener {
+
+        @Override
+        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+            spinOffset = (Integer) valueAnimator.getAnimatedValue();
+            invalidate();
+        }
     }
 }
