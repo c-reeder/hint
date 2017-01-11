@@ -3,6 +3,7 @@ package com.wordpress.simpledevelopments.password;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -47,7 +48,7 @@ public class TenSpinner extends View {
     private ValueAnimator valueAnimator;
     private ValueAnimator.AnimatorUpdateListener updateListener;
     private MyAnimatorListener animatorListener;
-    private int pendingNextSpinCount;
+    private int offsetGoal;
 
 
     public TenSpinner(Context context) {
@@ -78,7 +79,7 @@ public class TenSpinner extends View {
         textPaint.setAntiAlias(true);
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setTextSize(100);
-        pendingNextSpinCount = 0;
+        offsetGoal = 0;
         animatorListener = new MyAnimatorListener();
         updateListener = new MyUpdateListener();
     }
@@ -192,20 +193,20 @@ public class TenSpinner extends View {
     }
     public void spinToNext() {
         if (valueAnimator != null) {
-            pendingNextSpinCount++;
+            valueAnimator.cancel();
+            offsetGoal += 36;
         } else {
-            valueAnimator = ValueAnimator.ofInt(spinOffset,spinOffset + 36);
-            valueAnimator.setDuration(1000);
-            valueAnimator.addUpdateListener(updateListener);
-            valueAnimator.addListener(animatorListener);
-            valueAnimator.start();
+            offsetGoal = spinOffset + 36;
         }
-
+        valueAnimator = ValueAnimator.ofInt(spinOffset,offsetGoal);
+        valueAnimator.setDuration(1000);
+        valueAnimator.addUpdateListener(updateListener);
+        valueAnimator.addListener(animatorListener);
+        valueAnimator.start();
     }
     public void resetSpinner() {
         if (valueAnimator != null) {
             valueAnimator.cancel();
-            pendingNextSpinCount = 0;
         }
         valueAnimator = ValueAnimator.ofInt(spinOffset,0);
         valueAnimator.setDuration(1000);
@@ -217,8 +218,6 @@ public class TenSpinner extends View {
 
         if (valueAnimator != null) {
             valueAnimator.cancel();
-            pendingNextSpinCount = 0;
-            valueAnimator = null;
         }
 
         int index = 10 - (value % 10);
@@ -240,21 +239,12 @@ public class TenSpinner extends View {
 
         @Override
         public void onAnimationEnd(Animator animator) {
-            if (pendingNextSpinCount > 0) {
-                pendingNextSpinCount--;
-                valueAnimator = ValueAnimator.ofInt(spinOffset,spinOffset + 36);
-                valueAnimator.setDuration(1000);
-                valueAnimator.addUpdateListener(updateListener);
-                valueAnimator.addListener(animatorListener);
-                valueAnimator.start();
-            } else {
-                valueAnimator = null;
-            }
+            valueAnimator = null;
         }
 
         @Override
         public void onAnimationCancel(Animator animator) {
-
+            spinOffset = (Integer) valueAnimator.getAnimatedValue();
         }
 
         @Override
