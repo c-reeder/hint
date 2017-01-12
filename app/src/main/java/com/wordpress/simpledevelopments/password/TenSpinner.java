@@ -168,9 +168,7 @@ public class TenSpinner extends View {
     }
     @Override
     protected void onDraw(Canvas canvas) {
-        //canvas.drawCircle(origX + radius,origY + radius, radius,spinnerPaint);
         RectF rectF = new RectF(origX,origY - radius * 2,origX + radius * 4,origY + radius * 2);
-        //RectF rectF = new RectF(origX,origY,origX + radius * 2,origY + radius * 2);
 
         Paint.FontMetrics metrics = textPaint.getFontMetrics();
         float textHeight = metrics.bottom - metrics.top;
@@ -178,14 +176,13 @@ public class TenSpinner extends View {
         for (int i = 0; i < 10; i++) {
             spinnerPaint.setColor(COLORS[i]);
             canvas.drawArc(rectF,spinOffset + i * 36 + 117,36,true, spinnerPaint);
-            //canvas.drawArc(rectF,spinOffset + i * 36 + 72,36,true, spinnerPaint);
         }
 
         canvas.rotate(81 + spinOffset, origX + 2 * radius, origY);
         for (int i = 0; i < 10; i++) {
             String currText = "" + (i + 1);
             float textWidth = textPaint.measureText(currText);
-            canvas.drawText(currText,origX + 2 * radius - (textWidth / 2),origY + 2 * radius - textHeight, textPaint);
+            canvas.drawText(currText,origX + 2 * radius - (textWidth / 2),origY + (2 * radius) - (textHeight / 2), textPaint);
             canvas.rotate(36, origX + 2 * radius, origY);
         }
 
