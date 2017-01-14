@@ -42,7 +42,6 @@ public class TextPagerAdapter extends PagerAdapter {
         ViewGroup newbie = (ViewGroup) inflater.inflate(R.layout.single_text, container, false);
         TextView singleTextView = (TextView) newbie.findViewById(R.id.singleTextView);
         singleTextView.setText(textList.get(position));
-        Log.d(TAG, "Instantiating Item with text: " + textList.get(position));
         container.addView(newbie);
         return newbie;
     }
@@ -74,7 +73,6 @@ public class TextPagerAdapter extends PagerAdapter {
 
     @Override
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
-        Log.d(TAG, "setPrimaryItem " + position);
         currentView = (ViewGroup) object;
         super.setPrimaryItem(container,position,object);
     }

@@ -1,7 +1,5 @@
 package com.wordpress.simpledevelopments.password;
 
-import android.app.FragmentTransaction;
-import android.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,13 +27,13 @@ public class TestActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.d(TAG, "switchButton!");
-                MyDialogFragment myDialogFragment = new MyDialogFragment();
-                myDialogFragment.show(getFragmentManager(), "DIALOG_FRAGMENT");
+                MenuFragment menuFragment = new MenuFragment();
+                menuFragment.show(getFragmentManager(), "DIALOG_FRAGMENT");
                 /*getSupportFragmentManager()
                         .beginTransaction()
-                        .add(R.id.fragmentContainer,myDialogFragment)
+                        .add(R.id.fragmentContainer,menuFragment)
                         .commit();
-                myDialogFragment.show(getSupportFragmentManager(), "test");*/
+                menuFragment.show(getSupportFragmentManager(), "test");*/
 
             }
         });
