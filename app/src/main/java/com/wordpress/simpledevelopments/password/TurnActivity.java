@@ -40,6 +40,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private boolean inPlay;
     private String teamName1;
     private String teamName2;
+    private String difficulty;
     private String[] wordList;
 
     // Ever-Changing "Current" Variables
@@ -100,6 +101,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             // Init Game Values
             teamName1 = parentIntent.getStringExtra("teamName1");
             teamName2 = parentIntent.getStringExtra("teamName2");
+            difficulty = parentIntent.getStringExtra("difficulty");
             currRound = 1;
             currPP = 10;
             isPartnerB = false;
@@ -145,7 +147,10 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                         }
                     }
                 };
-                task.execute("https://wordvault.herokuapp.com/passwords");
+                task.execute("https://wordvault.herokuapp.com/passwords/"
+                        + difficulty);
+                Log.d(TAG, "URL: " + "https://wordvault.herokuapp.com/passwords/"
+                        + difficulty);
             } else {
                 Log.e(TAG, "Not connected to network");
             }
@@ -155,6 +160,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             inPlay = savedInstanceState.getBoolean("inPlay");
             teamName1 = savedInstanceState.getString("teamName1");
             teamName2 = savedInstanceState.getString("teamName2");
+            difficulty = savedInstanceState.getString("difficulty");
             wordList = savedInstanceState.getStringArray("wordList");
 
             // Ever-Changing "Current" Variables
@@ -195,6 +201,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         savedInstanceState.putBoolean("inPlay",inPlay);
         savedInstanceState.putString("teamName1",teamName1);
         savedInstanceState.putString("teamName2",teamName2);
+        savedInstanceState.putString("difficulty",difficulty);
         savedInstanceState.putStringArray("wordList",wordList);
 
         // Ever-Changing "Current" Variables
@@ -372,6 +379,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             winnerIntent.putExtra("score2", currScore2);
             winnerIntent.putExtra("teamName1", teamName1);
             winnerIntent.putExtra("teamName2", teamName2);
+            winnerIntent.putExtra("difficulty", difficulty);
 
             //Launch Winner Activity
             startActivity(winnerIntent);
@@ -485,6 +493,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
         restartIntent.putExtra("teamName1", teamName1);
         restartIntent.putExtra("teamName2", teamName2);
+        restartIntent.putExtra("difficulty", difficulty);
 
         startActivity(restartIntent);
     }

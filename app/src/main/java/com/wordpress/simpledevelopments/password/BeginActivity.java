@@ -3,16 +3,11 @@ package com.wordpress.simpledevelopments.password;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
-import android.view.KeyEvent;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 public class BeginActivity extends AppCompatActivity {
 
@@ -22,6 +17,7 @@ public class BeginActivity extends AppCompatActivity {
     private String teamName2;
     private EditText nameText1;
     private EditText nameText2;
+    private RadioGroup diffGroup;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +26,7 @@ public class BeginActivity extends AppCompatActivity {
         Intent parentIntent = getIntent();
         nameText1 = (EditText) findViewById(R.id.team1NameBox);
         nameText2 = (EditText) findViewById(R.id.team2NameBox);
+        diffGroup = (RadioGroup) findViewById(R.id.diffGroup);
 
         if (parentIntent.getStringExtra("teamName1") != null) {
             teamName1 = parentIntent.getStringExtra("teamName1");
@@ -45,6 +42,16 @@ public class BeginActivity extends AppCompatActivity {
             Log.d(TAG, "teamName2 not passed correctly!");
         }
 
+        if (parentIntent.getStringExtra("difficulty") != null) {
+            String difficulty = parentIntent.getStringExtra("difficulty");
+            if (difficulty.equals("easy"))
+                diffGroup.check(R.id.easyButton);
+            else if (difficulty.equals("medium"))
+                diffGroup.check(R.id.mediumButton);
+            else if (difficulty.equals("hard"))
+                diffGroup.check(R.id.hardButton);
+        }
+
 
     }
     @Override
@@ -56,6 +63,8 @@ public class BeginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, TurnActivity.class);
         intent.putExtra("teamName1", nameText1.getText().toString());
         intent.putExtra("teamName2", nameText2.getText().toString());
+        RadioButton selected = (RadioButton) findViewById(diffGroup.getCheckedRadioButtonId());
+        intent.putExtra("difficulty", selected.getText().toString().toLowerCase());
         startActivity(intent);
     }
 }

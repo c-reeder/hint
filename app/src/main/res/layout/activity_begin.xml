@@ -61,7 +61,7 @@
         app:layout_constraintTop_toBottomOf="@+id/team1NameBox"
         app:layout_constraintLeft_toLeftOf="parent"
         android:text="Team Sweet"
-        app:layout_constraintBottom_toTopOf="@+id/radioGroup"
+        app:layout_constraintBottom_toTopOf="@+id/diffGroup"
         android:layout_marginBottom="8dp" />
 
     <Button
@@ -84,7 +84,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginEnd="16dp"
         app:layout_constraintRight_toRightOf="parent"
-        android:id="@+id/radioGroup"
+        android:id="@+id/diffGroup"
         app:layout_constraintBottom_toTopOf="@+id/beginButton"
         android:layout_marginBottom="32dp"
         android:orientation="horizontal">
@@ -94,7 +94,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/easyButton"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:checked="true" />
 
         <RadioButton
             android:text="Medium"

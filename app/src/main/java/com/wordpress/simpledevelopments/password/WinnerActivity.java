@@ -26,6 +26,7 @@ public class WinnerActivity extends AppCompatActivity {
     private int score2;
     private String teamName1;
     private String teamName2;
+    private String difficulty;
 
 
 
@@ -102,6 +103,12 @@ public class WinnerActivity extends AppCompatActivity {
             Log.d(TAG, "teamName2 not passed to WinnerActivity correctly!");
         }
 
+        if (parentIntent.getStringExtra("difficulty") != null) {
+            difficulty = parentIntent.getStringExtra("difficulty");
+        } else {
+            difficulty = "easy";
+        }
+
 
         TableLayout scoreTable = (TableLayout) findViewById(R.id.scoreTable);
         for (int i = 0; i < 5; i++) {
@@ -130,6 +137,7 @@ public class WinnerActivity extends AppCompatActivity {
 
         restartIntent.putExtra("teamName1", teamName1);
         restartIntent.putExtra("teamName2", teamName2);
+        restartIntent.putExtra("difficulty", difficulty);
 
         startActivity(restartIntent);
     }
