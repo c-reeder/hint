@@ -20,7 +20,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 
-public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener {
+public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener, MenuFragment.MenuActionsHandler {
 
     private static final String TAG = "TurnActivity";
 
@@ -243,7 +243,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume: Turn Activity!!!");
         setToFullScreen();
     }
 
@@ -468,7 +467,25 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
     public void pauseGame(View view) {
         MenuFragment menuFragment = new MenuFragment();
-        menuFragment.show(getFragmentManager(), "MENU_FRAGMENT");
+
+        TextView wordText = (TextView) viewPager.findViewById(R.id.singleTextView);
+        wordText.setVisibility(View.INVISIBLE);
+        menuFragment.show(getSupportFragmentManager(), "MENU_FRAGMENT");
     }
 
+    @Override
+    public void restartGame() {
+        Intent restartIntent = new Intent(this, BeginActivity.class);
+
+        restartIntent.putExtra("teamName1", teamName1);
+        restartIntent.putExtra("teamName2", teamName2);
+
+        startActivity(restartIntent);
+    }
+
+    @Override
+    public void resumeGame() {
+        TextView wordText = (TextView) viewPager.findViewById(R.id.singleTextView);
+        wordText.setVisibility(View.VISIBLE);
+    }
 }

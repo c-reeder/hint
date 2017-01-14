@@ -1,11 +1,12 @@
 package com.wordpress.simpledevelopments.password;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.app.DialogFragment;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -13,7 +14,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.List;
 
 /**
  * Created by connor on 1/13/17.
@@ -21,6 +28,9 @@ import android.widget.Button;
 
 public class MenuFragment extends DialogFragment {
     public static final String TAG = "MenuFragment";
+    private ArrayAdapter<String> menuOptionsAdapter;
+    private static final String[] menuOptions = {"Restart Game", "Resume Game"};
+    private MenuActionsHandler handler;
 
     @NonNull
     @Override
@@ -33,14 +43,23 @@ public class MenuFragment extends DialogFragment {
         int height = metrics.heightPixels;
         menuDialog.getWindow().setLayout((int) (width * .8), WindowManager.LayoutParams.WRAP_CONTENT);
 
-        Button dismissButton = (Button) menuDialog.findViewById(R.id.dismissButton);
-        dismissButton.setOnClickListener(new View.OnClickListener() {
+        menuOptionsAdapter = new MenuAdapter(menuOptions);
+        ListView optionsListView = (ListView) menuDialog.findViewById(R.id.optionsList);
+        optionsListView.setAdapter(menuOptionsAdapter);
+        optionsListView.setOnItemClickListener(new ListView.OnItemClickListener(){
             @Override
-            public void onClick(View view) {
-                menuDialog.dismiss();
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        handler.restartGame();
+                        break;
+                    case 1:
+                        dismiss();
+                        handler.resumeGame();
+                        break;
+                }
             }
         });
-
 
         return menuDialog;
     }
@@ -85,6 +104,40 @@ public class MenuFragment extends DialogFragment {
         }
     }
 
+    private class MenuAdapter extends ArrayAdapter<String> {
 
+        public MenuAdapter(String[] menuOptions) {
+            super(getActivity(), 0, menuOptions);
+        }
 
+        @NonNull
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            String optionText = getItem(position);
+
+            if (convertView == null) {
+                convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_menu, parent, false);
+            }
+
+            TextView textView = (TextView) convertView.findViewById(R.id.menuItemText);
+
+            textView.setText(optionText);
+            return convertView;
+        }
+    }
+    public interface MenuActionsHandler {
+        public void restartGame();
+        public void resumeGame();
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        Log.d(TAG, "onAttach: ");
+        super.onAttach(context);
+        try {
+            handler = (MenuActionsHandler) context;
+        } catch (ClassCastException ex) {
+            throw new ClassCastException(context.toString() + " is not a MenuActionsHandler");
+        }
+    }
 }

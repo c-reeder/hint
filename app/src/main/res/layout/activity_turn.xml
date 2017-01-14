@@ -38,19 +38,6 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent">
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/roundText"-->
-            <!--android:layout_centerInParent="false"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:textSize="18sp"-->
-            <!--android:text="Round #X"-->
-            <!--android:layout_alignParentLeft="true"-->
-            <!--tools:layout_editor_absoluteY="0dp"-->
-            <!--tools:layout_editor_absoluteX="0dp"-->
-            <!--android:layout_marginLeft="20dp" />-->
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -58,15 +45,6 @@
             android:textAppearance="@style/TextAppearance.AppCompat.Display1"
             android:layout_centerInParent="true" />
 
-        <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:id="@+id/possPointsText"-->
-            <!--android:layout_marginRight="20dp"-->
-            <!--android:layout_centerVertical="true"-->
-            <!--android:textSize="18sp"-->
-            <!--android:layout_alignParentRight="true"-->
-            <!--android:text="10" />-->
     </RelativeLayout>
 
     <com.wordpress.simpledevelopments.password.ArcShapeView
@@ -178,6 +156,7 @@
             android:layout_height="wrap_content"
             app:srcCompat="@android:drawable/ic_media_pause"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/pauseButton"
             tools:layout_editor_absoluteY="0dp"
             android:onClick="pauseGame" />
