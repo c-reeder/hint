@@ -4,13 +4,10 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.FrameLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 import android.view.View;
-
-import static android.support.v7.appcompat.R.styleable.View;
 
 public class WinnerActivity extends AppCompatActivity {
 
@@ -22,8 +19,8 @@ public class WinnerActivity extends AppCompatActivity {
     private int[] aScores2;
     private int[] bScores1;
     private int[] bScores2;
-    private int score1;
-    private int score2;
+    private int totalScore1;
+    private int totalScore2;
     private String teamName1;
     private String teamName2;
     private String difficulty;
@@ -35,76 +32,76 @@ public class WinnerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_winner);
         Intent parentIntent = getIntent();
-        Log.d(TAG, parentIntent.getStringExtra("winnerTeamName"));
+        Log.d(TAG, parentIntent.getStringExtra(GV.WINNER_TEAM_NAME));
         TextView winnerView = (TextView) findViewById(R.id.winnerText);
 
-        if (parentIntent.getStringExtra("winnerTeamName") != null) {
-            winnerView.setText(parentIntent.getStringExtra("winnerTeamName"));
+        if (parentIntent.getStringExtra(GV.WINNER_TEAM_NAME) != null) {
+            winnerView.setText(parentIntent.getStringExtra(GV.WINNER_TEAM_NAME));
         } else {
             winnerView.setText("It's a Tie!!!");
         }
 
-        if (parentIntent.getIntArrayExtra("aScores1") != null) {
-            aScores1 = parentIntent.getIntArrayExtra("aScores1");
+        if (parentIntent.getIntArrayExtra(GV.A_SCORES_1) != null) {
+            aScores1 = parentIntent.getIntArrayExtra(GV.A_SCORES_1);
         } else {
             Log.d(TAG, "aScores1 not passed correctly!");
         }
-        if (parentIntent.getIntArrayExtra("aScores2") != null) {
-            aScores2 = parentIntent.getIntArrayExtra("aScores2");
+        if (parentIntent.getIntArrayExtra(GV.A_SCORES_2) != null) {
+            aScores2 = parentIntent.getIntArrayExtra(GV.A_SCORES_2);
         } else {
             Log.d(TAG, "aScores2 not passed correctly!");
         }
 
-        if (parentIntent.getIntArrayExtra("bScores1") != null) {
-            bScores1 = parentIntent.getIntArrayExtra("bScores1");
+        if (parentIntent.getIntArrayExtra(GV.B_SCORES_1) != null) {
+            bScores1 = parentIntent.getIntArrayExtra(GV.B_SCORES_1);
         } else {
             Log.d(TAG, "bScores1 not passed correctly!");
         }
 
-        if (parentIntent.getIntArrayExtra("bScores2") != null) {
-            bScores2 = parentIntent.getIntArrayExtra("bScores2");
+        if (parentIntent.getIntArrayExtra(GV.B_SCORES_2) != null) {
+            bScores2 = parentIntent.getIntArrayExtra(GV.B_SCORES_2);
         } else {
             Log.d(TAG, "bScores1 not passed correctly!");
         }
 
-        if (parentIntent.getStringArrayExtra("aWords") != null) {
-            aWords = parentIntent.getStringArrayExtra("aWords");
+        if (parentIntent.getStringArrayExtra(GV.A_WORDS) != null) {
+            aWords = parentIntent.getStringArrayExtra(GV.A_WORDS);
         } else {
             Log.d(TAG, "aWords not passed correctly!");
         }
 
-        if (parentIntent.getStringArrayExtra("bWords") != null) {
-            bWords = parentIntent.getStringArrayExtra("bWords");
+        if (parentIntent.getStringArrayExtra(GV.B_WORDS) != null) {
+            bWords = parentIntent.getStringArrayExtra(GV.B_WORDS);
         } else {
             Log.d(TAG, "bWords not passed correctly!");
         }
 
-        if (parentIntent.getIntExtra("score1", -1) >= 0) {
-            score1 = parentIntent.getIntExtra("score1", 0);
+        if (parentIntent.getIntExtra(GV.TOTAL_SCORE_1, -1) >= 0) {
+            totalScore1 = parentIntent.getIntExtra(GV.TOTAL_SCORE_1, 0);
         } else {
-            Log.d(TAG, "score1 not passed correctly!");
+            Log.d(TAG, "totalScore1 not passed correctly!");
         }
 
-        if (parentIntent.getIntExtra("score2", -1) >= 0) {
-            score2 = parentIntent.getIntExtra("score2", 0);
+        if (parentIntent.getIntExtra(GV.TOTAL_SCORE_2, -1) >= 0) {
+            totalScore2 = parentIntent.getIntExtra(GV.TOTAL_SCORE_2, 0);
         } else {
-            Log.d(TAG, "score2 not passed correctly!");
+            Log.d(TAG, "totalScore2 not passed correctly!");
         }
 
-        if (parentIntent.getStringExtra("teamName1") != null) {
-            teamName1 = parentIntent.getStringExtra("teamName1");
+        if (parentIntent.getStringExtra(GV.TEAM_NAME_1) != null) {
+            teamName1 = parentIntent.getStringExtra(GV.TEAM_NAME_1);
         } else {
             Log.d(TAG, "teamName1 not passed to WinnerActivity correctly!");
         }
 
-        if (parentIntent.getStringExtra("teamName2") != null) {
-            teamName2 = parentIntent.getStringExtra("teamName2");
+        if (parentIntent.getStringExtra(GV.TEAM_NAME_2) != null) {
+            teamName2 = parentIntent.getStringExtra(GV.TEAM_NAME_2);
         } else {
             Log.d(TAG, "teamName2 not passed to WinnerActivity correctly!");
         }
 
-        if (parentIntent.getStringExtra("difficulty") != null) {
-            difficulty = parentIntent.getStringExtra("difficulty");
+        if (parentIntent.getStringExtra(GV.DIFFICULTY) != null) {
+            difficulty = parentIntent.getStringExtra(GV.DIFFICULTY);
         } else {
             difficulty = "easy";
         }
@@ -128,16 +125,16 @@ public class WinnerActivity extends AppCompatActivity {
 
         TextView sum1View = (TextView) findViewById(R.id.sum1);
         TextView sum2View = (TextView) findViewById(R.id.sum2);
-        sum1View.setText("" + score1);
-        sum2View.setText("" + score2);
+        sum1View.setText("" + totalScore1);
+        sum2View.setText("" + totalScore2);
 
     }
     public void restartGame(View view) {
         Intent restartIntent = new Intent(this, BeginActivity.class);
 
-        restartIntent.putExtra("teamName1", teamName1);
-        restartIntent.putExtra("teamName2", teamName2);
-        restartIntent.putExtra("difficulty", difficulty);
+        restartIntent.putExtra(GV.TEAM_NAME_1, teamName1);
+        restartIntent.putExtra(GV.TEAM_NAME_2, teamName2);
+        restartIntent.putExtra(GV.DIFFICULTY, difficulty);
 
         startActivity(restartIntent);
     }

@@ -28,22 +28,22 @@ public class BeginActivity extends AppCompatActivity {
         nameText2 = (EditText) findViewById(R.id.team2NameBox);
         diffGroup = (RadioGroup) findViewById(R.id.diffGroup);
 
-        if (parentIntent.getStringExtra("teamName1") != null) {
-            teamName1 = parentIntent.getStringExtra("teamName1");
+        if (parentIntent.getStringExtra(GV.TEAM_NAME_1) != null) {
+            teamName1 = parentIntent.getStringExtra(GV.TEAM_NAME_1);
             nameText1.setText(teamName1);
         } else {
             Log.d(TAG, "teamName1 not passed correctly!");
         }
 
-        if (parentIntent.getStringExtra("teamName2") != null) {
-            teamName2 = parentIntent.getStringExtra("teamName2");
+        if (parentIntent.getStringExtra(GV.TEAM_NAME_2) != null) {
+            teamName2 = parentIntent.getStringExtra(GV.TEAM_NAME_2);
             nameText2.setText(teamName2);
         } else {
             Log.d(TAG, "teamName2 not passed correctly!");
         }
 
-        if (parentIntent.getStringExtra("difficulty") != null) {
-            String difficulty = parentIntent.getStringExtra("difficulty");
+        if (parentIntent.getStringExtra(GV.DIFFICULTY) != null) {
+            String difficulty = parentIntent.getStringExtra(GV.DIFFICULTY);
             if (difficulty.equals("easy"))
                 diffGroup.check(R.id.easyButton);
             else if (difficulty.equals("medium"))
@@ -61,10 +61,10 @@ public class BeginActivity extends AppCompatActivity {
     }
     public void begin(View view) {
         Intent intent = new Intent(this, TurnActivity.class);
-        intent.putExtra("teamName1", nameText1.getText().toString());
-        intent.putExtra("teamName2", nameText2.getText().toString());
+        intent.putExtra(GV.TEAM_NAME_1, nameText1.getText().toString());
+        intent.putExtra(GV.TEAM_NAME_2, nameText2.getText().toString());
         RadioButton selected = (RadioButton) findViewById(diffGroup.getCheckedRadioButtonId());
-        intent.putExtra("difficulty", selected.getText().toString().toLowerCase());
+        intent.putExtra(GV.DIFFICULTY, selected.getText().toString().toLowerCase());
         startActivity(intent);
     }
 }

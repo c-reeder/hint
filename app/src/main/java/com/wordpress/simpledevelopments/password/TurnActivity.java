@@ -3,7 +3,6 @@ package com.wordpress.simpledevelopments.password;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -48,8 +47,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private int currPP;
     private boolean isPartnerB;
     private boolean isTeam2;
-    private int currScore1;
-    private int currScore2;
+    private int totalScore1;
+    private int totalScore2;
     private int currSkipCountA;
     private int currSkipCountB;
     private boolean wordTransition;
@@ -80,7 +79,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         teamNameView = (TextView) findViewById(R.id.teamName);
         viewPager = (OneDirectionViewPager) findViewById(R.id.pager);
         viewPager.setSwipeController(this);
-        //Setup Tap-Action on the Word-Swyper
+
+        //Setup Tap-Action on the Word-Swyper which is used to exit the word-transition state
         gestureDetector = new GestureDetector(this,new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapConfirmed(MotionEvent event) {
@@ -99,15 +99,15 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         // If the game is started for the first time
         if (savedInstanceState == null) {
             // Init Game Values
-            teamName1 = parentIntent.getStringExtra("teamName1");
-            teamName2 = parentIntent.getStringExtra("teamName2");
-            difficulty = parentIntent.getStringExtra("difficulty");
+            teamName1 = parentIntent.getStringExtra(GV.TEAM_NAME_1);
+            teamName2 = parentIntent.getStringExtra(GV.TEAM_NAME_2);
+            difficulty = parentIntent.getStringExtra(GV.DIFFICULTY);
             currRound = 1;
             currPP = 10;
             isPartnerB = false;
             isTeam2 = false;
-            currScore1 = 0;
-            currScore2 = 0;
+            totalScore1 = 0;
+            totalScore2 = 0;
             currSkipCountA = 0;
             currSkipCountB = 0;
             wordTransition = false;
@@ -147,42 +147,40 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                         }
                     }
                 };
-                task.execute("https://wordvault.herokuapp.com/passwords/"
-                        + difficulty);
-                Log.d(TAG, "URL: " + "https://wordvault.herokuapp.com/passwords/"
-                        + difficulty);
+                task.execute("https://wordvault.herokuapp.com/passwords/" + difficulty);
+                Log.d(TAG, "URL: " + "https://wordvault.herokuapp.com/passwords/" + difficulty);
             } else {
                 Log.e(TAG, "Not connected to network");
             }
         } else { //if savedInstanceState != null  -----> We are RE-starting our activity
 
             // Values Constant for the Entirety of one Game
-            inPlay = savedInstanceState.getBoolean("inPlay");
-            teamName1 = savedInstanceState.getString("teamName1");
-            teamName2 = savedInstanceState.getString("teamName2");
-            difficulty = savedInstanceState.getString("difficulty");
-            wordList = savedInstanceState.getStringArray("wordList");
+            inPlay = savedInstanceState.getBoolean(GV.IN_PLAY);
+            teamName1 = savedInstanceState.getString(GV.TEAM_NAME_1);
+            teamName2 = savedInstanceState.getString(GV.TEAM_NAME_2);
+            difficulty = savedInstanceState.getString(GV.DIFFICULTY);
+            wordList = savedInstanceState.getStringArray(GV.WORD_LIST);
 
             // Ever-Changing "Current" Variables
-            currRound = savedInstanceState.getInt("currRound");
-            currPP = savedInstanceState.getInt("currPP");
-            isPartnerB = savedInstanceState.getBoolean("isPartnerB");
-            isTeam2 = savedInstanceState.getBoolean("isTeam2");
-            currScore1 = savedInstanceState.getInt("currScore1");
-            currScore2 = savedInstanceState.getInt("currScore2");
-            currSkipCountA = savedInstanceState.getInt("currSkipCountA");
-            currSkipCountB = savedInstanceState.getInt("currSkipCountB");
-            wordTransition = savedInstanceState.getBoolean("wordTransition");
-            previousCorrect = savedInstanceState.getBoolean("previousCorrect");
+            currRound = savedInstanceState.getInt(GV.CURR_ROUND);
+            currPP = savedInstanceState.getInt(GV.CURR_PP);
+            isPartnerB = savedInstanceState.getBoolean(GV.IS_PARTNER_B);
+            isTeam2 = savedInstanceState.getBoolean(GV.IS_TEAM_2);
+            totalScore1 = savedInstanceState.getInt(GV.CURR_SCORE_1);
+            totalScore2 = savedInstanceState.getInt(GV.CURR_SCORE_2);
+            currSkipCountA = savedInstanceState.getInt(GV.CURR_SKIP_COUNT_A);
+            currSkipCountB = savedInstanceState.getInt(GV.CURR_SKIP_COUNT_B);
+            wordTransition = savedInstanceState.getBoolean(GV.WORD_TRANSITION);
+            previousCorrect = savedInstanceState.getBoolean(GV.PREVIOUS_CORRECT);
 
 
             // Results Variables to be Passed to the Winner Screen
-            aWords = savedInstanceState.getStringArray("aWords");
-            bWords = savedInstanceState.getStringArray("bWords");
-            aScores1 = savedInstanceState.getIntArray("aScores1");
-            aScores2 = savedInstanceState.getIntArray("aScores2");
-            bScores1 = savedInstanceState.getIntArray("bScores1");
-            bScores2 = savedInstanceState.getIntArray("bScores2");
+            aWords = savedInstanceState.getStringArray(GV.A_WORDS);
+            bWords = savedInstanceState.getStringArray(GV.B_WORDS);
+            aScores1 = savedInstanceState.getIntArray(GV.A_SCORES_1);
+            aScores2 = savedInstanceState.getIntArray(GV.A_SCORES_2);
+            bScores1 = savedInstanceState.getIntArray(GV.B_SCORES_1);
+            bScores2 = savedInstanceState.getIntArray(GV.B_SCORES_2);
 
             // Hide the loading icon IMMEDIATELY since we are only re-starting the activity and have already obtained our word data
             ProgressBar loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
@@ -198,31 +196,31 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     public void onSaveInstanceState(Bundle savedInstanceState) {
 
         // Values Constant for the Entirety of one Game
-        savedInstanceState.putBoolean("inPlay",inPlay);
-        savedInstanceState.putString("teamName1",teamName1);
-        savedInstanceState.putString("teamName2",teamName2);
-        savedInstanceState.putString("difficulty",difficulty);
-        savedInstanceState.putStringArray("wordList",wordList);
+        savedInstanceState.putBoolean(GV.IN_PLAY,inPlay);
+        savedInstanceState.putString(GV.TEAM_NAME_1,teamName1);
+        savedInstanceState.putString(GV.TEAM_NAME_2,teamName2);
+        savedInstanceState.putString(GV.DIFFICULTY,difficulty);
+        savedInstanceState.putStringArray(GV.WORD_LIST,wordList);
 
         // Ever-Changing "Current" Variables
-        savedInstanceState.putInt("currRound",currRound);
-        savedInstanceState.putInt("currPP",currPP);
-        savedInstanceState.putBoolean("isPartnerB",isPartnerB);
-        savedInstanceState.putBoolean("isTeam2",isTeam2);
-        savedInstanceState.putInt("currScore1",currScore1);
-        savedInstanceState.putInt("currScore2",currScore2);
-        savedInstanceState.putInt("currSkipCountA",currSkipCountA);
-        savedInstanceState.putInt("currSkipCountB",currSkipCountB);
-        savedInstanceState.putBoolean("wordTransition",wordTransition);
-        savedInstanceState.putBoolean("previousCorrect", previousCorrect);
+        savedInstanceState.putInt(GV.CURR_ROUND,currRound);
+        savedInstanceState.putInt(GV.CURR_PP,currPP);
+        savedInstanceState.putBoolean(GV.IS_PARTNER_B,isPartnerB);
+        savedInstanceState.putBoolean(GV.IS_TEAM_2,isTeam2);
+        savedInstanceState.putInt(GV.CURR_SCORE_1, totalScore1);
+        savedInstanceState.putInt(GV.CURR_SCORE_2, totalScore2);
+        savedInstanceState.putInt(GV.CURR_SKIP_COUNT_A,currSkipCountA);
+        savedInstanceState.putInt(GV.CURR_SKIP_COUNT_B,currSkipCountB);
+        savedInstanceState.putBoolean(GV.WORD_TRANSITION,wordTransition);
+        savedInstanceState.putBoolean(GV.PREVIOUS_CORRECT, previousCorrect);
 
         // Results Variables to be Passed to the Winner Screen
-        savedInstanceState.putStringArray("aWords",aWords);
-        savedInstanceState.putStringArray("bWords",bWords);
-        savedInstanceState.putIntArray("aScores1",aScores1);
-        savedInstanceState.putIntArray("aScores2",aScores2);
-        savedInstanceState.putIntArray("bScores1",bScores1);
-        savedInstanceState.putIntArray("bScores2",bScores2);
+        savedInstanceState.putStringArray(GV.A_WORDS,aWords);
+        savedInstanceState.putStringArray(GV.B_WORDS,bWords);
+        savedInstanceState.putIntArray(GV.A_SCORES_1,aScores1);
+        savedInstanceState.putIntArray(GV.A_SCORES_2,aScores2);
+        savedInstanceState.putIntArray(GV.B_SCORES_1,bScores1);
+        savedInstanceState.putIntArray(GV.B_SCORES_2,bScores2);
 
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -278,7 +276,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      */
     private void updateDisplay() {
         roundView.setText("#" + currRound);
-        scoreView.setText(currScore1 + ":" + currScore2);
+        scoreView.setText(totalScore1 + ":" + totalScore2);
         if(!isPartnerB)
             partnerLetterView.setText("A");
         else
@@ -305,9 +303,9 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
             // Score Addition Logic
             if (!isTeam2) {
-                currScore1 += currPP;
+                totalScore1 += currPP;
             } else {
-                currScore2 += currPP;
+                totalScore2 += currPP;
             }
 
             // Next Turn Logic
@@ -363,23 +361,23 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             Intent winnerIntent = new Intent(this, WinnerActivity.class);
 
             // Determine who the winner is based off the final scores
-            if (currScore1 > currScore2)
-                winnerIntent.putExtra("winnerTeamName", teamName1);
-            else if (currScore2 > currScore1)
-                winnerIntent.putExtra("winnerTeamName", teamName2);
+            if (totalScore1 > totalScore2)
+                winnerIntent.putExtra(GV.WINNER_TEAM_NAME, teamName1);
+            else if (totalScore2 > totalScore1)
+                winnerIntent.putExtra(GV.WINNER_TEAM_NAME, teamName2);
 
             // Attach the team names and necessary scoring values to the Winner Screen intent
-            winnerIntent.putExtra("aScores1", aScores1);
-            winnerIntent.putExtra("aScores2", aScores2);
-            winnerIntent.putExtra("bScores1", bScores1);
-            winnerIntent.putExtra("bScores2", bScores2);
-            winnerIntent.putExtra("aWords", aWords);
-            winnerIntent.putExtra("bWords", bWords);
-            winnerIntent.putExtra("score1", currScore1);
-            winnerIntent.putExtra("score2", currScore2);
-            winnerIntent.putExtra("teamName1", teamName1);
-            winnerIntent.putExtra("teamName2", teamName2);
-            winnerIntent.putExtra("difficulty", difficulty);
+            winnerIntent.putExtra(GV.A_SCORES_1, aScores1);
+            winnerIntent.putExtra(GV.A_SCORES_2, aScores2);
+            winnerIntent.putExtra(GV.B_SCORES_1, bScores1);
+            winnerIntent.putExtra(GV.B_SCORES_2, bScores2);
+            winnerIntent.putExtra(GV.A_WORDS, aWords);
+            winnerIntent.putExtra(GV.B_WORDS, bWords);
+            winnerIntent.putExtra(GV.TOTAL_SCORE_1, totalScore1);
+            winnerIntent.putExtra(GV.TOTAL_SCORE_2, totalScore2);
+            winnerIntent.putExtra(GV.TEAM_NAME_1, teamName1);
+            winnerIntent.putExtra(GV.TEAM_NAME_2, teamName2);
+            winnerIntent.putExtra(GV.DIFFICULTY, difficulty);
 
             //Launch Winner Activity
             startActivity(winnerIntent);
@@ -453,15 +451,9 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         }
         if (isPartnerB) {
             boolean canSkip =  (currPP == 10) && currSkipCountB < 5;
-            Log.d(TAG, "B canSwipe: " + canSkip);
-            if (!canSkip)
-                Toast.makeText(this,"No Skips left!",Toast.LENGTH_SHORT).show();
             return canSkip;
         } else {
             boolean canSkip = (currPP == 10) && currSkipCountA < 5;
-            Log.d(TAG, "A canSwipe: " + canSkip);
-            if(!canSkip)
-                Toast.makeText(this,"No Skips left!",Toast.LENGTH_SHORT).show();
             return canSkip;
         }
     }
@@ -491,9 +483,9 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     public void restartGame() {
         Intent restartIntent = new Intent(this, BeginActivity.class);
 
-        restartIntent.putExtra("teamName1", teamName1);
-        restartIntent.putExtra("teamName2", teamName2);
-        restartIntent.putExtra("difficulty", difficulty);
+        restartIntent.putExtra(GV.TEAM_NAME_1, teamName1);
+        restartIntent.putExtra(GV.TEAM_NAME_2, teamName2);
+        restartIntent.putExtra(GV.DIFFICULTY, difficulty);
 
         startActivity(restartIntent);
     }
