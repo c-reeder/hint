@@ -5,6 +5,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -27,6 +28,24 @@ public class BeginActivity extends AppCompatActivity {
         nameText1 = (EditText) findViewById(R.id.team1NameBox);
         nameText2 = (EditText) findViewById(R.id.team2NameBox);
         diffGroup = (RadioGroup) findViewById(R.id.diffGroup);
+        
+        nameText1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                Log.d(TAG, "onFocusChange: edit text 1 " + b + " -----------------------------");
+                if (!b)
+                    setToFullScreen();
+            }
+        });
+
+        nameText2.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                Log.d(TAG, "onFocusChange: edit text 2 " + b + " -----------------------------");
+                if (!b)
+                    setToFullScreen();
+            }
+        });
 
         if (parentIntent.getStringExtra(GV.TEAM_NAME_1) != null) {
             teamName1 = parentIntent.getStringExtra(GV.TEAM_NAME_1);
@@ -52,13 +71,35 @@ public class BeginActivity extends AppCompatActivity {
                 diffGroup.check(R.id.hardButton);
         }
 
-
+        //Ensure that we do not lose fullscreen mode upon entering text
+        final View decorView = getWindow().getDecorView();
+        decorView.setOnSystemUiVisibilityChangeListener (new View.OnSystemUiVisibilityChangeListener() {
+            @Override
+            public void onSystemUiVisibilityChange(int visibility) {
+                if ((visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0) {
+                    setToFullScreen();
+                }
+            }
+        });
     }
     @Override
     protected void onResume() {
         super.onResume();
-        //setToFullScreen();
+        setToFullScreen();
     }
+
+    /**
+     * Sets app to fullscreen mode
+     */
+    private void setToFullScreen() {
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+                | View.SYSTEM_UI_FLAG_FULLSCREEN
+                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+    }
+
     public void begin(View view) {
         Intent intent = new Intent(this, TurnActivity.class);
         intent.putExtra(GV.TEAM_NAME_1, nameText1.getText().toString());
