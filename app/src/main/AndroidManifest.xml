@@ -13,8 +13,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         <!-- android:theme="@style/AppTheme" -->
-        <activity android:name=".TurnActivity"
-            android:noHistory="true"/>
+        <activity android:name=".TurnActivity"/>
         <activity android:name=".BeginActivity">
             android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>

@@ -379,10 +379,22 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             winnerIntent.putExtra(GV.DIFFICULTY, difficulty);
 
             //Launch Winner Activity
-            startActivity(winnerIntent);
+            startActivityForResult(winnerIntent,0);
         } else { // If not the end of the game
             updateDisplay();
         }
+    }
+
+    /**
+     * Setup so that we cannot return to TurnActivity from WinnerActivity
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        finish();
     }
 
     /**
