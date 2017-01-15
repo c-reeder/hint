@@ -1,6 +1,7 @@
 package com.wordpress.simpledevelopments.password;
 
 import android.content.Context;
+import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -50,6 +51,7 @@ public class OneDirectionViewPager extends ViewPager {
         return true;
     }
 
+
     /**
      * Interface definining the interaction between a OneDirectionViewPager and its containing Activity or Fragment
      */
@@ -66,4 +68,6 @@ public class OneDirectionViewPager extends ViewPager {
          */
         public void onSwiped(int newIndex);
     }
+
+
 }

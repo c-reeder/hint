@@ -3,6 +3,7 @@ package com.wordpress.simpledevelopments.password;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
@@ -20,7 +21,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 
-public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener, MenuFragment.MenuActionsHandler {
+public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener, MenuFragment.MenuActionsHandler, TextPagerAdapter.OnReadyListener {
 
     private static final String TAG = "TurnActivity";
 
@@ -51,6 +52,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private int currSkipCountA;
     private int currSkipCountB;
     private boolean wordTransition;
+    private boolean previousCorrect;
 
     // Results Variables to be Passed to the Winner Screen
     private String[] aWords;
@@ -165,6 +167,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             currSkipCountA = savedInstanceState.getInt("currSkipCountA");
             currSkipCountB = savedInstanceState.getInt("currSkipCountB");
             wordTransition = savedInstanceState.getBoolean("wordTransition");
+            previousCorrect = savedInstanceState.getBoolean("previousCorrect");
+
 
             // Results Variables to be Passed to the Winner Screen
             aWords = savedInstanceState.getStringArray("aWords");
@@ -203,6 +207,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         savedInstanceState.putInt("currSkipCountA",currSkipCountA);
         savedInstanceState.putInt("currSkipCountB",currSkipCountB);
         savedInstanceState.putBoolean("wordTransition",wordTransition);
+        savedInstanceState.putBoolean("previousCorrect", previousCorrect);
 
         // Results Variables to be Passed to the Winner Screen
         savedInstanceState.putStringArray("aWords",aWords);
@@ -223,6 +228,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      */
     public void initWords() {
         adapter = new TextPagerAdapter(this, wordList);
+        adapter.setReadyListener(this);
         viewPager.setAdapter(adapter);
     }
 
@@ -411,8 +417,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      * @param success
      */
     private void transitionToNextWord(boolean success) {
+        previousCorrect = success;
         View currentView = adapter.getCurrentView();
-        TextView textView = (TextView) currentView.findViewById(R.id.singleTextView);
         if (success)
             currentView.setBackgroundColor(Color.GREEN);
         else
@@ -487,5 +493,19 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     public void resumeGame() {
         TextView wordText = (TextView) viewPager.findViewById(R.id.singleTextView);
         wordText.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Called when the viewPager has initialized its first view
+     * allowing us to set the background color if we are in the middle of a word transition
+     */
+    @Override
+    public void onTextPagerAdapterReady() {
+        if (wordTransition) {
+            if (previousCorrect)
+                adapter.getCurrentView().setBackgroundColor(Color.GREEN);
+            else
+                adapter.getCurrentView().setBackgroundColor(Color.RED);
+        }
     }
 }

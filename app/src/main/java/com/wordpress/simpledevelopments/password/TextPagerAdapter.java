@@ -22,6 +22,8 @@ public class TextPagerAdapter extends PagerAdapter {
     private List<String> textList;
     private static final String TAG = "TextPagerAdapter";
     private ViewGroup currentView;
+    private boolean ready;
+    private OnReadyListener listener;
 
 
     public TextPagerAdapter(Context context, List<String> textList) {
@@ -75,8 +77,20 @@ public class TextPagerAdapter extends PagerAdapter {
     public void setPrimaryItem(ViewGroup container, int position, Object object) {
         currentView = (ViewGroup) object;
         super.setPrimaryItem(container,position,object);
+        if (!ready) {
+            ready = true;
+            listener.onTextPagerAdapterReady();
+        }
     }
     public ViewGroup getCurrentView() {
         return currentView;
     }
+
+    public interface OnReadyListener {
+        public void onTextPagerAdapterReady();
+    }
+    public void setReadyListener(OnReadyListener listener) {
+        this.listener = listener;
+    }
+
 }
