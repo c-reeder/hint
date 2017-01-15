@@ -481,13 +481,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
     @Override
     public void restartGame() {
-        Intent restartIntent = new Intent(this, BeginActivity.class);
-
-        restartIntent.putExtra(GV.TEAM_NAME_1, teamName1);
-        restartIntent.putExtra(GV.TEAM_NAME_2, teamName2);
-        restartIntent.putExtra(GV.DIFFICULTY, difficulty);
-
-        startActivity(restartIntent);
+        finish();
     }
 
     @Override

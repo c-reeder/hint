@@ -130,12 +130,6 @@ public class WinnerActivity extends AppCompatActivity {
 
     }
     public void restartGame(View view) {
-        Intent restartIntent = new Intent(this, BeginActivity.class);
-
-        restartIntent.putExtra(GV.TEAM_NAME_1, teamName1);
-        restartIntent.putExtra(GV.TEAM_NAME_2, teamName2);
-        restartIntent.putExtra(GV.DIFFICULTY, difficulty);
-
-        startActivity(restartIntent);
+        finish();
     }
 }

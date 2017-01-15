@@ -13,7 +13,8 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
 
         <!-- android:theme="@style/AppTheme" -->
-        <activity android:name=".TurnActivity" />
+        <activity android:name=".TurnActivity"
+            android:noHistory="true"/>
         <activity android:name=".BeginActivity">
             android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
@@ -25,13 +26,6 @@
         <activity
             android:name=".WinnerActivity"
             android:exported="true" />
-        <activity android:name=".TestActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
     </application>
 
 </manifest>
