@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_turn"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.wordpress.simpledevelopments.password.TurnActivity">
+
+    <com.wordpress.simpledevelopments.password.OneDirectionViewPager
+        android:id="@+id/pager"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        app:layout_constraintRight_toRightOf="@+id/buttonRow"
+        app:layout_constraintLeft_toLeftOf="@+id/buttonRow"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="55dp"
+        android:layout_marginTop="55dp"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.wordpress.simpledevelopments.password.CustomProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="@+id/pager"
+        app:layout_constraintLeft_toLeftOf="@+id/pager"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <RelativeLayout
+        android:id="@+id/topBar"
+        android:background="@android:color/holo_green_dark"
+        tools:alpha="1"
+        android:layout_height="55dp"
+        android:layout_width="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/scoreText"
+            android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+            android:layout_centerInParent="true" />
+
+    </RelativeLayout>
+
+    <com.wordpress.simpledevelopments.password.ArcShapeView
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        android:id="@+id/roundCircle"
+        app:arcColor="@color/colorAccent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:text="Round"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView"
+        android:textSize="18sp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintRight_toRightOf="@+id/roundCircle"
+        app:layout_constraintLeft_toLeftOf="@+id/roundCircle"
+        android:layout_marginTop="16dp"
+        app:layout_constraintHorizontal_bias="0.4" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/roundText"
+        android:text="#X"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="@+id/roundCircle"
+        android:layout_marginTop="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/textView"
+        app:layout_constraintRight_toRightOf="@+id/roundCircle"
+        app:layout_constraintLeft_toLeftOf="@+id/roundCircle"
+        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.4" />
+
+    <com.wordpress.simpledevelopments.password.TenSpinner
+        android:layout_height="120dp"
+        android:layout_width="120dp"
+        android:id="@+id/ppSpinner"
+        app:layout_constraintRight_toRightOf="@+id/topBar"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:id="@+id/buttonRow"
+        android:layout_height="50dp"
+        android:layout_width="wrap_content"
+        tools:layout_constraintRight_creator="1"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_constraintLeft_creator="1"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/teamNameBar"
+        android:layout_marginBottom="8dp">
+
+        <ImageButton
+            android:layout_height="50dp"
+            app:srcCompat="@android:drawable/checkbox_on_background"
+            android:id="@+id/successButton"
+            android:layout_weight="1"
+            android:layout_width="50dp"
+            android:onClick="guessMade" />
+
+        <ImageButton
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            app:srcCompat="@android:drawable/ic_delete"
+            android:id="@+id/failureButton"
+            android:layout_weight="1"
+            android:onClick="guessMade" />
+
+    </LinearLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/teamNameBar"
+        android:layout_height="55dp"
+        android:background="@android:color/holo_green_light"
+        android:layout_width="0dp"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintBottom_toBottomOf="parent"
+        tools:layout_constraintRight_creator="1"
+        tools:layout_constraintLeft_creator="1">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/partnerLetterText"
+            android:textSize="26sp"
+            android:layout_marginStart="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/teamName"
+            android:textSize="26sp"
+            android:layout_marginStart="8dp"
+            app:layout_constraintRight_toLeftOf="@+id/pauseButton"
+            app:layout_constraintLeft_toRightOf="@+id/partnerLetterText"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent" />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@android:drawable/ic_media_pause"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:id="@+id/pauseButton"
+            tools:layout_editor_absoluteY="0dp"
+            android:onClick="pauseGame" />
+
+    </android.support.constraint.ConstraintLayout>
+
+</android.support.constraint.ConstraintLayout>
