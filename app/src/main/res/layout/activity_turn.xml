@@ -88,32 +88,32 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
-        android:orientation="horizontal"
         android:id="@+id/buttonRow"
+        android:layout_width="match_parent"
         android:layout_height="50dp"
-        android:layout_width="wrap_content"
-        tools:layout_constraintRight_creator="1"
+        android:layout_marginBottom="0dp"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toTopOf="@+id/teamNameBar"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:layout_constraintLeft_creator="1"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/teamNameBar"
-        android:layout_marginBottom="8dp">
+        tools:layout_constraintRight_creator="1">
 
-        <ImageButton
-            android:layout_height="50dp"
-            app:srcCompat="@android:drawable/checkbox_on_background"
+        <Button
             android:id="@+id/successButton"
-            android:layout_weight="1"
-            android:layout_width="50dp"
-            android:onClick="guessMade" />
-
-        <ImageButton
-            android:layout_width="50dp"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
-            app:srcCompat="@android:drawable/ic_delete"
-            android:id="@+id/failureButton"
             android:layout_weight="1"
-            android:onClick="guessMade" />
+            android:onClick="guessMade"
+            android:text="Correct" />
+
+        <Button
+            android:id="@+id/failureButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_weight="1"
+            android:onClick="guessMade"
+            android:text="Incorrect" />
 
     </LinearLayout>
 
