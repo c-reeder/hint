@@ -9,13 +9,15 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 
 /**
- * Created by connor on 1/5/17.
+ * Custom UI element which represents a spinnable wheel.
+ * By Connor Reeder
  */
 
 public class TenSpinner extends View {
@@ -39,6 +41,7 @@ public class TenSpinner extends View {
     private Gravity vGravity;
     private int spinOffset;
     private Paint spinnerPaint;
+    private Paint outlinePaint;
     private Paint textPaint;
     private float origX;
     private float origY;
@@ -79,6 +82,12 @@ public class TenSpinner extends View {
         textPaint.setAntiAlias(true);
         textPaint.setStyle(Paint.Style.FILL);
         textPaint.setTextSize(100);
+
+        outlinePaint = new Paint();
+        outlinePaint.setStrokeWidth(5);
+        outlinePaint.setColor(ContextCompat.getColor(getContext(), R.color.spinnerOutline));
+        outlinePaint.setStyle(Paint.Style.STROKE);
+
         offsetGoal = 0;
         animatorListener = new MyAnimatorListener();
         updateListener = new MyUpdateListener();
@@ -174,10 +183,27 @@ public class TenSpinner extends View {
         float textHeight = metrics.bottom - metrics.top;
 
         for (int i = 0; i < 10; i++) {
-            spinnerPaint.setColor(COLORS[i]);
-            canvas.drawArc(rectF,spinOffset + i * 36 + 117,36,true, spinnerPaint);
+            if (i % 2 == 0) {
+                spinnerPaint.setColor(ContextCompat.getColor(getContext(), R.color.spinnerFill));
+            } else {
+                spinnerPaint.setColor(Color.WHITE);
+            }
+//            if ((spinOffset + i * 36 + 117) % 360 > 100 && (spinOffset + i * 36 + 117) % 360 < 136) {
+//                            canvas.drawArc(rectF, spinOffset + i * 36 + 117,36,true, blurPaint);
+//            } else {
+//                            canvas.drawArc(rectF, spinOffset + i * 36 + 117,36,true, spinnerPaint);
+//            }
+            canvas.drawArc(rectF, spinOffset + i * 36 + 117,36,true, spinnerPaint);
+
         }
 
+        for (int i = 0; i < 10; i++) {
+            double angle = Math.toRadians(spinOffset + i * 36 + 117);
+            canvas.drawLine(origX + 2 * radius, origY, origX + 2 * radius + 2 * radius * (float)Math.cos(angle), origY + 2 * radius * (float)Math.sin(angle), outlinePaint);
+        }
+
+
+        canvas.drawCircle(origX + 2 * radius, origY, 2 * radius, outlinePaint);
         canvas.rotate(81 + spinOffset, origX + 2 * radius, origY);
         for (int i = 0; i < 10; i++) {
             String currText = "" + (i + 1);
