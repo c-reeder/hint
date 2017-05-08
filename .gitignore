@@ -1,5 +1,8 @@
 *.iml
 .gradle
+gradlew.bat
+app/.idea/
+app/local.properties
 /local.properties
 .idea/*
 .DS_Store
