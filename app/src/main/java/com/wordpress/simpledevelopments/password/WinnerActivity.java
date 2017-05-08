@@ -34,7 +34,6 @@ public class WinnerActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_winner);
         Intent parentIntent = getIntent();
-        Log.d(TAG, parentIntent.getStringExtra(GV.WINNER_TEAM_NAME));
         TextView winnerView = (TextView) findViewById(R.id.winnerText);
 
         if (parentIntent.getStringExtra(GV.WINNER_TEAM_NAME) != null) {
