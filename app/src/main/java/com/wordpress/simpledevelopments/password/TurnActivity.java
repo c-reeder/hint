@@ -23,6 +23,7 @@ import org.json.JSONException;
 public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener, MenuFragment.MenuActionsHandler, TextPagerAdapter.OnReadyListener {
 
     private static final String TAG = "TurnActivity";
+    public static final int NUM_ROUNDS = 6;
 
     // Components of the Display
     private TextView roundView;
@@ -113,14 +114,15 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             wordTransition = false;
 
             // Init Results Variables
-            aWords = new String[5];
-            bWords = new String[5];
-            aScores1 = new int[5];
-            aScores2 = new int[5];
-            bScores1 = new int[5];
-            bScores2 = new int[5];
+            aWords = new String[NUM_ROUNDS];
+            bWords = new String[NUM_ROUNDS];
+            aScores1 = new int[NUM_ROUNDS];
+            aScores2 = new int[NUM_ROUNDS];
+            bScores1 = new int[NUM_ROUNDS];
+            bScores2 = new int[NUM_ROUNDS];
 
             // Check Network Status and if connected perform GET request to acquire word list from server
+            // There should be 22 words. 2 Words * 6 Rounds + 5 Word-Skips * 2 Teams = 22 Words
             ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
             NetworkInfo netInfo = cm.getActiveNetworkInfo();
             if (netInfo != null && netInfo.isConnected()) {
@@ -129,12 +131,12 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                     @Override
                     protected void onPostExecute(String result) {
                         try {
-                            wordList = new String[20];
+                            wordList = new String[22];
                             JSONArray response = new JSONArray(result);
                             for (int i = 0; i < response.length(); i++) {
                                 wordList[i] = response.getString(i);
                             }
-                            if (response.length() != 20) throw new AssertionError("DID NOT GET 20 WORDS!!!");
+                            if (response.length() != 22) throw new AssertionError("DID NOT GET 22 WORDS!!!");
                             //Hide Loading Icon now that Data has been received
                             ProgressBar loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
                             loadingIcon.setVisibility(View.GONE);
@@ -352,7 +354,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         }
 
         // Check if end of game
-        if (currRound > 5) {
+        if (currRound > NUM_ROUNDS) {
             // Game is Over
             inPlay = false;
 

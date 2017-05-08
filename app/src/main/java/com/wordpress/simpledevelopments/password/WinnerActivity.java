@@ -13,6 +13,8 @@ public class WinnerActivity extends AppCompatActivity {
 
     private static final String TAG = "WinnerActivity";
 
+    private static final int NUM_ROUNDS = 6;
+
     private String[] aWords;
     private String[] bWords;
     private int[] aScores1;
@@ -108,7 +110,7 @@ public class WinnerActivity extends AppCompatActivity {
 
 
         TableLayout scoreTable = (TableLayout) findViewById(R.id.scoreTable);
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < NUM_ROUNDS; i++) {
             TableRow row = (TableRow) scoreTable.getChildAt(i + 1);
             DiagonalDoubleTextView wordDouble = (DiagonalDoubleTextView) row.getChildAt(1);
             wordDouble.setText1("" + aWords[i]);

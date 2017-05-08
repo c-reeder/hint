@@ -40,7 +40,7 @@
         app:layout_constraintTop_toBottomOf="@+id/winnerText"
         android:stretchColumns="*"
         android:weightSum="7"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="14dp"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintBottom_toTopOf="@+id/restartButton"
         android:layout_marginBottom="8dp">
@@ -340,6 +340,64 @@
             android:background="@android:color/black">
             <TextView
                 android:text="Round #5"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:textAlignment="center"
+                android:layout_gravity="center_vertical"
+                android:background="?android:attr/colorBackground"
+                android:gravity="center_vertical"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginLeft="1dp" />
+
+            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:textSize="@dimen/diagonalTextSize"
+                android:textAlignment="center"
+                android:layout_gravity="center_vertical"
+                android:background="?android:attr/colorBackground"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp" />
+
+            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:textSize="@dimen/diagonalTextSize"
+                android:textAlignment="center"
+                android:layout_gravity="center_vertical"
+                android:background="?android:attr/colorBackground"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp" />
+
+            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                app:textSize="@dimen/diagonalTextSize"
+                android:textAlignment="center"
+                android:layout_gravity="center_vertical"
+                android:background="?android:attr/colorBackground"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp" />
+
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/tableRow6"
+            android:layout_weight="1"
+            android:background="@android:color/black">
+            <TextView
+                android:text="Round #6"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:textAlignment="center"
