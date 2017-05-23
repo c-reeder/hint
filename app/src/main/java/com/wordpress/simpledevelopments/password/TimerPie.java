@@ -29,6 +29,7 @@ public class TimerPie extends View {
     private MyUpdateListener updateListener;
     private MyAnimatorListener animatorListener;
 
+    private TimerListener timerListener;
 
     public TimerPie(Context context) {
         super(context);
@@ -87,6 +88,9 @@ public class TimerPie extends View {
         @Override
         public void onAnimationEnd(Animator animator) {
             valueAnimator = null;
+            if (timerListener != null) {
+                timerListener.onTimerComplete();
+            }
         }
 
         @Override
@@ -106,5 +110,13 @@ public class TimerPie extends View {
             angle = (Integer) valueAnimator.getAnimatedValue();
             invalidate();
         }
+    }
+
+    public interface TimerListener {
+        public void onTimerComplete();
+    }
+
+    public void setTimerListener(TimerListener timerListener) {
+        this.timerListener = timerListener;
     }
 }

@@ -20,8 +20,10 @@ import android.widget.Toast;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.Timer;
 
-public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener, MenuFragment.MenuActionsHandler, TextPagerAdapter.OnReadyListener {
+
+public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener, MenuFragment.MenuActionsHandler, TextPagerAdapter.OnReadyListener, TimerPie.TimerListener {
 
     private static final String TAG = "TurnActivity";
     public static final int NUM_ROUNDS = 6;
@@ -34,6 +36,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private TextView teamNameView;
     private OneDirectionViewPager viewPager;
     private Button acceptWordButton;
+    private TimerPie timerPie;
     //Word-Swiper Functionality
     private TextPagerAdapter adapter;
     private GestureDetector gestureDetector;
@@ -84,6 +87,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         viewPager = (OneDirectionViewPager) findViewById(R.id.pager);
         viewPager.setSwipeController(this);
         acceptWordButton = (Button) findViewById(R.id.acceptWordButton);
+        timerPie = (TimerPie) findViewById(R.id.timerPie);
+        timerPie.setTimerListener(this);
 
         //Setup Tap-Action on the Word-Swyper which is used to exit the word-transition state
         gestureDetector = new GestureDetector(this,new GestureDetector.SimpleOnGestureListener() {
@@ -300,6 +305,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         Log.d(TAG, "Word Accepted");
         wordAccepted = true;
         acceptWordButton.setVisibility(View.GONE);
+        timerPie.setVisibility(View.VISIBLE);
+        timerPie.startTimer();
     }
 
     /**
@@ -312,6 +319,9 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         // or the word has not been accepted
         if (wordTransition || !inPlay || !wordAccepted)
             return;
+
+        timerPie.setVisibility(View.GONE);
+        timerPie.resetTimer();
 
         // If the guess was correct
         if (view.getId() == R.id.successButton) {
@@ -531,5 +541,18 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             else
                 adapter.getCurrentView().setBackgroundColor(Color.RED);
         }
+    }
+
+    /**
+     *
+     * Called when the TimerPie finishes its countdown
+     *
+     */
+    @Override
+    public void onTimerComplete() {
+        Log.d(TAG, "Timer Complete!");
+        // Simulate a Incorrect Button press
+        Button incorrectButton = (Button) findViewById(R.id.failureButton);
+        guessMade(incorrectButton);
     }
 }

@@ -7,6 +7,22 @@
     android:layout_height="match_parent"
     tools:context="com.wordpress.simpledevelopments.password.TurnActivity">
 
+    <com.wordpress.simpledevelopments.password.TimerPie
+        android:id="@+id/timerPie"
+        android:layout_height="400dp"
+        android:layout_width="400dp"
+
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginBottom="32dp"
+        android:visibility="gone"
+         />
+
     <com.wordpress.simpledevelopments.password.OneDirectionViewPager
         android:id="@+id/pager"
         android:layout_width="wrap_content"
