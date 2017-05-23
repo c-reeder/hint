@@ -21,4 +21,7 @@
     <declare-styleable name="ArcShapeView">
         <attr name="arcColor" format="color" />
     </declare-styleable>
+    <declare-styleable name="TimerPie">
+        <attr name="color" format="color" />
+    </declare-styleable>
 </resources>

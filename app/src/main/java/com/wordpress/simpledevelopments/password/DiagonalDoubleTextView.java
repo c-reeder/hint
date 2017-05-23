@@ -129,11 +129,11 @@ public class DiagonalDoubleTextView extends View {
 
 
         // Draw Outer-bounding Rectangle
-//        paint.setStyle(Paint.Style.STROKE);
+//        backgroundPaint.setStyle(Paint.Style.STROKE);
 //        canvas.drawRect(0,0,
 //                viewWidth,
 //                viewHeight,
-//                paint);
+//                backgroundPaint);
 
         float x1 = 0;
         float y1 = 0;
