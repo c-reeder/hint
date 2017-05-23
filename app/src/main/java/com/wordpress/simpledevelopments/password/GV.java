@@ -31,4 +31,5 @@ class GV {
     static final String TOTAL_SCORE_1 = "TOTAL_SCORE_1";
     static final String TOTAL_SCORE_2 = "TOTAL_SCORE_2";
     static final String WINNER_TEAM_NAME = "WINNER_TEAM_NAME";
+    static final String WORD_ACCEPTED = "WORD_ACCEPTED";
 }
