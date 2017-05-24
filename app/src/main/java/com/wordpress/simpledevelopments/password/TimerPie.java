@@ -21,9 +21,10 @@ public class TimerPie extends View {
 
     private static final String TAG = "TimerPie";
 
-    Paint piePaint;
-    int angle;
-    int color;
+    private Paint piePaint;
+    private int angle;
+    private int color;
+    private boolean canceled;
 
     private ValueAnimator valueAnimator;
     private MyUpdateListener updateListener;
@@ -49,6 +50,7 @@ public class TimerPie extends View {
         piePaint = new Paint();
         piePaint.setColor(color);
         angle = 360;
+        canceled = false;
 
         animatorListener = new MyAnimatorListener();
         updateListener = new MyUpdateListener();
@@ -65,7 +67,7 @@ public class TimerPie extends View {
         }
         valueAnimator = ValueAnimator.ofInt(360,0);
         valueAnimator.setInterpolator(new LinearInterpolator());
-        valueAnimator.setDuration(4000);
+        valueAnimator.setDuration(15 * 1000);
         valueAnimator.addUpdateListener(updateListener);
         valueAnimator.addListener(animatorListener);
         valueAnimator.start();
@@ -82,19 +84,22 @@ public class TimerPie extends View {
 
         @Override
         public void onAnimationStart(Animator animator) {
-
+            canceled = false;
         }
 
         @Override
         public void onAnimationEnd(Animator animator) {
             valueAnimator = null;
-            if (timerListener != null) {
-                timerListener.onTimerComplete();
+            if (!canceled) {
+                if (timerListener != null) {
+                    timerListener.onTimerComplete();
+                }
             }
         }
 
         @Override
         public void onAnimationCancel(Animator animator) {
+            canceled = true;
             valueAnimator = null;
         }
 
