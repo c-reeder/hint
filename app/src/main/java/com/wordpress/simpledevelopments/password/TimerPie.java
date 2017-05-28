@@ -67,7 +67,7 @@ public class TimerPie extends View {
         }
         valueAnimator = ValueAnimator.ofInt(360,0);
         valueAnimator.setInterpolator(new LinearInterpolator());
-        valueAnimator.setDuration(15 * 1000);
+        valueAnimator.setDuration(30 * 1000);
         valueAnimator.addUpdateListener(updateListener);
         valueAnimator.addListener(animatorListener);
         valueAnimator.start();
