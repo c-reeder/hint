@@ -36,6 +36,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private TextView teamNameView;
     private OneDirectionViewPager viewPager;
     private Button acceptWordButton;
+    private Button continueButton;
+    private TextView messageView;
     private TimerPie timerPie;
     //Word-Swiper Functionality
     private TextPagerAdapter adapter;
@@ -87,6 +89,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         viewPager = (OneDirectionViewPager) findViewById(R.id.pager);
         viewPager.setSwipeController(this);
         acceptWordButton = (Button) findViewById(R.id.acceptWordButton);
+        continueButton = (Button) findViewById(R.id.continueButton);
+        messageView = (TextView) findViewById(R.id.messageView);
         timerPie = (TimerPie) findViewById(R.id.timerPie);
         timerPie.setTimerListener(this);
 
@@ -301,7 +305,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             teamNameView.setText(teamName2);
     }
 
-    public void acceptWord(View view) {
+    public void onAcceptWord(View view) {
         Log.d(TAG, "Word Accepted");
         wordAccepted = true;
         acceptWordButton.setVisibility(View.GONE);
@@ -409,15 +413,28 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             startActivityForResult(winnerIntent,0);
         } else { // If not the end of the game
             updateDisplay();
+            promptForContinue();
         }
     }
 
-    /**
-     * Setup so that we cannot return to TurnActivity from WinnerActivity
-     * @param requestCode
-     * @param resultCode
-     * @param data
-     */
+    private void promptForContinue() {
+        Log.d(TAG, "Here is where we would prompt for continue!");
+        messageView.setVisibility(View.VISIBLE);
+        continueButton.setVisibility(View.VISIBLE);
+    }
+
+    public void onContinue(View view) {
+        Log.d(TAG, "We have continued!");
+        messageView.setVisibility(View.GONE);
+        continueButton.setVisibility(View.GONE);
+    }
+
+        /**
+         * Setup so that we cannot return to TurnActivity from WinnerActivity
+         * @param requestCode
+         * @param resultCode
+         * @param data
+         */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
