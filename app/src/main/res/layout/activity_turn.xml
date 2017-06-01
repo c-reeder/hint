@@ -140,7 +140,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:onClick="onContinue"
-        android:text="Continue?"
+        android:text="Continue"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/buttonRow"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -6,7 +6,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -19,6 +21,7 @@ public class BeginActivity extends AppCompatActivity {
     private EditText nameText1;
     private EditText nameText2;
     private RadioGroup diffGroup;
+    private ImageButton helpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,15 @@ public class BeginActivity extends AppCompatActivity {
         nameText1 = (EditText) findViewById(R.id.team1NameBox);
         nameText2 = (EditText) findViewById(R.id.team2NameBox);
         diffGroup = (RadioGroup) findViewById(R.id.diffGroup);
+        helpButton = (ImageButton) findViewById(R.id.helpButton);
+
+        helpButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), InstructionsActivity.class);
+                startActivity(intent);
+            }
+        });
         
         nameText1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
