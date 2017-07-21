@@ -213,6 +213,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             //wordAccepted = savedInstanceState.getBoolean(GV.WORD_ACCEPTED);
             gameState = (GameState) savedInstanceState.getSerializable(GV.GAME_STATE);
 
+            Log.d(TAG, "Game state on restart: " + gameState);
 
             // Results Variables to be Passed to the Winner Screen
             aWords = savedInstanceState.getStringArray(GV.A_WORDS);
@@ -228,6 +229,11 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             initWords();
             ppSpinnerView.setSpinner(currPP);
             updateDisplay();
+            if (gameState == GameState.TEAM_TRANSITION) {
+                promptForContinue("Pass phone to other person and click continue!");
+            } else if (gameState == GameState.WORD_TRANSITION) {
+                promptForContinue("Pass phone across the table and click continue!");
+            }
             // Game has been successfully restarted
         }
     }
