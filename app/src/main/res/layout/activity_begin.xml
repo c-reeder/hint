@@ -21,13 +21,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:text="Team 1"
+        android:id="@+id/team1Label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/team1Label"
-        app:layout_constraintLeft_toLeftOf="@+id/team1NameBox"
+        android:layout_marginBottom="8dp"
+        android:text="@string/team1"
         app:layout_constraintBottom_toTopOf="@+id/team1NameBox"
-        android:layout_marginBottom="8dp" />
+        app:layout_constraintLeft_toLeftOf="@+id/team1NameBox" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -43,12 +43,12 @@
         android:text="Team Awesome" />
 
     <TextView
-        android:text="Team 2"
+        android:id="@+id/team2Label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/team2Label"
-        app:layout_constraintBottom_toTopOf="@+id/team2NameBox"
         android:layout_marginBottom="16dp"
+        android:text="@string/team2"
+        app:layout_constraintBottom_toTopOf="@+id/team2NameBox"
         app:layout_constraintLeft_toLeftOf="@+id/team2NameBox" />
 
     <EditText
@@ -65,17 +65,17 @@
         android:layout_marginBottom="8dp" />
 
     <Button
-        android:text="Begin Game"
+        android:id="@+id/beginButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/beginButton"
-        android:layout_marginStart="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginBottom="64dp"
-        android:onClick="begin" />
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:onClick="begin"
+        android:text="@string/begin_game"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
     <RadioGroup
         android:layout_width="300dp"
@@ -119,27 +119,27 @@
     android:layout_marginBottom="32dp"
     android:orientation="horizontal">
 
-    <RadioButton
-        android:text="Easy"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/easyButton"
-        android:layout_weight="1"
-        android:checked="true" />
+        <RadioButton
+            android:id="@+id/easyButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:checked="true"
+            android:text="@string/easy" />
 
-    <RadioButton
-        android:text="Medium"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/mediumButton"
-        android:layout_weight="1" />
+        <RadioButton
+            android:id="@+id/mediumButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/medium" />
 
-    <RadioButton
-        android:text="Hard"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/hardButton"
-        android:layout_weight="1" />
+        <RadioButton
+            android:id="@+id/hardButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/hard" />
 </RadioGroup>
 
     <ImageButton

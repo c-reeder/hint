@@ -90,16 +90,16 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:text="Round"
+        android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:textSize="18sp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintRight_toRightOf="@+id/roundCircle"
-        app:layout_constraintLeft_toLeftOf="@+id/roundCircle"
         android:layout_marginTop="16dp"
-        app:layout_constraintHorizontal_bias="0.4" />
+        android:text="@string/round"
+        android:textSize="18sp"
+        app:layout_constraintHorizontal_bias="0.4"
+        app:layout_constraintLeft_toLeftOf="@+id/roundCircle"
+        app:layout_constraintRight_toRightOf="@+id/roundCircle"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:layout_width="wrap_content"

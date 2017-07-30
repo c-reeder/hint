@@ -29,12 +29,12 @@ import java.util.List;
 public class MenuFragment extends DialogFragment {
     public static final String TAG = "MenuFragment";
     private ArrayAdapter<String> menuOptionsAdapter;
-    private static final String[] menuOptions = {"Restart Game", "Resume Game"};
     private MenuActionsHandler handler;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
+        String[] menuOptions = {getString(R.string.restart_game), getString(R.string.resume_game)};
         final MenuDialog menuDialog = new MenuDialog(getActivity());
         menuDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         menuDialog.setContentView(R.layout.dialog_menu);

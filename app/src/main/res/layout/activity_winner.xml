@@ -8,28 +8,28 @@
     tools:context="com.wordpress.simpledevelopments.password.WinnerActivity">
 
     <TextView
-        android:text="The Winner Is:"
+        android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="32dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/winner_announcement"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-        android:id="@+id/textView7" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
+        android:id="@+id/winnerText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/winnerText"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-        android:layout_marginTop="20dp"
-        app:layout_constraintTop_toBottomOf="@+id/textView7"
         android:layout_marginEnd="16dp"
-        app:layout_constraintRight_toRightOf="parent"
         android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:text="@string/team1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:text="Team Awesome" />
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView7" />
 
     <TableLayout
         android:layout_width="0dp"
@@ -53,56 +53,56 @@
             android:background="@android:color/black">
 
             <TextView
-                android:text="Round"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textAlignment="center"
                 android:layout_gravity="center_vertical"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="2dp"
                 android:background="?android:attr/colorBackground"
                 android:gravity="center_vertical"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginLeft="1dp" />
+                android:text="@string/round"
+                android:textAlignment="center" />
 
             <TextView
-                android:text="Word"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textAlignment="center"
                 android:layout_gravity="center_vertical"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="2dp"
                 android:background="?android:attr/colorBackground"
                 android:gravity="center_vertical"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginLeft="1dp" />
+                android:text="@string/word"
+                android:textAlignment="center" />
 
             <TextView
-                android:text="Team 1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textAlignment="center"
                 android:layout_gravity="center_vertical"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="2dp"
                 android:background="?android:attr/colorBackground"
                 android:gravity="center_vertical"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginLeft="1dp" />
+                android:text="@string/team1"
+                android:textAlignment="center" />
 
             <TextView
-                android:text="Team 2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textAlignment="center"
                 android:layout_gravity="center_vertical"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="2dp"
                 android:background="?android:attr/colorBackground"
                 android:gravity="center_vertical"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginLeft="1dp" />
+                android:text="@string/team2"
+                android:textAlignment="center" />
         </TableRow>
 
         <TableRow
@@ -111,18 +111,19 @@
             android:id="@+id/tableRow1"
             android:layout_weight="1"
             android:background="@android:color/black">
+
             <TextView
-                android:text="Round #1"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textAlignment="center"
                 android:layout_gravity="center_vertical"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="2dp"
                 android:background="?android:attr/colorBackground"
                 android:gravity="center_vertical"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginLeft="1dp" />
+                android:text="@string/round1"
+                android:textAlignment="center" />
 
             <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
@@ -169,17 +170,17 @@
             android:background="@android:color/black">
 
             <TextView
-                android:text="Round #2"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textAlignment="center"
                 android:layout_gravity="center_vertical"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="2dp"
                 android:background="?android:attr/colorBackground"
                 android:gravity="center_vertical"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginLeft="1dp" />
+                android:text="@string/round2"
+                android:textAlignment="center" />
 
             <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
@@ -227,17 +228,17 @@
 
 
             <TextView
-                android:text="Round #3"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textAlignment="center"
                 android:layout_gravity="center_vertical"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="2dp"
                 android:background="?android:attr/colorBackground"
                 android:gravity="center_vertical"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginLeft="1dp" />
+                android:text="@string/round3"
+                android:textAlignment="center" />
 
             <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
@@ -282,18 +283,19 @@
             android:id="@+id/tableRow4"
             android:layout_weight="1"
             android:background="@android:color/black">
+
             <TextView
-                android:text="Round #4"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textAlignment="center"
                 android:layout_gravity="center_vertical"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="2dp"
                 android:background="?android:attr/colorBackground"
                 android:gravity="center_vertical"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginLeft="1dp" />
+                android:text="@string/round4"
+                android:textAlignment="center" />
 
             <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
@@ -338,18 +340,19 @@
             android:id="@+id/tableRow5"
             android:layout_weight="1"
             android:background="@android:color/black">
+
             <TextView
-                android:text="Round #5"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textAlignment="center"
                 android:layout_gravity="center_vertical"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="2dp"
                 android:background="?android:attr/colorBackground"
                 android:gravity="center_vertical"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginLeft="1dp" />
+                android:text="@string/round5"
+                android:textAlignment="center" />
 
             <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
@@ -396,18 +399,19 @@
             android:id="@+id/tableRow6"
             android:layout_weight="1"
             android:background="@android:color/black">
+
             <TextView
-                android:text="Round #6"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:textAlignment="center"
                 android:layout_gravity="center_vertical"
+                android:layout_marginBottom="2dp"
+                android:layout_marginLeft="1dp"
+                android:layout_marginRight="1dp"
+                android:layout_marginTop="2dp"
                 android:background="?android:attr/colorBackground"
                 android:gravity="center_vertical"
-                android:layout_marginTop="2dp"
-                android:layout_marginBottom="2dp"
-                android:layout_marginRight="1dp"
-                android:layout_marginLeft="1dp" />
+                android:text="@string/round6"
+                android:textAlignment="center" />
 
             <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
@@ -506,15 +510,15 @@
     </TableLayout>
 
     <Button
-        android:text="Restart"
+        android:id="@+id/restartButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/restartButton"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintRight_toRightOf="parent"
         android:layout_marginBottom="8dp"
-        android:onClick="restartGame" />
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:onClick="restartGame"
+        android:text="@string/restart_button"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 </android.support.constraint.ConstraintLayout>

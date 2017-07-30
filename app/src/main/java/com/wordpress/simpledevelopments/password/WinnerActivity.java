@@ -40,7 +40,7 @@ public class WinnerActivity extends AppCompatActivity {
         if (parentIntent.getStringExtra(GV.WINNER_TEAM_NAME) != null) {
             winnerView.setText(parentIntent.getStringExtra(GV.WINNER_TEAM_NAME));
         } else {
-            winnerView.setText("It's a Tie!!!");
+            winnerView.setText(R.string.its_a_tie);
         }
 
         if (parentIntent.getIntArrayExtra(GV.A_SCORES_1) != null) {

@@ -233,9 +233,9 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             ppSpinnerView.setSpinner(currPP);
             updateDisplay();
             if (gameState == GameState.TEAM_TRANSITION) {
-                promptForContinue("Pass phone to other person and click continue!");
+                promptForContinue(getString(R.string.pass_phone_next));
             } else if (gameState == GameState.WORD_TRANSITION) {
-                promptForContinue("Pass phone across the table and click continue!");
+                promptForContinue(getString(R.string.pass_phone_across));
             }
             // Game has been successfully restarted
         }
@@ -467,9 +467,9 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         } else { // If not the end of the game
             updateDisplay();
             if (gameState == GameState.TEAM_TRANSITION) {
-                promptForContinue("Pass phone to other person and click continue!");
+                promptForContinue(getString(R.string.pass_phone_next));
             } else if (gameState == GameState.WORD_TRANSITION) {
-                promptForContinue("Pass phone across the table and click continue!");
+                promptForContinue(getString(R.string.pass_phone_across));
             }
         }
     }
