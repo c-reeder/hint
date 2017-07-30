@@ -190,7 +190,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                     }
                 };
                 task.execute("https://wordvault.herokuapp.com/passwords/" + language + "/" + difficulty);
-                Log.d(TAG, "URL: " + "https://wordvault.herokuapp.com/passwords/" + language + "/" + difficulty);
+                Log.v(TAG, "URL: " + "https://wordvault.herokuapp.com/passwords/" + language + "/" + difficulty);
             } else {
                 Log.e(TAG, "Not connected to network");
             }
@@ -218,7 +218,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             //wordAccepted = savedInstanceState.getBoolean(GV.WORD_ACCEPTED);
             gameState = (GameState) savedInstanceState.getSerializable(GV.GAME_STATE);
 
-            Log.d(TAG, "Game state on restart: " + gameState);
+            Log.v(TAG, "Game state on restart: " + gameState);
 
             // Results Variables to be Passed to the Winner Screen
             aWords = savedInstanceState.getStringArray(GV.A_WORDS);
@@ -347,7 +347,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
     public void onAcceptWord(View view) {
         assertEquals(gameState, GameState.WORD_APPROVAL);
-        Log.d(TAG, "Word Accepted");
+        Log.v(TAG, "Word Accepted");
         //wordAccepted = true;
         acceptWordButton.setVisibility(View.GONE);
         startPlaying();
@@ -481,14 +481,14 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     }
 
     private void promptForContinue(String message) {
-        Log.d(TAG, "Here is where we would prompt for continue!");
+        Log.v(TAG, "Here is where we would prompt for continue!");
         messageView.setText(message);
         messageView.setVisibility(View.VISIBLE);
         continueButton.setVisibility(View.VISIBLE);
     }
 
     public void onContinue(View view) {
-        Log.d(TAG, "We have continued in this state: " + gameState);
+        Log.v(TAG, "We have continued in this state: " + gameState);
         assertTrue(gameState == GameState.TEAM_TRANSITION || gameState == GameState.WORD_TRANSITION);
         messageView.setVisibility(View.GONE);
         continueButton.setVisibility(View.GONE);
@@ -583,7 +583,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 //            return false;
 //        }
         boolean inApprovalState = (gameState == GameState.WORD_APPROVAL);
-        Log.d(TAG, "canSwipe: " + inApprovalState);
+        Log.v(TAG, "canSwipe: " + inApprovalState);
         if (!inApprovalState) {
             return false;
         }
@@ -660,7 +660,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      */
     @Override
     public void onTimerComplete() {
-        Log.d(TAG, "Timer Complete!");
+        Log.v(TAG, "Timer Complete!");
         // Simulate a Incorrect Button press
         Button incorrectButton = (Button) findViewById(R.id.failureButton);
         guessMade(incorrectButton);
