@@ -26,6 +26,7 @@ public class WinnerActivity extends AppCompatActivity {
     private String teamName1;
     private String teamName2;
     private String difficulty;
+    private String language;
 
 
 
@@ -105,6 +106,12 @@ public class WinnerActivity extends AppCompatActivity {
             difficulty = parentIntent.getStringExtra(GV.DIFFICULTY);
         } else {
             difficulty = "easy";
+        }
+
+        if (parentIntent.getStringExtra(GV.LANGUAGE) != null) {
+            difficulty = parentIntent.getStringExtra(GV.LANGUAGE);
+        } else {
+            difficulty = "english";
         }
 
 

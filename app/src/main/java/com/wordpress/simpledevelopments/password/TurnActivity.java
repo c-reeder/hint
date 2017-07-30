@@ -56,6 +56,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private String teamName1;
     private String teamName2;
     private String difficulty;
+    private String language;
     private String[] wordList;
 
     // Ever-Changing "Current" Variables
@@ -136,6 +137,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             teamName1 = parentIntent.getStringExtra(GV.TEAM_NAME_1);
             teamName2 = parentIntent.getStringExtra(GV.TEAM_NAME_2);
             difficulty = parentIntent.getStringExtra(GV.DIFFICULTY);
+            language = parentIntent.getStringExtra(GV.LANGUAGE);
             currRound = 1;
             currPP = 10;
             isPartnerB = false;
@@ -185,8 +187,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                         }
                     }
                 };
-                task.execute("https://wordvault.herokuapp.com/passwords/" + difficulty);
-                Log.d(TAG, "URL: " + "https://wordvault.herokuapp.com/passwords/" + difficulty);
+                task.execute("https://wordvault.herokuapp.com/passwords/" + language + "/" + difficulty);
+                Log.d(TAG, "URL: " + "https://wordvault.herokuapp.com/passwords/" + language + "/" + difficulty);
             } else {
                 Log.e(TAG, "Not connected to network");
             }
@@ -197,6 +199,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             teamName1 = savedInstanceState.getString(GV.TEAM_NAME_1);
             teamName2 = savedInstanceState.getString(GV.TEAM_NAME_2);
             difficulty = savedInstanceState.getString(GV.DIFFICULTY);
+            language = savedInstanceState.getString(GV.LANGUAGE);
             wordList = savedInstanceState.getStringArray(GV.WORD_LIST);
 
             // Ever-Changing "Current" Variables
@@ -251,6 +254,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         savedInstanceState.putString(GV.TEAM_NAME_1,teamName1);
         savedInstanceState.putString(GV.TEAM_NAME_2,teamName2);
         savedInstanceState.putString(GV.DIFFICULTY,difficulty);
+        savedInstanceState.putString(GV.LANGUAGE,language);
         savedInstanceState.putStringArray(GV.WORD_LIST,wordList);
 
         // Ever-Changing "Current" Variables
@@ -456,6 +460,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             winnerIntent.putExtra(GV.TEAM_NAME_1, teamName1);
             winnerIntent.putExtra(GV.TEAM_NAME_2, teamName2);
             winnerIntent.putExtra(GV.DIFFICULTY, difficulty);
+            winnerIntent.putExtra(GV.LANGUAGE, language);
 
             //Launch Winner Activity
             startActivityForResult(winnerIntent,0);

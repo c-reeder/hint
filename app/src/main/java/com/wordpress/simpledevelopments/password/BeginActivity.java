@@ -1,6 +1,7 @@
 package com.wordpress.simpledevelopments.password;
 
 import android.content.Intent;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -21,6 +22,7 @@ public class BeginActivity extends AppCompatActivity {
     private EditText nameText1;
     private EditText nameText2;
     private RadioGroup diffGroup;
+    private RadioGroup langGroup;
     private ImageButton helpButton;
 
     @Override
@@ -31,6 +33,7 @@ public class BeginActivity extends AppCompatActivity {
         nameText1 = (EditText) findViewById(R.id.team1NameBox);
         nameText2 = (EditText) findViewById(R.id.team2NameBox);
         diffGroup = (RadioGroup) findViewById(R.id.diffGroup);
+        langGroup = (RadioGroup) findViewById(R.id.langGroup);
         helpButton = (ImageButton) findViewById(R.id.helpButton);
 
         helpButton.setOnClickListener(new View.OnClickListener() {
@@ -83,6 +86,14 @@ public class BeginActivity extends AppCompatActivity {
                 diffGroup.check(R.id.hardButton);
         }
 
+        if (parentIntent.getStringExtra(GV.LANGUAGE) != null) {
+            String difficulty = parentIntent.getStringExtra(GV.LANGUAGE);
+            if (difficulty.equals("english"))
+                diffGroup.check(R.id.easyButton);
+            else if (difficulty.equals("español"))
+                diffGroup.check(R.id.mediumButton);
+        }
+
         //Ensure that we do not lose fullscreen mode upon entering text
         final View decorView = getWindow().getDecorView();
         decorView.setOnSystemUiVisibilityChangeListener (new View.OnSystemUiVisibilityChangeListener() {
@@ -116,8 +127,10 @@ public class BeginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, TurnActivity.class);
         intent.putExtra(GV.TEAM_NAME_1, nameText1.getText().toString());
         intent.putExtra(GV.TEAM_NAME_2, nameText2.getText().toString());
-        RadioButton selected = (RadioButton) findViewById(diffGroup.getCheckedRadioButtonId());
-        intent.putExtra(GV.DIFFICULTY, selected.getText().toString().toLowerCase());
+        RadioButton selectedDiff = (RadioButton) findViewById(diffGroup.getCheckedRadioButtonId());
+        RadioButton selectedLang = (RadioButton) findViewById(langGroup.getCheckedRadioButtonId());
+        intent.putExtra(GV.DIFFICULTY, selectedDiff.getText().toString().toLowerCase());
+        intent.putExtra(GV.LANGUAGE, selectedLang.getText().toString().toLowerCase());
         startActivity(intent);
     }
 }

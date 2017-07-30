@@ -84,33 +84,63 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginEnd="16dp"
         app:layout_constraintRight_toRightOf="parent"
-        android:id="@+id/diffGroup"
-        app:layout_constraintBottom_toTopOf="@+id/beginButton"
+        android:id="@+id/langGroup"
+        app:layout_constraintBottom_toTopOf="@+id/diffGroup"
         android:layout_marginBottom="32dp"
         android:orientation="horizontal">
 
         <RadioButton
-            android:text="Easy"
+            android:id="@+id/englishButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/easyButton"
             android:layout_weight="1"
-            android:checked="true" />
+            android:checked="true"
+            android:text="English"
+            android:textAlignment="viewStart" />
 
         <RadioButton
-            android:text="Medium"
+            android:id="@+id/españolButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/mediumButton"
-            android:layout_weight="1" />
-
-        <RadioButton
-            android:text="Hard"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/hardButton"
-            android:layout_weight="1" />
+            android:layout_weight="1"
+            android:text="Español"
+            android:textAlignment="viewStart" />
     </RadioGroup>
+
+    <RadioGroup
+    android:layout_width="300dp"
+    android:layout_height="0dp"
+    android:layout_marginStart="16dp"
+    app:layout_constraintLeft_toLeftOf="parent"
+    android:layout_marginEnd="16dp"
+    app:layout_constraintRight_toRightOf="parent"
+    android:id="@+id/diffGroup"
+    app:layout_constraintBottom_toTopOf="@+id/beginButton"
+    android:layout_marginBottom="32dp"
+    android:orientation="horizontal">
+
+    <RadioButton
+        android:text="Easy"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/easyButton"
+        android:layout_weight="1"
+        android:checked="true" />
+
+    <RadioButton
+        android:text="Medium"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/mediumButton"
+        android:layout_weight="1" />
+
+    <RadioButton
+        android:text="Hard"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/hardButton"
+        android:layout_weight="1" />
+</RadioGroup>
 
     <ImageButton
         android:id="@+id/helpButton"

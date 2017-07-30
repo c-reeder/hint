@@ -10,6 +10,7 @@ class GV {
     static final String TEAM_NAME_1 = "TEAM_NAME_1";
     static final String TEAM_NAME_2 = "TEAM_NAME_2";
     static final String DIFFICULTY = "DIFFICULTY";
+    static final String LANGUAGE = "LANGUAGE";
     static final String IN_PLAY = "IN_PLAY";
     static final String WORD_LIST = "WORD_LIST";
     static final String CURR_ROUND = "CURR_ROUND";
