@@ -116,9 +116,9 @@
         app:layout_constraintHorizontal_bias="0.4" />
 
     <com.wordpress.simpledevelopments.password.TenSpinner
-        android:layout_height="120dp"
-        android:layout_width="120dp"
         android:id="@+id/ppSpinner"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         app:layout_constraintRight_toRightOf="@+id/topBar"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -128,7 +128,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:onClick="onAcceptWord"
-        android:text="Accept Word?"
+        android:text="@string/accept_word"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/buttonRow"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -162,20 +162,20 @@
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:onClick="guessMade"
-            android:text="Correct"
             android:background="@color/correctGreen"
-            android:textColor="@color/white"/>
+            android:onClick="guessMade"
+            android:text="@string/correct"
+            android:textColor="@color/white" />
 
         <Button
             android:id="@+id/failureButton"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_weight="1"
-            android:onClick="guessMade"
-            android:text="Incorrect"
             android:background="@color/incorrectRed"
-            android:textColor="@color/white"/>
+            android:onClick="guessMade"
+            android:text="@string/incorrect"
+            android:textColor="@color/white" />
 
     </LinearLayout>
 

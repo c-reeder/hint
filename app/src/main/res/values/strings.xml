@@ -36,4 +36,6 @@
     <string name="team1">Team 1</string>
     <string name="team2">Team 2</string>
     <string name="large_text">This is some large text</string>
+    <string name="english">English</string>
+    <string name="spanish">Spanish</string>
 </resources>

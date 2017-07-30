@@ -16,14 +16,10 @@
     <string name="round6">Ronda #6</string>
     <string name="restart_game">REINICIAR JUEGO</string>
     <string name="restart_button">Reiniciar</string>
-    <string name="resume_game">CONINUAR JUEGO</string>
+    <string name="resume_game">CONTINUAR JUEGO</string>
     <string name="menu">Menú</string>
-    <string name="pass_phone_across">
-        Pasa el celular al otro lado de la mesa y haz clic en coninuar!
-    </string>
-    <string name="pass_phone_next">
-        Pasa el celular al oponente que está al lado tuyo!
-    </string>
+    <string name="pass_phone_across">"\n        Pasa el celular al otro lado de la mesa y haz clic en continuar!\n    "</string>
+    <string name="pass_phone_next">"\n        Pasa el celular al oponente que está al lado tuyo y haz clic en continuar!\n    "</string>
     <string name="continue_button">Continuar</string>
     <string name="winner_announcement">El Equipo Ganador Es:</string>
     <string name="its_a_tie">Es un Empate!!!</string>
@@ -36,4 +32,6 @@
     <string name="team1">Equipo 1</string>
     <string name="team2">Equipo 2</string>
     <string name="large_text">This is some large text</string>
+    <string name="english">Inglés</string>
+    <string name="spanish">Español</string>
 </resources>

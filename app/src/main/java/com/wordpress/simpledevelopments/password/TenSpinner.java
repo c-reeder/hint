@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -81,10 +82,14 @@ public class TenSpinner extends View {
         textPaint = new Paint();
         textPaint.setAntiAlias(true);
         textPaint.setStyle(Paint.Style.FILL);
-        textPaint.setTextSize(100);
+        Resources res = getResources();
+        float textSize = res.getDimensionPixelSize(R.dimen.tenSpinnerText);
+        float strokeWidth = res.getDimensionPixelSize(R.dimen.tenSpinnerStroke);
+//        textPaint.setTextSize(100);
+        textPaint.setTextSize(textSize);
 
         outlinePaint = new Paint();
-        outlinePaint.setStrokeWidth(5);
+        outlinePaint.setStrokeWidth(strokeWidth);
         outlinePaint.setColor(ContextCompat.getColor(getContext(), R.color.spinnerOutline));
         outlinePaint.setStyle(Paint.Style.STROKE);
 

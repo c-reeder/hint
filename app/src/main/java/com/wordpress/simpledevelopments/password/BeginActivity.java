@@ -1,13 +1,10 @@
 package com.wordpress.simpledevelopments.password;
 
 import android.content.Intent;
-import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
@@ -87,11 +84,11 @@ public class BeginActivity extends AppCompatActivity {
         }
 
         if (parentIntent.getStringExtra(GV.LANGUAGE) != null) {
-            String difficulty = parentIntent.getStringExtra(GV.LANGUAGE);
-            if (difficulty.equals("english"))
-                diffGroup.check(R.id.easyButton);
-            else if (difficulty.equals("español"))
-                diffGroup.check(R.id.mediumButton);
+            String lang = parentIntent.getStringExtra(GV.LANGUAGE);
+            if (lang.equals("english"))
+                langGroup.check(R.id.englishButton);
+            else if (lang.equals("spanish"))
+                langGroup.check(R.id.spanishButton);
         }
 
         //Ensure that we do not lose fullscreen mode upon entering text
@@ -136,7 +133,11 @@ public class BeginActivity extends AppCompatActivity {
         } else if (selectedDiff.getId() == R.id.hardButton) {
             intent.putExtra(GV.DIFFICULTY, "hard");
         }
-        intent.putExtra(GV.LANGUAGE, selectedLang.getText().toString().toLowerCase());
+        if (selectedLang.getId() == R.id.englishButton) {
+            intent.putExtra(GV.LANGUAGE, "english");
+        } else if (selectedLang.getId() == R.id.spanishButton) {
+            intent.putExtra(GV.LANGUAGE, "spanish");
+        }
         startActivity(intent);
     }
 }

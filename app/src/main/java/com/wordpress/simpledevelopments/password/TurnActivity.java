@@ -184,6 +184,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                             //Game has now begun
                         } catch (JSONException ex) {
                             ex.printStackTrace();
+                            Log.e(TAG, "Contents of Response: ");
+                            Log.e(TAG, result);
                         }
                     }
                 };
@@ -608,6 +610,11 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     }
 
     public void pauseGame(View view) {
+        if (gameState == GameState.AWAITING_WORDS) {
+            Log.d(TAG, "Trying to pause in Awaiting Words Mode");
+            return;
+        }
+
         MenuFragment menuFragment = new MenuFragment();
 
         TextView wordText = (TextView) viewPager.findViewById(R.id.singleTextView);

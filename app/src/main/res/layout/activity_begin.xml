@@ -40,7 +40,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         android:imeOptions="flagNoFullscreen|flagNoExtractUi"
         android:layout_marginTop="112dp"
-        android:text="Team Awesome" />
+        android:text="@string/team1" />
 
     <TextView
         android:id="@+id/team2Label"
@@ -60,7 +60,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/team1NameBox"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:text="Team Sweet"
+        android:text="@string/team2"
         app:layout_constraintBottom_toTopOf="@+id/diffGroup"
         android:layout_marginBottom="8dp" />
 
@@ -95,15 +95,15 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:checked="true"
-            android:text="English"
+            android:text="@string/english"
             android:textAlignment="viewStart" />
 
         <RadioButton
-            android:id="@+id/españolButton"
+            android:id="@+id/spanishButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:text="Español"
+            android:text="@string/spanish"
             android:textAlignment="viewStart" />
     </RadioGroup>
 
