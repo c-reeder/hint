@@ -4,7 +4,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_instructions">InstructionsActivity</string>
     <string name="action_settings">Configuraciones</string>
-    <string name="accept_word">Acceptar Palabra?</string>
+    <string name="accept_word">Aceptar Palabra?</string>
     <string name="correct">CORRECTO</string>
     <string name="incorrect">INCORRECTO</string>
     <string name="round">Ronda</string>
@@ -24,7 +24,7 @@
     <string name="pass_phone_next">
         Pasa el celular al oponente que está al lado tuyo!
     </string>
-    <string name="continue_button">Continue</string>
+    <string name="continue_button">Continuar</string>
     <string name="winner_announcement">El Equipo Ganador Es:</string>
     <string name="its_a_tie">Es un Empate!!!</string>
     <string name="word">Palabra</string>

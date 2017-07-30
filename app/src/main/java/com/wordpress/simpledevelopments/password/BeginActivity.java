@@ -129,7 +129,13 @@ public class BeginActivity extends AppCompatActivity {
         intent.putExtra(GV.TEAM_NAME_2, nameText2.getText().toString());
         RadioButton selectedDiff = (RadioButton) findViewById(diffGroup.getCheckedRadioButtonId());
         RadioButton selectedLang = (RadioButton) findViewById(langGroup.getCheckedRadioButtonId());
-        intent.putExtra(GV.DIFFICULTY, selectedDiff.getText().toString().toLowerCase());
+        if (selectedDiff.getId() == R.id.easyButton) {
+            intent.putExtra(GV.DIFFICULTY, "easy");
+        } else if (selectedDiff.getId() == R.id.mediumButton) {
+            intent.putExtra(GV.DIFFICULTY, "medium");
+        } else if (selectedDiff.getId() == R.id.hardButton) {
+            intent.putExtra(GV.DIFFICULTY, "hard");
+        }
         intent.putExtra(GV.LANGUAGE, selectedLang.getText().toString().toLowerCase());
         startActivity(intent);
     }
