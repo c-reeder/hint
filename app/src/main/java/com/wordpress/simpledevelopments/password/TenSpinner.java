@@ -3,7 +3,6 @@ package com.wordpress.simpledevelopments.password;
 import android.animation.Animator;
 import android.animation.ValueAnimator;
 import android.content.Context;
-import android.content.Intent;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
@@ -12,8 +11,6 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 
 /**
@@ -22,11 +19,6 @@ import android.view.View;
  */
 
 public class TenSpinner extends View {
-
-    private static final String TAG = "TenSpinner";
-
-    private static final int[] COLORS = {Color.BLUE, Color.CYAN, Color.DKGRAY,Color.GRAY,Color.GREEN,
-                                        Color.LTGRAY,Color.MAGENTA, Color.RED, Color.WHITE, Color.YELLOW};
     private enum Gravity {
         Left,
         Center,
@@ -35,8 +27,6 @@ public class TenSpinner extends View {
         Bottom
     }
 
-    private int viewWidth;
-    private int viewHeight;
     private int rDiameter;
     private Gravity hGravity;
     private Gravity vGravity;
@@ -53,6 +43,8 @@ public class TenSpinner extends View {
     private ValueAnimator.AnimatorUpdateListener updateListener;
     private MyAnimatorListener animatorListener;
     private int offsetGoal;
+
+    private RectF bounds;
 
 
     public TenSpinner(Context context) {
@@ -99,6 +91,8 @@ public class TenSpinner extends View {
     }
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
+        int viewWidth;
+        int viewHeight;
         //Measure Width
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         if (rDiameter < 0) {
@@ -176,14 +170,18 @@ public class TenSpinner extends View {
             }
         }
 
-
-
         setMeasuredDimension(viewWidth,viewHeight);
+    }
+
+    @Override
+    public void onSizeChanged(int width,
+                              int height,
+                              int oldWidth,
+                              int oldHeight) {
+        bounds = new RectF(origX,origY - radius * 2,origX + radius * 4,origY + radius * 2);
     }
     @Override
     protected void onDraw(Canvas canvas) {
-        RectF rectF = new RectF(origX,origY - radius * 2,origX + radius * 4,origY + radius * 2);
-
         Paint.FontMetrics metrics = textPaint.getFontMetrics();
         float textHeight = metrics.bottom - metrics.top;
 
@@ -193,12 +191,7 @@ public class TenSpinner extends View {
             } else {
                 spinnerPaint.setColor(Color.WHITE);
             }
-//            if ((spinOffset + i * 36 + 117) % 360 > 100 && (spinOffset + i * 36 + 117) % 360 < 136) {
-//                            canvas.drawArc(rectF, spinOffset + i * 36 + 117,36,true, blurPaint);
-//            } else {
-//                            canvas.drawArc(rectF, spinOffset + i * 36 + 117,36,true, spinnerPaint);
-//            }
-            canvas.drawArc(rectF, spinOffset + i * 36 + 117,36,true, spinnerPaint);
+            canvas.drawArc(bounds, spinOffset + i * 36 + 117,36,true, spinnerPaint);
 
         }
 

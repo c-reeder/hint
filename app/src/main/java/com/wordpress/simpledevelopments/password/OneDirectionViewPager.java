@@ -1,7 +1,6 @@
 package com.wordpress.simpledevelopments.password;
 
 import android.content.Context;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -10,15 +9,13 @@ import android.view.MotionEvent;
 
 /**
  * OneDirectionViewPager
- * Connor Reeder
- * 12/23/16.
+ * By Connor Reeder
  */
 
 public class OneDirectionViewPager extends ViewPager {
 
     private static final String TAG = "OneDirectionViewPager";
 
-    private float oldXVal;
     private GestureDetector gestureDetector;
     private SwipeController swipeController;
 
@@ -53,20 +50,20 @@ public class OneDirectionViewPager extends ViewPager {
 
 
     /**
-     * Interface definining the interaction between a OneDirectionViewPager and its containing Activity or Fragment
+     * Interface defining the interaction between a OneDirectionViewPager and its containing Activity or Fragment
      */
-    public interface SwipeController {
+    interface SwipeController {
         /**
          * Determines whether swiping is currently allowed on this OneDirectionalViewPager
          * @return whether or not swiping is allowed
          */
-        public boolean canSwipe();
+        boolean canSwipe();
 
         /**
          * Callback for when this OneDirectionViewPager has been swiped
          * @param newIndex the index of the OneDirectionViewPager after being swiped.
          */
-        public void onSwiped(int newIndex);
+        void onSwiped(int newIndex);
     }
 
 

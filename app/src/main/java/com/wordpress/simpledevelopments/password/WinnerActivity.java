@@ -23,10 +23,6 @@ public class WinnerActivity extends AppCompatActivity {
     private int[] bScores2;
     private int totalScore1;
     private int totalScore2;
-    private String teamName1;
-    private String teamName2;
-    private String difficulty;
-    private String language;
 
 
 
@@ -90,31 +86,6 @@ public class WinnerActivity extends AppCompatActivity {
             Log.d(TAG, "totalScore2 not passed correctly!");
         }
 
-        if (parentIntent.getStringExtra(GV.TEAM_NAME_1) != null) {
-            teamName1 = parentIntent.getStringExtra(GV.TEAM_NAME_1);
-        } else {
-            Log.d(TAG, "teamName1 not passed to WinnerActivity correctly!");
-        }
-
-        if (parentIntent.getStringExtra(GV.TEAM_NAME_2) != null) {
-            teamName2 = parentIntent.getStringExtra(GV.TEAM_NAME_2);
-        } else {
-            Log.d(TAG, "teamName2 not passed to WinnerActivity correctly!");
-        }
-
-        if (parentIntent.getStringExtra(GV.DIFFICULTY) != null) {
-            difficulty = parentIntent.getStringExtra(GV.DIFFICULTY);
-        } else {
-            difficulty = "easy";
-        }
-
-        if (parentIntent.getStringExtra(GV.LANGUAGE) != null) {
-            difficulty = parentIntent.getStringExtra(GV.LANGUAGE);
-        } else {
-            difficulty = "english";
-        }
-
-
         TableLayout scoreTable = (TableLayout) findViewById(R.id.scoreTable);
         for (int i = 0; i < NUM_ROUNDS; i++) {
             TableRow row = (TableRow) scoreTable.getChildAt(i + 1);
@@ -133,8 +104,8 @@ public class WinnerActivity extends AppCompatActivity {
 
         TextView sum1View = (TextView) findViewById(R.id.sum1);
         TextView sum2View = (TextView) findViewById(R.id.sum2);
-        sum1View.setText("" + totalScore1);
-        sum2View.setText("" + totalScore2);
+        sum1View.setText(totalScore1);
+        sum2View.setText(totalScore2);
 
     }
     public void restartGame(View view) {

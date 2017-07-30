@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.animation.LinearInterpolator;
 
 /**
+ * A grey circle that shoes how much time is left as a form of timer.
  * Created by connor on 5/23/17.
  */
 
@@ -31,6 +32,7 @@ public class TimerPie extends View {
     private MyAnimatorListener animatorListener;
 
     private TimerListener timerListener;
+    private RectF bounds;
 
     public TimerPie(Context context) {
         super(context);
@@ -56,9 +58,15 @@ public class TimerPie extends View {
         updateListener = new MyUpdateListener();
     }
     @Override
+    public void onSizeChanged(int width,
+                              int height,
+                              int oldWidth,
+                              int oldHeight) {
+        bounds = new RectF(0,0,width,height);
+    }
+    @Override
     public void onDraw(Canvas canvas) {
-        RectF rectF = new RectF(0,0,canvas.getWidth(),canvas.getHeight());
-        canvas.drawArc(rectF,270,-1 * angle,true,piePaint);
+        canvas.drawArc(bounds,270,-1 * angle,true,piePaint);
     }
     public void startTimer() {
         if (valueAnimator != null) {
@@ -117,8 +125,8 @@ public class TimerPie extends View {
         }
     }
 
-    public interface TimerListener {
-        public void onTimerComplete();
+    interface TimerListener {
+        void onTimerComplete();
     }
 
     public void setTimerListener(TimerListener timerListener) {

@@ -1,15 +1,8 @@
 package com.wordpress.simpledevelopments.password;
 
-import android.animation.ObjectAnimator;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.view.animation.Animation;
-import android.view.animation.DecelerateInterpolator;
-import android.view.animation.LinearInterpolator;
-import android.view.animation.RotateAnimation;
-import android.widget.ProgressBar;
 
 public class TestActivity extends AppCompatActivity {
 

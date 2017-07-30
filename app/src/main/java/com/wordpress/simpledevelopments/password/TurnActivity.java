@@ -8,7 +8,6 @@ import android.net.NetworkInfo;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -21,7 +20,11 @@ import org.json.JSONException;
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
-
+/**
+ * Main activity which is displayed during gameplay.
+ * The display shows the word to be guessed, the current score, and the number of the round.
+ * By Connor Reeder
+ */
 public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener, MenuFragment.MenuActionsHandler, TextPagerAdapter.OnReadyListener, TimerPie.TimerListener {
 
     private static final String TAG = "TurnActivity";
@@ -49,7 +52,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private TimerPie timerPie;
     //Word-Swiper Functionality
     private TextPagerAdapter adapter;
-    private GestureDetector gestureDetector;
 
     // Values Constant for the Entirety of one Game
     //private boolean inPlay;
@@ -68,9 +70,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private int totalScore2;
     private int currSkipCountA;
     private int currSkipCountB;
-    //private boolean wordTransition;
     private boolean previousCorrect;
-    //private boolean wordAccepted;
     private GameState gameState;
 
     // Results Variables to be Passed to the Winner Screen
@@ -103,32 +103,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         messageView = (TextView) findViewById(R.id.messageView);
         timerPie = (TimerPie) findViewById(R.id.timerPie);
         timerPie.setTimerListener(this);
-
-        //Setup Tap-Action on the Word-Swyper which is used to exit the word-transition state
-        gestureDetector = new GestureDetector(this,new GestureDetector.SimpleOnGestureListener() {
-            @Override
-            public boolean onSingleTapConfirmed(MotionEvent event) {
-                // Single tap used to release the game from word-transition mode
-//                if (wordTransition) {
-//                    nextWord();
-//                    acceptWordButton.setVisibility(View.VISIBLE);
-//                    wordTransition = false;
-//                    return true;
-//                } else {
-//                    return false;
-//                }
-
-//                if (gameState == GameState.WORD_TRANSITION) {
-//                    nextWord();
-//                    acceptWordButton.setVisibility(View.VISIBLE);
-//                    approveNextWord();
-//                    return true;
-//                } else {
-//                    return false;
-//                }
-                return false;
-            }
-        });
         viewPager.setOnTouchListener(this);
 
         // If the game is started for the first time
@@ -146,8 +120,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             totalScore2 = 0;
             currSkipCountA = 0;
             currSkipCountB = 0;
-            //wordTransition = false;
-            //wordAccepted = false;
             gameState = GameState.AWAITING_WORDS;
 
             // Init Results Variables
@@ -179,7 +151,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                             loadingIcon.setVisibility(View.GONE);
                             initWords();
                             updateDisplay();
-                            //inPlay = true;
                             approveNextWord();
                             //Game has now begun
                         } catch (JSONException ex) {
@@ -197,7 +168,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         } else { //if savedInstanceState != null  -----> We are RE-starting our activity
 
             // Values Constant for the Entirety of one Game
-            //inPlay = savedInstanceState.getBoolean(GV.IN_PLAY);
             teamName1 = savedInstanceState.getString(GV.TEAM_NAME_1);
             teamName2 = savedInstanceState.getString(GV.TEAM_NAME_2);
             difficulty = savedInstanceState.getString(GV.DIFFICULTY);
@@ -213,9 +183,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             totalScore2 = savedInstanceState.getInt(GV.CURR_SCORE_2);
             currSkipCountA = savedInstanceState.getInt(GV.CURR_SKIP_COUNT_A);
             currSkipCountB = savedInstanceState.getInt(GV.CURR_SKIP_COUNT_B);
-            //wordTransition = savedInstanceState.getBoolean(GV.WORD_TRANSITION);
             previousCorrect = savedInstanceState.getBoolean(GV.PREVIOUS_CORRECT);
-            //wordAccepted = savedInstanceState.getBoolean(GV.WORD_ACCEPTED);
             gameState = (GameState) savedInstanceState.getSerializable(GV.GAME_STATE);
 
             Log.v(TAG, "Game state on restart: " + gameState);
@@ -250,9 +218,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-
         // Values Constant for the Entirety of one Game
-        //savedInstanceState.putBoolean(GV.IN_PLAY,inPlay);
         savedInstanceState.putString(GV.TEAM_NAME_1,teamName1);
         savedInstanceState.putString(GV.TEAM_NAME_2,teamName2);
         savedInstanceState.putString(GV.DIFFICULTY,difficulty);
@@ -268,9 +234,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         savedInstanceState.putInt(GV.CURR_SCORE_2, totalScore2);
         savedInstanceState.putInt(GV.CURR_SKIP_COUNT_A,currSkipCountA);
         savedInstanceState.putInt(GV.CURR_SKIP_COUNT_B,currSkipCountB);
-        //savedInstanceState.putBoolean(GV.WORD_TRANSITION,wordTransition);
         savedInstanceState.putBoolean(GV.PREVIOUS_CORRECT, previousCorrect);
-        //savedInstanceState.putBoolean(GV.WORD_ACCEPTED, wordAccepted);
         savedInstanceState.putSerializable(GV.GAME_STATE, gameState);
 
         // Results Variables to be Passed to the Winner Screen
@@ -333,8 +297,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      * variables that back them.
      */
     private void updateDisplay() {
-        roundView.setText("#" + currRound);
-        scoreView.setText(totalScore1 + ":" + totalScore2);
+        roundView.setText(String.format("%c%s",'#',Integer.toString(currRound)));
+        scoreView.setText(Integer.toString(totalScore1) + ':' + Integer.toString(totalScore2));
         if(!isPartnerB)
             partnerLetterView.setText("A");
         else
@@ -348,7 +312,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     public void onAcceptWord(View view) {
         assertEquals(gameState, GameState.WORD_APPROVAL);
         Log.v(TAG, "Word Accepted");
-        //wordAccepted = true;
         acceptWordButton.setVisibility(View.GONE);
         startPlaying();
     }
@@ -364,12 +327,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      * @param view The button pressed to signal that a guess has been made
      */
     public void guessMade(View view) {
-        // Do nothing if a guess has already been made but we have not advanced
-        // or the game is not currently in play
-        // or the word has not been accepted
-//        if (wordTransition || !inPlay || !wordAccepted)
-//            return;
-
         if (gameState != GameState.PLAYING) {
             Log.e(TAG, "Guess made while not playing!");
             return;
@@ -438,7 +395,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         // Check if end of game
         if (currRound > NUM_ROUNDS) {
             // Game is Over
-            //inPlay = false;
             gameState = GameState.GAME_OVER;
 
             // Create Winner Screen intent
@@ -499,7 +455,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         } else if (gameState == GameState.WORD_TRANSITION) {
             // The other two players now start giving hints and a new word is approved
             nextWord();
-            //acceptWordButton.setVisibility(View.VISIBLE);
             approveNextWord();
         }
 
@@ -507,9 +462,10 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
         /**
          * Setup so that we cannot return to TurnActivity from WinnerActivity
-         * @param requestCode
-         * @param resultCode
-         * @param data
+         * @param requestCode The integer request code originally supplied to startActivityForResult(),
+         *                    allowing you to identify who this result came from.
+         * @param resultCode The integer result code returned by the child activity through its setResult().
+         * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
          */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -548,10 +504,10 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
     /**
      * Puts the game into word-transition mode
-     * Once the game is in this mode, the background color of the word-swiper indicates whether the word was succesfully guessed or not
+     * Once the game is in this mode, the background color of the word-swiper indicates whether the word was successfully guessed or not
      * and the screen must be tapped for the game to advance.
      * This mode is used when handing the phone to the other set of opposing players
-     * @param success
+     * @param success Whether or not the guess made was correct.
      */
     private void transitionToNextWord(boolean success) {
         previousCorrect = success;
@@ -578,21 +534,16 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      */
     @Override
     public boolean canSwipe() {
-//        Log.d(TAG, "canSwipe: " + !wordTransition);
-//        if (wordTransition) {
-//            return false;
-//        }
         boolean inApprovalState = (gameState == GameState.WORD_APPROVAL);
         Log.v(TAG, "canSwipe: " + inApprovalState);
         if (!inApprovalState) {
             return false;
         }
+        // Returns whether or not the current word can be skipped.
         if (isPartnerB) {
-            boolean canSkip =  (currPP == 10) && currSkipCountB < 5;
-            return canSkip;
+            return (currPP == 10) && currSkipCountB < 5;
         } else {
-            boolean canSkip = (currPP == 10) && currSkipCountA < 5;
-            return canSkip;
+            return (currPP == 10) && currSkipCountA < 5;
         }
     }
 
@@ -605,7 +556,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      */
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
-        gestureDetector.onTouchEvent(motionEvent);
         return false;
     }
 
@@ -639,12 +589,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      */
     @Override
     public void onTextPagerAdapterReady() {
-//        if (wordTransition) {
-//            if (previousCorrect)
-//                adapter.getCurrentView().setBackgroundColor(Color.GREEN);
-//            else
-//                adapter.getCurrentView().setBackgroundColor(Color.RED);
-//        }
         if (gameState == GameState.WORD_TRANSITION) {
             if (previousCorrect)
                 adapter.getCurrentView().setBackgroundColor(Color.GREEN);

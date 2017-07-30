@@ -10,17 +10,19 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+/**
+ * Initial Activity upon opening the app.
+ * Allows the user to choose team names and difficulty for the game.
+ * By Connor Reeder
+ */
 public class BeginActivity extends AppCompatActivity {
 
     private static final String TAG = "TurnActivity";
 
-    private String teamName1;
-    private String teamName2;
     private EditText nameText1;
     private EditText nameText2;
     private RadioGroup diffGroup;
     private RadioGroup langGroup;
-    private ImageButton helpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,7 +33,7 @@ public class BeginActivity extends AppCompatActivity {
         nameText2 = (EditText) findViewById(R.id.team2NameBox);
         diffGroup = (RadioGroup) findViewById(R.id.diffGroup);
         langGroup = (RadioGroup) findViewById(R.id.langGroup);
-        helpButton = (ImageButton) findViewById(R.id.helpButton);
+        ImageButton helpButton = (ImageButton) findViewById(R.id.helpButton);
 
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -60,27 +62,30 @@ public class BeginActivity extends AppCompatActivity {
         });
 
         if (parentIntent.getStringExtra(GV.TEAM_NAME_1) != null) {
-            teamName1 = parentIntent.getStringExtra(GV.TEAM_NAME_1);
-            nameText1.setText(teamName1);
+            nameText1.setText(parentIntent.getStringExtra(GV.TEAM_NAME_1));
         } else {
             Log.d(TAG, "teamName1 not passed correctly!");
         }
 
         if (parentIntent.getStringExtra(GV.TEAM_NAME_2) != null) {
-            teamName2 = parentIntent.getStringExtra(GV.TEAM_NAME_2);
-            nameText2.setText(teamName2);
+            nameText2.setText(parentIntent.getStringExtra(GV.TEAM_NAME_2));
         } else {
             Log.d(TAG, "teamName2 not passed correctly!");
         }
 
         if (parentIntent.getStringExtra(GV.DIFFICULTY) != null) {
             String difficulty = parentIntent.getStringExtra(GV.DIFFICULTY);
-            if (difficulty.equals("easy"))
-                diffGroup.check(R.id.easyButton);
-            else if (difficulty.equals("medium"))
-                diffGroup.check(R.id.mediumButton);
-            else if (difficulty.equals("hard"))
-                diffGroup.check(R.id.hardButton);
+            switch (difficulty) {
+                case "easy":
+                    diffGroup.check(R.id.easyButton);
+                    break;
+                case "medium":
+                    diffGroup.check(R.id.mediumButton);
+                    break;
+                case "hard":
+                    diffGroup.check(R.id.hardButton);
+                    break;
+            }
         }
 
         if (parentIntent.getStringExtra(GV.LANGUAGE) != null) {

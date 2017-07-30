@@ -1,6 +1,5 @@
 package com.wordpress.simpledevelopments.password;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
@@ -16,19 +15,17 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import java.util.List;
-
 /**
- * Created by connor on 1/13/17.
+ * Menu that pops up when you pause the game.
+ * Gives the option to resume the game or restart it.
+ * By Connor Reeder
  */
 
 public class MenuFragment extends DialogFragment {
     public static final String TAG = "MenuFragment";
-    private ArrayAdapter<String> menuOptionsAdapter;
     private MenuActionsHandler handler;
 
     @NonNull
@@ -40,10 +37,13 @@ public class MenuFragment extends DialogFragment {
         menuDialog.setContentView(R.layout.dialog_menu);
         DisplayMetrics metrics = getActivity().getResources().getDisplayMetrics();
         int width = metrics.widthPixels;
-        int height = metrics.heightPixels;
-        menuDialog.getWindow().setLayout((int) (width * .8), WindowManager.LayoutParams.WRAP_CONTENT);
 
-        menuOptionsAdapter = new MenuAdapter(menuOptions);
+        Window window = menuDialog.getWindow();
+        if (window != null) {
+            window.setLayout((int) (width * .8), WindowManager.LayoutParams.WRAP_CONTENT);
+        }
+
+        ArrayAdapter<String> menuOptionsAdapter = new MenuAdapter(menuOptions);
         ListView optionsListView = (ListView) menuDialog.findViewById(R.id.optionsList);
         optionsListView.setAdapter(menuOptionsAdapter);
         optionsListView.setOnItemClickListener(new ListView.OnItemClickListener(){
@@ -79,15 +79,18 @@ public class MenuFragment extends DialogFragment {
 
     private class MenuDialog extends Dialog {
 
-        public MenuDialog(Context context) {
+        MenuDialog(Context context) {
             super(context);
         }
 
         @Override
         public void show() {
             // Set the dialog to not focusable.
-            getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
-                    WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+            Window window = getWindow();
+            if (window != null) {
+                window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+            }
 
             copySystemUiVisibility();
             setCancelable(false);
@@ -98,21 +101,24 @@ public class MenuFragment extends DialogFragment {
         }
         private void copySystemUiVisibility() {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
-                getWindow().getDecorView().setSystemUiVisibility(
-                        getActivity().getWindow().getDecorView().getSystemUiVisibility());
+                Window window = getWindow();
+                if (window != null) {
+                    window.getDecorView().setSystemUiVisibility(
+                            getActivity().getWindow().getDecorView().getSystemUiVisibility());
+                }
             }
         }
     }
 
     private class MenuAdapter extends ArrayAdapter<String> {
 
-        public MenuAdapter(String[] menuOptions) {
+        MenuAdapter(String[] menuOptions) {
             super(getActivity(), 0, menuOptions);
         }
 
         @NonNull
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
+        public View getView(int position, View convertView, @NonNull ViewGroup parent) {
             String optionText = getItem(position);
 
             if (convertView == null) {
@@ -125,9 +131,9 @@ public class MenuFragment extends DialogFragment {
             return convertView;
         }
     }
-    public interface MenuActionsHandler {
-        public void restartGame();
-        public void resumeGame();
+    interface MenuActionsHandler {
+        void restartGame();
+        void resumeGame();
     }
 
     @Override

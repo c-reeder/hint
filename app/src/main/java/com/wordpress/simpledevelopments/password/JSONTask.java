@@ -1,9 +1,5 @@
 package com.wordpress.simpledevelopments.password;
 import android.os.AsyncTask;
-import android.util.Log;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
@@ -18,8 +14,7 @@ import java.net.URL;
  * Connor Reeder
  */
 
-public class JSONTask extends AsyncTask<String, Void, String> {
-    private final String TAG = "JSONTask";
+class JSONTask extends AsyncTask<String, Void, String> {
 
     @Override
     protected String doInBackground(String... urls) {
