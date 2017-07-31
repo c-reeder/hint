@@ -1,15 +1,20 @@
 package com.wordpress.simpledevelopments.password;
 
+import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.Build;
+import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Explode;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -86,6 +91,12 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+            getWindow().setEnterTransition(new Explode());
+            getWindow().setExitTransition(new Explode());
+        }
+
         setContentView(R.layout.activity_turn);
         Intent parentIntent = getIntent();
 
@@ -421,7 +432,12 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             winnerIntent.putExtra(GV.LANGUAGE, language);
 
             //Launch Winner Activity
-            startActivityForResult(winnerIntent,0);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                startActivity(winnerIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+            } else {
+                startActivity(winnerIntent);
+            }
+            finish();
         } else { // If not the end of the game
             updateDisplay();
             if (gameState == GameState.TEAM_TRANSITION) {
@@ -467,11 +483,11 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
          * @param resultCode The integer result code returned by the child activity through its setResult().
          * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
          */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        finish();
-    }
+//    @Override
+//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+//        super.onActivityResult(requestCode, resultCode, data);
+//        finish();
+//    }
 
     /**
      * Helper method to be called every time is word is completed
@@ -574,7 +590,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
     @Override
     public void restartGame() {
-        finish();
+        supportFinishAfterTransition();
     }
 
     @Override

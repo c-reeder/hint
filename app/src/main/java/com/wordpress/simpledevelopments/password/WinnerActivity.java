@@ -1,9 +1,12 @@
 package com.wordpress.simpledevelopments.password;
 
 import android.content.Intent;
+import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.transition.Explode;
 import android.util.Log;
+import android.view.Window;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -29,6 +32,11 @@ public class WinnerActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
+            getWindow().setEnterTransition(new Explode());
+        }
+
         setContentView(R.layout.activity_winner);
         Intent parentIntent = getIntent();
         TextView winnerView = (TextView) findViewById(R.id.winnerText);
@@ -104,12 +112,12 @@ public class WinnerActivity extends AppCompatActivity {
 
         TextView sum1View = (TextView) findViewById(R.id.sum1);
         TextView sum2View = (TextView) findViewById(R.id.sum2);
-        sum1View.setText(totalScore1);
-        sum2View.setText(totalScore2);
+        sum1View.setText(String.format("%d",totalScore1));
+        sum2View.setText(String.format("%d",totalScore2));
 
     }
     public void restartGame(View view) {
-        finish();
+        supportFinishAfterTransition();
     }
 
     @Override

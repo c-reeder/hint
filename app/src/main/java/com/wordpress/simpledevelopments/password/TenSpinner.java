@@ -77,7 +77,6 @@ public class TenSpinner extends View {
         Resources res = getResources();
         float textSize = res.getDimensionPixelSize(R.dimen.tenSpinnerText);
         float strokeWidth = res.getDimensionPixelSize(R.dimen.tenSpinnerStroke);
-//        textPaint.setTextSize(100);
         textPaint.setTextSize(textSize);
 
         outlinePaint = new Paint();
