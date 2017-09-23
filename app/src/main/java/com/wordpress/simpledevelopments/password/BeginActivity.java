@@ -69,41 +69,6 @@ public class BeginActivity extends AppCompatActivity {
             }
         });
 
-        if (parentIntent.getStringExtra(GV.TEAM_NAME_1) != null) {
-            nameText1.setText(parentIntent.getStringExtra(GV.TEAM_NAME_1));
-        } else {
-            Log.d(TAG, "teamName1 not passed correctly!");
-        }
-
-        if (parentIntent.getStringExtra(GV.TEAM_NAME_2) != null) {
-            nameText2.setText(parentIntent.getStringExtra(GV.TEAM_NAME_2));
-        } else {
-            Log.d(TAG, "teamName2 not passed correctly!");
-        }
-
-        if (parentIntent.getStringExtra(GV.DIFFICULTY) != null) {
-            String difficulty = parentIntent.getStringExtra(GV.DIFFICULTY);
-            switch (difficulty) {
-                case "easy":
-                    diffGroup.check(R.id.easyButton);
-                    break;
-                case "medium":
-                    diffGroup.check(R.id.mediumButton);
-                    break;
-                case "hard":
-                    diffGroup.check(R.id.hardButton);
-                    break;
-            }
-        }
-
-        if (parentIntent.getStringExtra(GV.LANGUAGE) != null) {
-            String lang = parentIntent.getStringExtra(GV.LANGUAGE);
-            if (lang.equals("english"))
-                langGroup.check(R.id.englishButton);
-            else if (lang.equals("spanish"))
-                langGroup.check(R.id.spanishButton);
-        }
-
         //Ensure that we do not lose fullscreen mode upon entering text
         final View decorView = getWindow().getDecorView();
         decorView.setOnSystemUiVisibilityChangeListener (new View.OnSystemUiVisibilityChangeListener() {
@@ -114,7 +79,97 @@ public class BeginActivity extends AppCompatActivity {
                 }
             }
         });
+
+        if (savedInstanceState == null) {
+            if (parentIntent.getStringExtra(GK.TEAM_NAME_1) != null) {
+                nameText1.setText(parentIntent.getStringExtra(GK.TEAM_NAME_1));
+            } else {
+                Log.d(TAG, "teamName1 not passed correctly!");
+            }
+
+            if (parentIntent.getStringExtra(GK.TEAM_NAME_2) != null) {
+                nameText2.setText(parentIntent.getStringExtra(GK.TEAM_NAME_2));
+            } else {
+                Log.d(TAG, "teamName2 not passed correctly!");
+            }
+
+            if (parentIntent.getStringExtra(GK.DIFFICULTY) != null) {
+                String difficulty = parentIntent.getStringExtra(GK.DIFFICULTY);
+                switch (difficulty) {
+                    case GV.EASY:
+                        diffGroup.check(R.id.easyButton);
+                        break;
+                    case GV.MEDIUM:
+                        diffGroup.check(R.id.mediumButton);
+                        break;
+                    case GV.HARD:
+                        diffGroup.check(R.id.hardButton);
+                        break;
+                }
+            }
+
+            if (parentIntent.getStringExtra(GK.LANGUAGE) != null) {
+                String lang = parentIntent.getStringExtra(GK.LANGUAGE);
+                if (lang.equals(GV.ENGLISH))
+                    langGroup.check(R.id.englishButton);
+                else if (lang.equals(GV.SPANISH))
+                    langGroup.check(R.id.spanishButton);
+            }
+        } else {
+            nameText1.setText(savedInstanceState.getString(GK.TEAM_NAME_1));
+            nameText2.setText(savedInstanceState.getString(GK.TEAM_NAME_2));
+
+            String difficulty = savedInstanceState.getString(GK.DIFFICULTY);
+            switch (difficulty) {
+                case GV.EASY:
+                    diffGroup.check(R.id.easyButton);
+                    break;
+                case GV.MEDIUM:
+                    diffGroup.check(R.id.mediumButton);
+                    break;
+                case GV.HARD:
+                    diffGroup.check(R.id.hardButton);
+                    break;
+            }
+
+            String lang = savedInstanceState.getString(GK.LANGUAGE);
+            if (lang.equals(GV.ENGLISH))
+                langGroup.check(R.id.englishButton);
+            else if (lang.equals(GV.SPANISH))
+                langGroup.check(R.id.spanishButton);
+
+        }
+
+
+
     }
+
+    @Override
+    protected void onSaveInstanceState(Bundle savedInstanceState) {
+
+        savedInstanceState.putString(GK.TEAM_NAME_1, nameText1.getText().toString());
+        savedInstanceState.putString(GK.TEAM_NAME_2, nameText2.getText().toString());
+
+        switch (diffGroup.getCheckedRadioButtonId()) {
+            case R.id.easyButton:
+                savedInstanceState.putString(GK.DIFFICULTY, GV.EASY);
+                break;
+            case R.id.mediumButton:
+                savedInstanceState.putString(GK.DIFFICULTY, GV.MEDIUM);
+                break;
+            case R.id.hardButton:
+                savedInstanceState.putString(GK.DIFFICULTY, GV.HARD);
+                break;
+        }
+
+        if (langGroup.getCheckedRadioButtonId() == R.id.englishButton)
+            savedInstanceState.putString(GK.LANGUAGE, GV.ENGLISH);
+        else if (langGroup.getCheckedRadioButtonId() == R.id.spanishButton)
+            savedInstanceState.putString(GK.LANGUAGE, GV.SPANISH);
+
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -135,21 +190,21 @@ public class BeginActivity extends AppCompatActivity {
 
     public void begin(View view) {
         Intent intent = new Intent(this, TurnActivity.class);
-        intent.putExtra(GV.TEAM_NAME_1, nameText1.getText().toString());
-        intent.putExtra(GV.TEAM_NAME_2, nameText2.getText().toString());
+        intent.putExtra(GK.TEAM_NAME_1, nameText1.getText().toString());
+        intent.putExtra(GK.TEAM_NAME_2, nameText2.getText().toString());
         RadioButton selectedDiff = (RadioButton) findViewById(diffGroup.getCheckedRadioButtonId());
         RadioButton selectedLang = (RadioButton) findViewById(langGroup.getCheckedRadioButtonId());
         if (selectedDiff.getId() == R.id.easyButton) {
-            intent.putExtra(GV.DIFFICULTY, "easy");
+            intent.putExtra(GK.DIFFICULTY, GV.EASY);
         } else if (selectedDiff.getId() == R.id.mediumButton) {
-            intent.putExtra(GV.DIFFICULTY, "medium");
+            intent.putExtra(GK.DIFFICULTY, GV.MEDIUM);
         } else if (selectedDiff.getId() == R.id.hardButton) {
-            intent.putExtra(GV.DIFFICULTY, "hard");
+            intent.putExtra(GK.DIFFICULTY, GV.HARD);
         }
         if (selectedLang.getId() == R.id.englishButton) {
-            intent.putExtra(GV.LANGUAGE, "english");
+            intent.putExtra(GK.LANGUAGE, GV.ENGLISH);
         } else if (selectedLang.getId() == R.id.spanishButton) {
-            intent.putExtra(GV.LANGUAGE, "spanish");
+            intent.putExtra(GK.LANGUAGE, GV.SPANISH);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());

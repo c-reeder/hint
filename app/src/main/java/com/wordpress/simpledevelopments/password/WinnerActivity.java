@@ -41,55 +41,55 @@ public class WinnerActivity extends AppCompatActivity {
         Intent parentIntent = getIntent();
         TextView winnerView = (TextView) findViewById(R.id.winnerText);
 
-        if (parentIntent.getStringExtra(GV.WINNER_TEAM_NAME) != null) {
-            winnerView.setText(parentIntent.getStringExtra(GV.WINNER_TEAM_NAME));
+        if (parentIntent.getStringExtra(GK.WINNER_TEAM_NAME) != null) {
+            winnerView.setText(parentIntent.getStringExtra(GK.WINNER_TEAM_NAME));
         } else {
             winnerView.setText(R.string.its_a_tie);
         }
 
-        if (parentIntent.getIntArrayExtra(GV.A_SCORES_1) != null) {
-            aScores1 = parentIntent.getIntArrayExtra(GV.A_SCORES_1);
+        if (parentIntent.getIntArrayExtra(GK.A_SCORES_1) != null) {
+            aScores1 = parentIntent.getIntArrayExtra(GK.A_SCORES_1);
         } else {
             Log.d(TAG, "aScores1 not passed correctly!");
         }
-        if (parentIntent.getIntArrayExtra(GV.A_SCORES_2) != null) {
-            aScores2 = parentIntent.getIntArrayExtra(GV.A_SCORES_2);
+        if (parentIntent.getIntArrayExtra(GK.A_SCORES_2) != null) {
+            aScores2 = parentIntent.getIntArrayExtra(GK.A_SCORES_2);
         } else {
             Log.d(TAG, "aScores2 not passed correctly!");
         }
 
-        if (parentIntent.getIntArrayExtra(GV.B_SCORES_1) != null) {
-            bScores1 = parentIntent.getIntArrayExtra(GV.B_SCORES_1);
+        if (parentIntent.getIntArrayExtra(GK.B_SCORES_1) != null) {
+            bScores1 = parentIntent.getIntArrayExtra(GK.B_SCORES_1);
         } else {
             Log.d(TAG, "bScores1 not passed correctly!");
         }
 
-        if (parentIntent.getIntArrayExtra(GV.B_SCORES_2) != null) {
-            bScores2 = parentIntent.getIntArrayExtra(GV.B_SCORES_2);
+        if (parentIntent.getIntArrayExtra(GK.B_SCORES_2) != null) {
+            bScores2 = parentIntent.getIntArrayExtra(GK.B_SCORES_2);
         } else {
             Log.d(TAG, "bScores1 not passed correctly!");
         }
 
-        if (parentIntent.getStringArrayExtra(GV.A_WORDS) != null) {
-            aWords = parentIntent.getStringArrayExtra(GV.A_WORDS);
+        if (parentIntent.getStringArrayExtra(GK.A_WORDS) != null) {
+            aWords = parentIntent.getStringArrayExtra(GK.A_WORDS);
         } else {
             Log.d(TAG, "aWords not passed correctly!");
         }
 
-        if (parentIntent.getStringArrayExtra(GV.B_WORDS) != null) {
-            bWords = parentIntent.getStringArrayExtra(GV.B_WORDS);
+        if (parentIntent.getStringArrayExtra(GK.B_WORDS) != null) {
+            bWords = parentIntent.getStringArrayExtra(GK.B_WORDS);
         } else {
             Log.d(TAG, "bWords not passed correctly!");
         }
 
-        if (parentIntent.getIntExtra(GV.TOTAL_SCORE_1, -1) >= 0) {
-            totalScore1 = parentIntent.getIntExtra(GV.TOTAL_SCORE_1, 0);
+        if (parentIntent.getIntExtra(GK.TOTAL_SCORE_1, -1) >= 0) {
+            totalScore1 = parentIntent.getIntExtra(GK.TOTAL_SCORE_1, 0);
         } else {
             Log.d(TAG, "totalScore1 not passed correctly!");
         }
 
-        if (parentIntent.getIntExtra(GV.TOTAL_SCORE_2, -1) >= 0) {
-            totalScore2 = parentIntent.getIntExtra(GV.TOTAL_SCORE_2, 0);
+        if (parentIntent.getIntExtra(GK.TOTAL_SCORE_2, -1) >= 0) {
+            totalScore2 = parentIntent.getIntExtra(GK.TOTAL_SCORE_2, 0);
         } else {
             Log.d(TAG, "totalScore2 not passed correctly!");
         }
