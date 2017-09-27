@@ -146,6 +146,12 @@ public class TimerPie extends View {
     public void cancel() {
         valueAnimator.cancel();
     }
+    public void pause() {
+        valueAnimator.pause();
+    }
+    public void resume() {
+        valueAnimator.resume();
+    }
     public long getTime() {
         return valueAnimator.getCurrentPlayTime();
     }

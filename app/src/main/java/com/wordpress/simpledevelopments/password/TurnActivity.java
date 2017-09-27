@@ -3,6 +3,7 @@ package com.wordpress.simpledevelopments.password;
 import android.app.ActivityOptions;
 import android.app.FragmentManager;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -117,6 +118,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
         // If the game is started for the first time
         if (savedInstanceState == null) {
+            Log.d(TAG, "From scratch");
             // Init Game Values
             teamName1 = parentIntent.getStringExtra(GK.TEAM_NAME_1);
             teamName2 = parentIntent.getStringExtra(GK.TEAM_NAME_2);
@@ -158,6 +160,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             }
 
         } else { //if savedInstanceState != null  -----> We are RE-starting our activity
+            Log.d(TAG, "Restart");
 
             // Values Constant for the Entirety of one Game
             teamName1 = savedInstanceState.getString(GK.TEAM_NAME_1);
@@ -269,9 +272,15 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         super.onStop();
 
         if (timerPie.isRunning()) {
-            Log.d(TAG, "Cancelling timer Pie!");
-            timerPie.cancel();
+            Log.d(TAG, "Pausing timer Pie!");
+            timerPie.pause();
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        timerPie.resume();
     }
 
     /**
