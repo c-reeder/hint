@@ -1,6 +1,8 @@
 package com.wordpress.simpledevelopments.password;
 
 import android.app.ActivityOptions;
+import android.app.Fragment;
+import android.app.FragmentManager;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -29,7 +31,7 @@ import static junit.framework.Assert.assertTrue;
  * The display shows the word to be guessed, the current score, and the number of the round.
  * By Connor Reeder
  */
-public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener, MenuFragment.MenuActionsHandler, TextPagerAdapter.OnReadyListener, TimerPie.TimerListener {
+public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener, MenuFragment.MenuActionsHandler, TextPagerAdapter.OnReadyListener, TimerPie.TimerListener, DownloadFragment.OnDownloadCompleteListener {
 
     private static final String TAG = "TurnActivity";
     public static final int NUM_ROUNDS = 6;
@@ -84,6 +86,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private int[] aScores2;
     private int[] bScores1;
     private int[] bScores2;
+
+    private DownloadFragment downloadFragment;
 
 
 
@@ -140,41 +144,23 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             bScores1 = new int[NUM_ROUNDS];
             bScores2 = new int[NUM_ROUNDS];
 
-            // Check Network Status and if connected perform GET request to acquire word list from server
-            // There should be 22 words. 2 Words * 6 Rounds + 5 Word-Skips * 2 Teams = 22 Words
-            ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo netInfo = cm.getActiveNetworkInfo();
-            if (netInfo != null && netInfo.isConnected()) {
-                // Define behavior to occur upon receiving the JSON word data
-                JSONTask task = new JSONTask() {
-                    @Override
-                    protected void onPostExecute(String result) {
-                        try {
-                            wordList = new String[22];
-                            JSONArray response = new JSONArray(result);
-                            for (int i = 0; i < response.length(); i++) {
-                                wordList[i] = response.getString(i);
-                            }
-                            if (response.length() != 22) throw new AssertionError("DID NOT GET 22 WORDS!!!");
-                            //Hide Loading Icon now that Data has been received
-                            ProgressBar loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
-                            loadingIcon.setVisibility(View.GONE);
-                            initWords();
-                            updateDisplay();
-                            approveNextWord();
-                            //Game has now begun
-                        } catch (JSONException ex) {
-                            ex.printStackTrace();
-                            Log.e(TAG, "Contents of Response: ");
-                            Log.e(TAG, result);
-                        }
-                    }
-                };
-                task.execute("https://wordvault.herokuapp.com/passwords/" + language + "/" + difficulty);
-                Log.v(TAG, "URL: " + "https://wordvault.herokuapp.com/passwords/" + language + "/" + difficulty);
+            // Create Fragment Here
+            Bundle fragmentBundle = new Bundle();
+            fragmentBundle.putString(GK.LANGUAGE, language);
+            fragmentBundle.putString(GK.DIFFICULTY, difficulty);
+
+            // Create DownloadFragment and start it.
+            FragmentManager fm = getFragmentManager();
+            downloadFragment = (DownloadFragment) fm.findFragmentByTag(GK.DOWNLOAD_FRAGMENT);
+
+            if (downloadFragment != null) {
+                Log.e(TAG, "Download Fragment already exists!");
             } else {
-                Log.e(TAG, "Not connected to network");
+                downloadFragment = new DownloadFragment();
+                downloadFragment.setArguments(fragmentBundle);
+                fm.beginTransaction().add(downloadFragment, GK.DOWNLOAD_FRAGMENT).commit();
             }
+
         } else { //if savedInstanceState != null  -----> We are RE-starting our activity
 
             // Values Constant for the Entirety of one Game
@@ -206,19 +192,33 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             bScores1 = savedInstanceState.getIntArray(GK.B_SCORES_1);
             bScores2 = savedInstanceState.getIntArray(GK.B_SCORES_2);
 
-            // Hide the loading icon IMMEDIATELY since we are only re-starting the activity and have already obtained our word data
-            ProgressBar loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
-            loadingIcon.setVisibility(View.GONE);
-            initWords();
-            ppSpinnerView.setSpinner(currPP);
-            updateDisplay();
-            if (gameState == GameState.TEAM_TRANSITION) {
-                promptForContinue(getString(R.string.pass_phone_next));
-            } else if (gameState == GameState.WORD_TRANSITION) {
-                promptForContinue(getString(R.string.pass_phone_across));
-            } else if (gameState == GameState.WORD_APPROVAL) {
-                acceptWordButton.setVisibility(View.VISIBLE);
+
+            FragmentManager fm = getFragmentManager();
+            downloadFragment = (DownloadFragment) fm.findFragmentByTag(GK.DOWNLOAD_FRAGMENT);
+
+            if (downloadFragment == null) {
+                Log.e(TAG, "Download Fragment doesn't exist!");
             }
+
+            if (downloadFragment.isComplete()) {
+                // Hide the loading icon IMMEDIATELY since we are only re-starting the activity and have already obtained our word data
+                ProgressBar loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
+                loadingIcon.setVisibility(View.GONE);
+                initWords();
+                ppSpinnerView.setSpinner(currPP);
+                updateDisplay();
+                if (gameState == GameState.TEAM_TRANSITION) {
+                    promptForContinue(getString(R.string.pass_phone_next));
+                } else if (gameState == GameState.WORD_TRANSITION) {
+                    promptForContinue(getString(R.string.pass_phone_across));
+                } else if (gameState == GameState.WORD_APPROVAL) {
+                    acceptWordButton.setVisibility(View.VISIBLE);
+                }
+            } else {
+                Log.d(TAG, "Activity Restarted but works not ready yet!");
+            }
+
+
             // Game has been successfully restarted
         }
     }
@@ -270,6 +270,33 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         adapter = new TextPagerAdapter(this, wordList);
         adapter.setReadyListener(this);
         viewPager.setAdapter(adapter);
+    }
+
+    /**
+     * Called by DownloadFragment when finished downloading words.
+     */
+    @Override
+    public void onDownloadComplete(String result) {
+        Log.d(TAG, "onDownloadComplete");
+        try {
+            wordList = new String[22];
+            JSONArray response = new JSONArray(result);
+            for (int i = 0; i < response.length(); i++) {
+                wordList[i] = response.getString(i);
+            }
+            if (response.length() != 22) throw new AssertionError("DID NOT GET 22 WORDS!!!");
+            //Hide Loading Icon now that Data has been received
+            ProgressBar loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
+            loadingIcon.setVisibility(View.GONE);
+            initWords();
+            updateDisplay();
+            approveNextWord();
+            //Game has now begun
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+            Log.e(TAG, "Contents of Response: ");
+            Log.e(TAG, result);
+        }
     }
 
     /**
