@@ -9,4 +9,5 @@
     <color name="bottomBarBlue">#28285c</color>
     <color name="spinnerFill">#67be6a</color>
     <color name="spinnerOutline">#303F9F</color>
+    <color name="acceptBlue">#5656ce</color>
 </resources>
