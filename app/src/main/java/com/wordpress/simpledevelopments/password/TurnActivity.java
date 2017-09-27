@@ -1,13 +1,9 @@
 package com.wordpress.simpledevelopments.password;
 
 import android.app.ActivityOptions;
-import android.app.Fragment;
 import android.app.FragmentManager;
-import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -215,7 +211,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                     acceptWordButton.setVisibility(View.VISIBLE);
                 }
             } else {
-                Log.d(TAG, "Activity Restarted but works not ready yet!");
+                Log.d(TAG, "Activity Restarted but words not ready yet!");
             }
 
 
