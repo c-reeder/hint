@@ -31,4 +31,7 @@ class GK {
     static final String WINNER_TEAM_NAME = "WINNER_TEAM_NAME";
     static final String GAME_STATE = "GAME_STATE";
     static final String DOWNLOAD_FRAGMENT = "DOWNLOAD_FRAGMENT";
+    static final String TIMER_PIE_TIME = "TIMER_PIE_TIME";
+    static final String TIMER_PIE_ACTIVE = "TIMER_PIE_ACTIVE";
+
 }

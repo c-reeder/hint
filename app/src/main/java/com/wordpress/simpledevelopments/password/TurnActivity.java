@@ -188,6 +188,10 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             bScores1 = savedInstanceState.getIntArray(GK.B_SCORES_1);
             bScores2 = savedInstanceState.getIntArray(GK.B_SCORES_2);
 
+            if (savedInstanceState.getBoolean(GK.TIMER_PIE_ACTIVE)) {
+                timerPie.setVisibility(View.VISIBLE);
+                timerPie.startTimer(savedInstanceState.getLong(GK.TIMER_PIE_TIME));
+            }
 
             FragmentManager fm = getFragmentManager();
             downloadFragment = (DownloadFragment) fm.findFragmentByTag(GK.DOWNLOAD_FRAGMENT);
@@ -253,10 +257,22 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         savedInstanceState.putIntArray(GK.B_SCORES_1,bScores1);
         savedInstanceState.putIntArray(GK.B_SCORES_2,bScores2);
 
+        savedInstanceState.putBoolean(GK.TIMER_PIE_ACTIVE, timerPie.isRunning());
+        if (timerPie.isRunning())
+            savedInstanceState.putLong(GK.TIMER_PIE_TIME, timerPie.getTime());
+
         super.onSaveInstanceState(savedInstanceState);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
 
+        if (timerPie.isRunning()) {
+            Log.d(TAG, "Cancelling timer Pie!");
+            timerPie.cancel();
+        }
+    }
 
     /**
      * Initialize the Word Viewpager (for swiping/skipping through words)

@@ -69,6 +69,9 @@ public class TimerPie extends View {
         canvas.drawArc(bounds,270,-1 * angle,true,piePaint);
     }
     public void startTimer() {
+        startTimer(0L);
+    }
+    public void startTimer(long startTime) {
         if (valueAnimator != null) {
             Log.d(TAG, "TimerPie already started!");
             return;
@@ -76,6 +79,7 @@ public class TimerPie extends View {
         valueAnimator = ValueAnimator.ofInt(360,0);
         valueAnimator.setInterpolator(new LinearInterpolator());
         valueAnimator.setDuration(30 * 1000);
+        valueAnimator.setCurrentPlayTime(startTime);
         valueAnimator.addUpdateListener(updateListener);
         valueAnimator.addListener(animatorListener);
         valueAnimator.start();
@@ -120,6 +124,7 @@ public class TimerPie extends View {
 
         @Override
         public void onAnimationUpdate(ValueAnimator valueAnimator) {
+            Log.d(TAG, String.format("Frame: %f, %d", valueAnimator.getAnimatedFraction(), valueAnimator.getCurrentPlayTime()));
             angle = (Integer) valueAnimator.getAnimatedValue();
             invalidate();
         }
@@ -132,4 +137,20 @@ public class TimerPie extends View {
     public void setTimerListener(TimerListener timerListener) {
         this.timerListener = timerListener;
     }
+
+    public boolean isRunning() {
+        if (valueAnimator == null)
+            return false;
+        return valueAnimator.isRunning();
+    }
+    public void cancel() {
+        valueAnimator.cancel();
+    }
+    public long getTime() {
+        return valueAnimator.getCurrentPlayTime();
+    }
+
+//    public long getSomething() {
+//        return valueAnimator.
+//    }
 }
