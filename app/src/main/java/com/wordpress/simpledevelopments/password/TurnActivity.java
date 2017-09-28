@@ -3,7 +3,6 @@ package com.wordpress.simpledevelopments.password;
 import android.app.ActivityOptions;
 import android.app.FragmentManager;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.graphics.Color;
 import android.os.Build;
 import android.support.v7.app.AppCompatActivity;
@@ -52,7 +51,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private Button acceptWordButton;
     private Button continueButton;
     private TextView messageView;
-    private TimerPie timerPie;
+    private TimerPieFragment timerPieFragment;
     //Word-Swiper Functionality
     private TextPagerAdapter adapter;
 
@@ -112,13 +111,12 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         acceptWordButton = (Button) findViewById(R.id.acceptWordButton);
         continueButton = (Button) findViewById(R.id.continueButton);
         messageView = (TextView) findViewById(R.id.messageView);
-        timerPie = (TimerPie) findViewById(R.id.timerPie);
-        timerPie.setTimerListener(this);
+        timerPieFragment = (TimerPieFragment) getFragmentManager().findFragmentById(R.id.timerPieFragment);
         viewPager.setOnTouchListener(this);
 
         // If the game is started for the first time
         if (savedInstanceState == null) {
-            Log.d(TAG, "From scratch");
+//            Log.d(TAG, "From scratch");
             // Init Game Values
             teamName1 = parentIntent.getStringExtra(GK.TEAM_NAME_1);
             teamName2 = parentIntent.getStringExtra(GK.TEAM_NAME_2);
@@ -160,7 +158,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             }
 
         } else { //if savedInstanceState != null  -----> We are RE-starting our activity
-            Log.d(TAG, "Restart");
+//            Log.d(TAG, "Restart");
 
             // Values Constant for the Entirety of one Game
             teamName1 = savedInstanceState.getString(GK.TEAM_NAME_1);
@@ -191,10 +189,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             bScores1 = savedInstanceState.getIntArray(GK.B_SCORES_1);
             bScores2 = savedInstanceState.getIntArray(GK.B_SCORES_2);
 
-            if (savedInstanceState.getBoolean(GK.TIMER_PIE_ACTIVE)) {
-                timerPie.setVisibility(View.VISIBLE);
-                timerPie.startTimer(savedInstanceState.getLong(GK.TIMER_PIE_TIME));
-            }
+
 
             FragmentManager fm = getFragmentManager();
             downloadFragment = (DownloadFragment) fm.findFragmentByTag(GK.DOWNLOAD_FRAGMENT);
@@ -216,6 +211,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                     promptForContinue(getString(R.string.pass_phone_across));
                 } else if (gameState == GameState.WORD_APPROVAL) {
                     acceptWordButton.setVisibility(View.VISIBLE);
+                } else if (gameState == GameState.PLAYING) {
+                    timerPieFragment.setVisibility(View.VISIBLE);
                 }
             } else {
                 Log.d(TAG, "Activity Restarted but words not ready yet!");
@@ -260,27 +257,17 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         savedInstanceState.putIntArray(GK.B_SCORES_1,bScores1);
         savedInstanceState.putIntArray(GK.B_SCORES_2,bScores2);
 
-        savedInstanceState.putBoolean(GK.TIMER_PIE_ACTIVE, timerPie.isRunning());
-        if (timerPie.isRunning())
-            savedInstanceState.putLong(GK.TIMER_PIE_TIME, timerPie.getTime());
-
         super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-
-        if (timerPie.isRunning()) {
-            Log.d(TAG, "Pausing timer Pie!");
-            timerPie.pause();
-        }
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
-        timerPie.resume();
     }
 
     /**
@@ -378,8 +365,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
     private void startPlaying() {
         gameState = GameState.PLAYING;
-        timerPie.setVisibility(View.VISIBLE);
-        timerPie.startTimer();
+        timerPieFragment.setVisibility(View.VISIBLE);
+        timerPieFragment.startTimer();
     }
 
     /**
@@ -393,8 +380,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         }
 
         // Get rid of the timer and reset it for next time we use it.
-        timerPie.setVisibility(View.GONE);
-        timerPie.resetTimer();
+        timerPieFragment.setVisibility(View.GONE);
+        timerPieFragment.resetTimer();
 
         // If the guess was correct
         if (view.getId() == R.id.successButton) {

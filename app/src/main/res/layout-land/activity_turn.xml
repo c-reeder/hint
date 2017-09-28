@@ -7,11 +7,14 @@
     android:layout_height="match_parent"
     tools:context="com.wordpress.simpledevelopments.password.TurnActivity">
 
-    <com.wordpress.simpledevelopments.password.TimerPie
-        android:id="@+id/timerPie"
+    <fragment
+        android:name="com.wordpress.simpledevelopments.password.TimerPieFragment"
+        tools:context="com.wordpress.simpledevelopments.password.TurnActivity"
+        tools:layout="@layout/fragment_timer_pie"
+        android:id="@+id/timerPieFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:visibility="gone"
+        android:visibility="visible"
 
         app:layout_constraintDimensionRatio="W,1:1"
         app:layout_constraintLeft_toLeftOf="parent"
