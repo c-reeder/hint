@@ -52,6 +52,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private Button acceptWordButton;
     private Button continueButton;
     private TextView messageView;
+    private TextView timerView;
     //Word-Swiper Functionality
     private TextPagerAdapter adapter;
 
@@ -113,14 +114,15 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         acceptWordButton = (Button) findViewById(R.id.acceptWordButton);
         continueButton = (Button) findViewById(R.id.continueButton);
         messageView = (TextView) findViewById(R.id.messageView);
+        timerView = (TextView) findViewById(R.id.timerView);
         //timerPieFragment = (TimerPieFragment) getFragmentManager().findFragmentById(R.id.timerPieFragment);
         viewPager.setOnTouchListener(this);
 
 
-        countDownTimer = new CountDownTimer(30000,1000) {
+        countDownTimer = new CountDownTimer(31000,1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                messageView.setText(String.format("%d",millisUntilFinished / 1000));
+                timerView.setText(String.format("%d",Math.round(millisUntilFinished / 1000)));
             }
 
             @Override
@@ -228,6 +230,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                     acceptWordButton.setVisibility(View.VISIBLE);
                 } else if (gameState == GameState.PLAYING) {
                     //timerPieFragment.setVisibility(View.VISIBLE);
+                    timerView.setVisibility(View.VISIBLE);
                 }
             } else {
                 Log.d(TAG, "Activity Restarted but words not ready yet!");
@@ -380,7 +383,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
     private void startPlaying() {
         gameState = GameState.PLAYING;
-        messageView.setVisibility(View.VISIBLE);
+        timerView.setVisibility(View.VISIBLE);
         countDownTimer.start();
         //timerPieFragment.setVisibility(View.VISIBLE);
         //timerPieFragment.startTimer();
@@ -397,6 +400,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         }
 
         // Get rid of the timer and reset it for next time we use it.
+        timerView.setVisibility(View.GONE);
+        countDownTimer.cancel();
         //timerPieFragment.setVisibility(View.GONE);
         //timerPieFragment.resetTimer();
 
@@ -515,7 +520,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     public void onContinue(View view) {
         Log.v(TAG, "We have continued in this state: " + gameState);
         assertTrue(gameState == GameState.TEAM_TRANSITION || gameState == GameState.WORD_TRANSITION);
-        //messageView.setVisibility(View.GONE);
+        messageView.setVisibility(View.GONE);
         continueButton.setVisibility(View.GONE);
 
         if (gameState == GameState.TEAM_TRANSITION) {
