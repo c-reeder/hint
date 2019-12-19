@@ -5,6 +5,7 @@ import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
+import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.Explode;
@@ -51,7 +52,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private Button acceptWordButton;
     private Button continueButton;
     private TextView messageView;
-    private TimerPieFragment timerPieFragment;
     //Word-Swiper Functionality
     private TextPagerAdapter adapter;
 
@@ -85,6 +85,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
     private DownloadFragment downloadFragment;
 
+    private CountDownTimer countDownTimer;
+
 
 
     @Override
@@ -111,8 +113,21 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         acceptWordButton = (Button) findViewById(R.id.acceptWordButton);
         continueButton = (Button) findViewById(R.id.continueButton);
         messageView = (TextView) findViewById(R.id.messageView);
-        timerPieFragment = (TimerPieFragment) getFragmentManager().findFragmentById(R.id.timerPieFragment);
+        //timerPieFragment = (TimerPieFragment) getFragmentManager().findFragmentById(R.id.timerPieFragment);
         viewPager.setOnTouchListener(this);
+
+
+        countDownTimer = new CountDownTimer(30000,1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                messageView.setText(String.format("%d",millisUntilFinished / 1000));
+            }
+
+            @Override
+            public void onFinish() {
+                onTimerComplete();
+            }
+        };
 
         // If the game is started for the first time
         if (savedInstanceState == null) {
@@ -212,7 +227,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 } else if (gameState == GameState.WORD_APPROVAL) {
                     acceptWordButton.setVisibility(View.VISIBLE);
                 } else if (gameState == GameState.PLAYING) {
-                    timerPieFragment.setVisibility(View.VISIBLE);
+                    //timerPieFragment.setVisibility(View.VISIBLE);
                 }
             } else {
                 Log.d(TAG, "Activity Restarted but words not ready yet!");
@@ -365,8 +380,10 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
     private void startPlaying() {
         gameState = GameState.PLAYING;
-        timerPieFragment.setVisibility(View.VISIBLE);
-        timerPieFragment.startTimer();
+        messageView.setVisibility(View.VISIBLE);
+        countDownTimer.start();
+        //timerPieFragment.setVisibility(View.VISIBLE);
+        //timerPieFragment.startTimer();
     }
 
     /**
@@ -380,8 +397,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         }
 
         // Get rid of the timer and reset it for next time we use it.
-        timerPieFragment.setVisibility(View.GONE);
-        timerPieFragment.resetTimer();
+        //timerPieFragment.setVisibility(View.GONE);
+        //timerPieFragment.resetTimer();
 
         // If the guess was correct
         if (view.getId() == R.id.successButton) {
@@ -498,7 +515,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     public void onContinue(View view) {
         Log.v(TAG, "We have continued in this state: " + gameState);
         assertTrue(gameState == GameState.TEAM_TRANSITION || gameState == GameState.WORD_TRANSITION);
-        messageView.setVisibility(View.GONE);
+        //messageView.setVisibility(View.GONE);
         continueButton.setVisibility(View.GONE);
 
         if (gameState == GameState.TEAM_TRANSITION) {
