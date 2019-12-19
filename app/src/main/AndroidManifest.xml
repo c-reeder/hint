@@ -14,7 +14,7 @@
 
         <!-- android:theme="@style/AppTheme" -->
         <activity android:name=".TurnActivity" />
-        <activity android:name=".BeginActivity">
+        <activity android:name=".BeginActivity"
             android:windowSoftInputMode="adjustResize|stateHidden">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,13 +22,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TestActivity">
-        </activity>
+        <activity android:name=".TestActivity"></activity>
         <activity
             android:name=".WinnerActivity"
             android:exported="true" />
         <activity
             android:name=".InstructionsActivity"
+            android:exported="true"
             android:label="@string/title_activity_instructions"
             android:parentActivityName=".BeginActivity"
             android:theme="@style/Theme.AppCompat.Light.NoActionBar">
@@ -36,6 +36,10 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.wordpress.simpledevelopments.password.BeginActivity" />
         </activity>
+        <activity
+            android:name=".ScrollingActivity"
+            android:label="@string/title_activity_scrolling"
+            android:theme="@style/Theme.AppCompat.Light.NoActionBar"></activity>
     </application>
 
 </manifest>

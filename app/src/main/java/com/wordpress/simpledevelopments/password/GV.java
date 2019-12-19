@@ -5,11 +5,11 @@ package com.wordpress.simpledevelopments.password;
  * Contains static strings passed as values through intents or bundles.
  */
 class GV {
-    static final String EASY = "EASY";
-    static final String MEDIUM = "MEDIUM";
-    static final String HARD = "HARD";
+    static final String EASY = "easy";
+    static final String MEDIUM = "medium";
+    static final String HARD = "hard";
 
-    static final String ENGLISH = "ENGLISH";
-    static final String SPANISH = "SPANISH";
+    static final String ENGLISH = "English";
+    static final String SPANISH = "Spanish";
 }
 

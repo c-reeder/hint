@@ -47,9 +47,9 @@ public class DownloadFragment extends Fragment {
                     listenerActivity.onDownloadComplete(result);
                 }
             };
-                task.execute("https://wordvault.herokuapp.com/passwords/" + language + "/" + difficulty);
+                task.execute("https://wordvault-heroku-18.herokuapp.com/passwords/" + language + "/" + difficulty);
 //            task.execute("http://192.168.50.24:5000/passwords/" + language + "/" + difficulty);
-                Log.v(TAG, "URL: " + "https://wordvault.herokuapp.com/passwords/" + language + "/" + difficulty);
+                Log.v(TAG, "URL: " + "https://wordvault-heroku-18.herokuapp.com/passwords/" + language + "/" + difficulty);
 //            Log.v(TAG, "URL: " + "http://192.168.50.24:5000/passwords/" + language + "/" + difficulty);
         } else {
             Log.e(TAG, "Not connected to network");

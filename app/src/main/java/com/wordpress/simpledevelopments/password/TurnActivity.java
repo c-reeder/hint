@@ -285,7 +285,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      */
     @Override
     public void onDownloadComplete(String result) {
-        Log.d(TAG, "onDownloadComplete");
+        Log.v(TAG, "onDownloadComplete");
         try {
             wordList = new String[22];
             JSONArray response = new JSONArray(result);
