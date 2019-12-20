@@ -6,6 +6,9 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.CountDownTimer;
+import android.support.constraint.ConstraintLayout;
+import android.support.constraint.ConstraintSet;
+import android.support.transition.TransitionManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.Explode;
@@ -53,8 +56,10 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private Button continueButton;
     private TextView messageView;
     private TextView timerView;
+    private TextView wordHolder;
     //Word-Swiper Functionality
     private TextPagerAdapter adapter;
+    ProgressBar loadingIcon;
 
     // Values Constant for the Entirety of one Game
     //private boolean inPlay;
@@ -115,7 +120,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         continueButton = (Button) findViewById(R.id.continueButton);
         messageView = (TextView) findViewById(R.id.messageView);
         timerView = (TextView) findViewById(R.id.timerView);
-        //timerPieFragment = (TimerPieFragment) getFragmentManager().findFragmentById(R.id.timerPieFragment);
+        wordHolder = (TextView) findViewById(R.id.wordHolder);
+        loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
         viewPager.setOnTouchListener(this);
 
 
@@ -217,7 +223,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
             if (downloadFragment.isComplete()) {
                 // Hide the loading icon IMMEDIATELY since we are only re-starting the activity and have already obtained our word data
-                ProgressBar loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
                 loadingIcon.setVisibility(View.GONE);
                 initWords();
                 ppSpinnerView.setSpinner(currPP);
@@ -312,7 +317,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             }
             if (response.length() != 22) throw new AssertionError("DID NOT GET 22 WORDS!!!");
             //Hide Loading Icon now that Data has been received
-            ProgressBar loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
+            loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
             loadingIcon.setVisibility(View.GONE);
             initWords();
             updateDisplay();
@@ -383,6 +388,26 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
     private void startPlaying() {
         gameState = GameState.PLAYING;
+
+        //PROBLEM
+        String tmp = wordList[viewPager.getCurrentItem()];
+        Log.d(TAG, "Setting wordHolder to____"+tmp);
+        wordHolder.setText(tmp);//here
+        //viewPager.setVisibility(View.INVISIBLE);
+        wordHolder.setVisibility(View.VISIBLE);
+        Log.d(TAG, "getLeft: " + wordHolder.getLeft());
+        Log.d(TAG, "getRight: " + wordHolder.getRight());
+        Log.d(TAG, "getTop: " + wordHolder.getTop());
+        Log.d(TAG, "getBottom: " + wordHolder.getBottom());
+
+        ConstraintLayout normLay = (ConstraintLayout) findViewById(R.id.activity_turn);
+        ConstraintSet newSet = new ConstraintSet();
+        newSet.clone(this,R.layout.activity_turn_modified);
+        TransitionManager.beginDelayedTransition(normLay);
+        newSet.applyTo(normLay);
+
+        Log.d(TAG, "AFter: " + wordHolder.getText());
+
         timerView.setVisibility(View.VISIBLE);
         countDownTimer.start();
         //timerPieFragment.setVisibility(View.VISIBLE);
@@ -400,7 +425,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         }
 
         // Get rid of the timer and reset it for next time we use it.
-        timerView.setVisibility(View.GONE);
+        timerView.setVisibility(View.INVISIBLE);
         countDownTimer.cancel();
         //timerPieFragment.setVisibility(View.GONE);
         //timerPieFragment.resetTimer();
@@ -528,7 +553,18 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             startPlaying();
         } else if (gameState == GameState.WORD_TRANSITION) {
             // The other two players now start giving hints and a new word is approved
+
+            Log.d(TAG, "Pos1: " + wordHolder.getText());
+            ConstraintLayout currLay = (ConstraintLayout) findViewById(R.id.activity_turn);
+            ConstraintSet newSet = new ConstraintSet();
+            newSet.clone(this,R.layout.activity_turn);
+            TransitionManager.beginDelayedTransition(currLay);
+            newSet.applyTo(currLay);
+            loadingIcon.setVisibility(View.GONE);
+
+            Log.d(TAG, "Pos2: " + wordHolder.getText());
             nextWord();
+            Log.d(TAG, "Pos3: " + wordHolder.getText());
             approveNextWord();
         }
 
