@@ -223,7 +223,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
             if (downloadFragment.isComplete()) {
                 // Hide the loading icon IMMEDIATELY since we are only re-starting the activity and have already obtained our word data
-                loadingIcon.setVisibility(View.GONE);
+                loadingIcon.setVisibility(View.INVISIBLE);
                 initWords();
                 ppSpinnerView.setSpinner(currPP);
                 updateDisplay();
@@ -318,7 +318,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             if (response.length() != 22) throw new AssertionError("DID NOT GET 22 WORDS!!!");
             //Hide Loading Icon now that Data has been received
             loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
-            loadingIcon.setVisibility(View.GONE);
+            loadingIcon.setVisibility(View.INVISIBLE);
             initWords();
             updateDisplay();
             approveNextWord();
@@ -382,36 +382,34 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     public void onAcceptWord(View view) {
         assertEquals(gameState, GameState.WORD_APPROVAL);
         Log.v(TAG, "Word Accepted");
-        acceptWordButton.setVisibility(View.GONE);
+        acceptWordButton.setVisibility(View.INVISIBLE);
         startPlaying();
     }
 
     private void startPlaying() {
         gameState = GameState.PLAYING;
 
-        //PROBLEM
         String tmp = wordList[viewPager.getCurrentItem()];
-        Log.d(TAG, "Setting wordHolder to____"+tmp);
         wordHolder.setText(tmp);//here
         //viewPager.setVisibility(View.INVISIBLE);
         wordHolder.setVisibility(View.VISIBLE);
-        Log.d(TAG, "getLeft: " + wordHolder.getLeft());
-        Log.d(TAG, "getRight: " + wordHolder.getRight());
-        Log.d(TAG, "getTop: " + wordHolder.getTop());
-        Log.d(TAG, "getBottom: " + wordHolder.getBottom());
 
         ConstraintLayout normLay = (ConstraintLayout) findViewById(R.id.activity_turn);
         ConstraintSet newSet = new ConstraintSet();
-        newSet.clone(this,R.layout.activity_turn_modified);
+        //newSet.clone(this,R.layout.activity_turn_modified);
+        Log.d(TAG, "aaaaaaaaaaaaaaaa");
+        newSet.clear(R.id.wordHolder);
+        newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+        newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+        newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.timerView, ConstraintSet.BOTTOM,0);
+        newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
+        newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
+        newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
         TransitionManager.beginDelayedTransition(normLay);
         newSet.applyTo(normLay);
 
-        Log.d(TAG, "AFter: " + wordHolder.getText());
-
         timerView.setVisibility(View.VISIBLE);
         countDownTimer.start();
-        //timerPieFragment.setVisibility(View.VISIBLE);
-        //timerPieFragment.startTimer();
     }
 
     /**
@@ -545,8 +543,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     public void onContinue(View view) {
         Log.v(TAG, "We have continued in this state: " + gameState);
         assertTrue(gameState == GameState.TEAM_TRANSITION || gameState == GameState.WORD_TRANSITION);
-        messageView.setVisibility(View.GONE);
-        continueButton.setVisibility(View.GONE);
+        messageView.setVisibility(View.INVISIBLE);
+        continueButton.setVisibility(View.INVISIBLE);
 
         if (gameState == GameState.TEAM_TRANSITION) {
             // Next Team guesses
@@ -554,17 +552,22 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         } else if (gameState == GameState.WORD_TRANSITION) {
             // The other two players now start giving hints and a new word is approved
 
-            Log.d(TAG, "Pos1: " + wordHolder.getText());
             ConstraintLayout currLay = (ConstraintLayout) findViewById(R.id.activity_turn);
             ConstraintSet newSet = new ConstraintSet();
-            newSet.clone(this,R.layout.activity_turn);
+            Log.d(TAG, "bbbbbbbbbbbbbbbbbb");
+            newSet.clear(R.id.wordHolder);
+            newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+            newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+            newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.topBar, ConstraintSet.BOTTOM,0);
+            newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
+            newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
+            newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
+
             TransitionManager.beginDelayedTransition(currLay);
             newSet.applyTo(currLay);
-            loadingIcon.setVisibility(View.GONE);
+            loadingIcon.setVisibility(View.INVISIBLE);
 
-            Log.d(TAG, "Pos2: " + wordHolder.getText());
             nextWord();
-            Log.d(TAG, "Pos3: " + wordHolder.getText());
             approveNextWord();
         }
 
