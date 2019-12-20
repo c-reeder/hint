@@ -6,8 +6,10 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.CountDownTimer;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.constraint.ConstraintSet;
+import android.support.transition.AutoTransition;
 import android.support.transition.TransitionManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -395,7 +397,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
         String tmp = wordList[viewPager.getCurrentItem()];
         wordHolder.setText(tmp);//here
-        //viewPager.setVisibility(View.INVISIBLE);
+        viewPager.setVisibility(View.INVISIBLE);
         wordHolder.setVisibility(View.VISIBLE);
         wordHolder.invalidate();
 
@@ -431,9 +433,9 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 currLay.removeOnLayoutChangeListener(this);
 
 
-                Transition changeBounds = new ChangeBounds();
-                changeBounds.setDuration(3000);
-                changeBounds.setInterpolator(new LinearInterpolator());
+                //Transition changeBounds = new ChangeBounds();
+                //changeBounds.setDuration(3000);
+                //changeBounds.setInterpolator(new LinearInterpolator());
 
                 Log.d(TAG, "Layout Changed");
                 ConstraintSet newSet = new ConstraintSet();
@@ -444,7 +446,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
                 newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
                 newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
-                TransitionManager.beginDelayedTransition(currLay,changeBounds);
+                TransitionManager.beginDelayedTransition(currLay);
                 newSet.applyTo(currLay);
             }
         });
@@ -594,26 +596,46 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         } else if (gameState == GameState.WORD_TRANSITION) {
             // The other two players now start giving hints and a new word is approved
 
+            ConstraintLayout mainLay = (ConstraintLayout) findViewById(R.id.activity_turn);
+            mainLay.setBackgroundColor(Color.WHITE);
 
-            Transition changeBounds = new ChangeBounds();
-            changeBounds.setDuration(500);
-            changeBounds.setInterpolator(new LinearInterpolator());
+            Transition transition = new AutoTransition();
+            transition.addListener(new Transition.TransitionListener() {
+                @Override
+                public void onTransitionStart(@NonNull Transition transition) {
+
+                }
+
+                @Override
+                public void onTransitionEnd(@NonNull Transition transition) {
+                    TextView wH = (TextView) findViewById(R.id.wordHolder);
+                    wH.setVisibility(View.INVISIBLE);
+                    viewPager.setVisibility(View.VISIBLE);
+
+                    nextWord();
+                    approveNextWord();
+                }
+
+                @Override
+                public void onTransitionCancel(@NonNull Transition transition) {
+
+                }
+
+                @Override
+                public void onTransitionPause(@NonNull Transition transition) {
+
+                }
+
+                @Override
+                public void onTransitionResume(@NonNull Transition transition) {
+
+                }
+            });
 
             // Transition from Low to NORMAL
-            ConstraintLayout currLay = (ConstraintLayout) findViewById(R.id.activity_turn);
-            ConstraintSet currSet = new ConstraintSet();
-            currSet.clear(R.id.wordHolder);
-            currSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
-            currSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
-            currSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.timerView, ConstraintSet.BOTTOM,0);
-            currSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
-            currSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
-            currSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
-            currSet.applyTo(currLay);
-
-
             Log.d(TAG, "bbbbbbbbbbbbbbbbb");
 
+            ConstraintLayout currLay = (ConstraintLayout) findViewById(R.id.activity_turn);
             ConstraintSet newSet = new ConstraintSet();
             newSet.clear(R.id.wordHolder);
             newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
@@ -622,12 +644,14 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
             newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
             newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
-            TransitionManager.beginDelayedTransition(currLay, changeBounds);
+            TransitionManager.beginDelayedTransition(currLay, transition);
             newSet.applyTo(currLay);
             loadingIcon.setVisibility(View.INVISIBLE);
 
-            nextWord();
-            approveNextWord();
+//            currLay.invalidate();
+//            currLay.requestLayout();
+//            currLay.forceLayout();
+
         }
 
     }
@@ -684,10 +708,15 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private void transitionToNextWord(boolean success) {
         previousCorrect = success;
         View currentView = adapter.getCurrentView();
-        if (success)
-            currentView.setBackgroundColor(Color.GREEN);
-        else
-            currentView.setBackgroundColor(Color.RED);
+        ConstraintLayout mainLay = (ConstraintLayout) findViewById(R.id.activity_turn);
+        if (success) {
+            //currentView.setBackgroundColor(Color.GREEN);
+            mainLay.setBackgroundColor(Color.GREEN);
+
+        } else {
+            //currentView.setBackgroundColor(Color.RED);
+            mainLay.setBackgroundColor(Color.RED);
+        }
         //wordTransition = true;
         //wordAccepted = false;
         gameState = GameState.WORD_TRANSITION;
