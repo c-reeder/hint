@@ -1,5 +1,6 @@
 package com.wordpress.simpledevelopments.password;
 
+import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.app.FragmentManager;
 import android.content.Intent;
@@ -13,14 +14,12 @@ import android.support.transition.AutoTransition;
 import android.support.transition.TransitionManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.transition.ChangeBounds;
 import android.transition.Explode;
 import android.support.transition.Transition;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
-import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -113,24 +112,25 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         Intent parentIntent = getIntent();
 
         // Setup Display
-        roundView = (TextView) findViewById(R.id.roundText);
+        roundView = findViewById(R.id.roundText);
         roundView.setTextSize(25);
-        scoreView = (TextView) findViewById(R.id.scoreText);
-        ppSpinnerView = (TenSpinner) findViewById(R.id.ppSpinner);
-        partnerLetterView = (TextView) findViewById(R.id.partnerLetterText);
-        teamNameView = (TextView) findViewById(R.id.teamName);
-        viewPager = (OneDirectionViewPager) findViewById(R.id.pager);
+        scoreView = findViewById(R.id.scoreText);
+        ppSpinnerView = findViewById(R.id.ppSpinner);
+        partnerLetterView = findViewById(R.id.partnerLetterText);
+        teamNameView = findViewById(R.id.teamName);
+        viewPager = findViewById(R.id.pager);
         viewPager.setSwipeController(this);
-        acceptWordButton = (Button) findViewById(R.id.acceptWordButton);
-        continueButton = (Button) findViewById(R.id.continueButton);
-        messageView = (TextView) findViewById(R.id.messageView);
-        timerView = (TextView) findViewById(R.id.timerView);
-        wordHolder = (TextView) findViewById(R.id.wordHolder);
-        loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
+        acceptWordButton = findViewById(R.id.acceptWordButton);
+        continueButton = findViewById(R.id.continueButton);
+        messageView = findViewById(R.id.messageView);
+        timerView = findViewById(R.id.timerView);
+        wordHolder = findViewById(R.id.wordHolder);
+        loadingIcon = findViewById(R.id.progressBar);
         viewPager.setOnTouchListener(this);
 
 
         countDownTimer = new CountDownTimer(31000,1000) {
+            @SuppressLint("DefaultLocale")
             @Override
             public void onTick(long millisUntilFinished) {
                 timerView.setText(String.format("%d",Math.round(millisUntilFinished / 1000)));
@@ -322,7 +322,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             }
             if (response.length() != 22) throw new AssertionError("DID NOT GET 22 WORDS!!!");
             //Hide Loading Icon now that Data has been received
-            loadingIcon = (ProgressBar) findViewById(R.id.progressBar);
+            loadingIcon = findViewById(R.id.progressBar);
             loadingIcon.setVisibility(View.INVISIBLE);
             initWords();
             updateDisplay();
@@ -371,9 +371,10 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      * Helper method that updates the various components of the view with the current values of the
      * variables that back them.
      */
+    @SuppressLint("SetTextI18n")
     private void updateDisplay() {
         roundView.setText(String.format("%c%s",'#',Integer.toString(currRound)));
-        scoreView.setText(Integer.toString(totalScore1) + ':' + Integer.toString(totalScore2));
+        scoreView.setText(Integer.toString(totalScore1) + ':' + totalScore2);
         if(!isPartnerB)
             partnerLetterView.setText("A");
         else
@@ -393,49 +394,19 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
     private void startPlaying() {
         gameState = GameState.PLAYING;
-        ConstraintLayout currLay = (ConstraintLayout) findViewById(R.id.activity_turn);
+        ConstraintLayout currLay = findViewById(R.id.activity_turn);
 
-        String tmp = wordList[viewPager.getCurrentItem()];
-        wordHolder.setText(tmp);//here
+        wordHolder.setText(wordList[viewPager.getCurrentItem()]);
         viewPager.setVisibility(View.INVISIBLE);
         wordHolder.setVisibility(View.VISIBLE);
-        wordHolder.invalidate();
 
-        Transition immediateChange = new ChangeBounds();
-        immediateChange.setDuration(0);
-        immediateChange.setInterpolator(new LinearInterpolator());
-
-
-        // Transistion from NORMAL to LOW
-        ConstraintSet currSet = new ConstraintSet();
-        currSet.clear(R.id.wordHolder);
-        currSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
-        currSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
-        currSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.topBar, ConstraintSet.BOTTOM,0);
-        currSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
-        currSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
-        currSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
-        //TransitionManager.beginDelayedTransition(currLay,immediateChange);
-        //TransitionManager.endTransitions(currLay);
-        currSet.applyTo(currLay);
-
-
-        Log.d(TAG, "aaaaaaaaaaaaaaaa");
-
-
-        currLay.invalidate();
-        currLay.requestLayout();
-        currLay.forceLayout();
+        // Animation WordHolder from Center Position to Low Position
         currLay.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-                ConstraintLayout currLay = (ConstraintLayout) findViewById(R.id.activity_turn);
+
+                ConstraintLayout currLay = findViewById(R.id.activity_turn);
                 currLay.removeOnLayoutChangeListener(this);
-
-
-                //Transition changeBounds = new ChangeBounds();
-                //changeBounds.setDuration(3000);
-                //changeBounds.setInterpolator(new LinearInterpolator());
 
                 Log.d(TAG, "Layout Changed");
                 ConstraintSet newSet = new ConstraintSet();
@@ -469,8 +440,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         // Get rid of the timer and reset it for next time we use it.
         timerView.setVisibility(View.INVISIBLE);
         countDownTimer.cancel();
-        //timerPieFragment.setVisibility(View.GONE);
-        //timerPieFragment.resetTimer();
 
         // If the guess was correct
         if (view.getId() == R.id.successButton) {
@@ -596,7 +565,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         } else if (gameState == GameState.WORD_TRANSITION) {
             // The other two players now start giving hints and a new word is approved
 
-            ConstraintLayout mainLay = (ConstraintLayout) findViewById(R.id.activity_turn);
+            ConstraintLayout mainLay = findViewById(R.id.activity_turn);
             mainLay.setBackgroundColor(Color.WHITE);
 
             Transition transition = new AutoTransition();
@@ -608,7 +577,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
                 @Override
                 public void onTransitionEnd(@NonNull Transition transition) {
-                    TextView wH = (TextView) findViewById(R.id.wordHolder);
+                    TextView wH = findViewById(R.id.wordHolder);
                     wH.setVisibility(View.INVISIBLE);
                     viewPager.setVisibility(View.VISIBLE);
 
@@ -632,10 +601,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 }
             });
 
-            // Transition from Low to NORMAL
-            Log.d(TAG, "bbbbbbbbbbbbbbbbb");
-
-            ConstraintLayout currLay = (ConstraintLayout) findViewById(R.id.activity_turn);
+            // Animation WordHolder from Low Position to Normal Position
+            ConstraintLayout currLay = findViewById(R.id.activity_turn);
             ConstraintSet newSet = new ConstraintSet();
             newSet.clear(R.id.wordHolder);
             newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
@@ -647,11 +614,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             TransitionManager.beginDelayedTransition(currLay, transition);
             newSet.applyTo(currLay);
             loadingIcon.setVisibility(View.INVISIBLE);
-
-//            currLay.invalidate();
-//            currLay.requestLayout();
-//            currLay.forceLayout();
-
         }
 
     }
@@ -675,7 +637,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      *  they earned.
      */
     private void storeResult() {
-        TextView currentView = (TextView) adapter.getCurrentView().findViewById(R.id.singleTextView);
+        TextView currentView = adapter.getCurrentView().findViewById(R.id.singleTextView);
         String currWord = currentView.getText().toString();
         if (isPartnerB) {
             bWords[currRound - 1] = currWord;
@@ -707,14 +669,11 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      */
     private void transitionToNextWord(boolean success) {
         previousCorrect = success;
-        View currentView = adapter.getCurrentView();
-        ConstraintLayout mainLay = (ConstraintLayout) findViewById(R.id.activity_turn);
+        ConstraintLayout mainLay = findViewById(R.id.activity_turn);
         if (success) {
-            //currentView.setBackgroundColor(Color.GREEN);
             mainLay.setBackgroundColor(Color.GREEN);
 
         } else {
-            //currentView.setBackgroundColor(Color.RED);
             mainLay.setBackgroundColor(Color.RED);
         }
         //wordTransition = true;
@@ -768,7 +727,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
         MenuFragment menuFragment = new MenuFragment();
 
-        TextView wordText = (TextView) viewPager.findViewById(R.id.singleTextView);
+        TextView wordText = viewPager.findViewById(R.id.singleTextView);
         wordText.setVisibility(View.INVISIBLE);
         menuFragment.show(getSupportFragmentManager(), "MENU_FRAGMENT");
     }
@@ -780,7 +739,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
     @Override
     public void resumeGame() {
-        TextView wordText = (TextView) viewPager.findViewById(R.id.singleTextView);
+        TextView wordText = viewPager.findViewById(R.id.singleTextView);
         wordText.setVisibility(View.VISIBLE);
     }
 
@@ -807,7 +766,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     public void onTimerComplete() {
         Log.v(TAG, "Timer Complete!");
         // Simulate a Incorrect Button press
-        Button incorrectButton = (Button) findViewById(R.id.failureButton);
+        Button incorrectButton = findViewById(R.id.failureButton);
         guessMade(incorrectButton);
     }
 }
