@@ -7,11 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
-    <com.wordpress.simpledevelopments.password.TimerPie
-        android:id="@+id/timerPie"
-        android:layout_height="400dp"
-        android:layout_width="400dp"
-        />
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

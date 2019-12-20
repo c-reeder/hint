@@ -35,11 +35,12 @@ import static junit.framework.Assert.assertTrue;
  * The display shows the word to be guessed, the current score, and the number of the round.
  * By Connor Reeder
  */
-public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener, MenuFragment.MenuActionsHandler, TextPagerAdapter.OnReadyListener, TimerPie.TimerListener, DownloadFragment.OnDownloadCompleteListener {
+public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener, MenuFragment.MenuActionsHandler, DownloadFragment.OnDownloadCompleteListener {
 
     private static final String TAG = "TurnActivity";
     public static final int NUM_ROUNDS = 6;
 
+    // Enum representing different states of the Game
     private enum GameState {
         AWAITING_WORDS,
         WORD_APPROVAL,
@@ -61,6 +62,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private TextView messageView;
     private TextView timerView;
     private TextView wordHolder;
+
     //Word-Swiper Functionality
     private TextPagerAdapter adapter;
     ProgressBar loadingIcon;
@@ -95,6 +97,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
     private DownloadFragment downloadFragment;
 
+    // CountDown used for the game timer
     private CountDownTimer countDownTimer;
     private long countDownTimeRemaining;
 
@@ -157,7 +160,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             bScores1 = new int[NUM_ROUNDS];
             bScores2 = new int[NUM_ROUNDS];
 
-            // Create Fragment Here
+            // Bundle the information sent to the Download Fragment
             Bundle fragmentBundle = new Bundle();
             fragmentBundle.putString(GK.LANGUAGE, language);
             fragmentBundle.putString(GK.DIFFICULTY, difficulty);
@@ -207,8 +210,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             bScores1 = savedInstanceState.getIntArray(GK.B_SCORES_1);
             bScores2 = savedInstanceState.getIntArray(GK.B_SCORES_2);
 
-
-
+            // Recover Download Fragment
             FragmentManager fm = getFragmentManager();
             downloadFragment = (DownloadFragment) fm.findFragmentByTag(GK.DOWNLOAD_FRAGMENT);
 
@@ -248,7 +250,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 } else if (gameState == GameState.WORD_APPROVAL) {
                     acceptWordButton.setVisibility(View.VISIBLE);
                 } else if (gameState == GameState.PLAYING) {
-                    //timerPieFragment.setVisibility(View.VISIBLE);
+
+                    // Initialize the CountDownTimer from where it was before we stopped
                     countDownTimer = new CountDownTimer(countDownTimeRemaining,1000) {
                         @SuppressLint("DefaultLocale")
                         @Override
@@ -259,10 +262,12 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
                         @Override
                         public void onFinish() {
-                            onTimerComplete();
+                            onCountDownCompleted();
                         }
                     };
                     countDownTimer.start();
+
+                    // Correctly restore position of the WordHolder vertically between the timerView and the buttonrow
                     ConstraintSet newSet = new ConstraintSet();
                     wordHolder.setText(wordList[viewPager.getCurrentItem()]);
                     viewPager.setVisibility(View.INVISIBLE);
@@ -286,6 +291,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         }
     }
 
+    // State transition into Approval Mode
     private void approveNextWord() {
         gameState = GameState.WORD_APPROVAL;
         acceptWordButton.setVisibility(View.VISIBLE);
@@ -340,7 +346,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      */
     public void initWords() {
         adapter = new TextPagerAdapter(this, wordList);
-        adapter.setReadyListener(this);
         viewPager.setAdapter(adapter);
     }
 
@@ -421,6 +426,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             teamNameView.setText(teamName2);
     }
 
+    // State transition called when the AcceptButton is pressed
     public void onAcceptWord(View view) {
         assertEquals(gameState, GameState.WORD_APPROVAL);
         Log.v(TAG, "Word Accepted");
@@ -428,6 +434,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         startPlaying();
     }
 
+    // State transition to the actual guessing/playing stage
     private void startPlaying() {
         gameState = GameState.PLAYING;
         ConstraintLayout currLay = findViewById(R.id.activity_turn);
@@ -436,7 +443,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         viewPager.setVisibility(View.INVISIBLE);
         wordHolder.setVisibility(View.VISIBLE);
 
-        // Animation WordHolder from Center Position to Low Position
+        // Animate WordHolder from Center Position to Low Position (beneath the timerView)
         currLay.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
@@ -458,7 +465,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             }
         });
 
-
+        // Initialize the timer clock
         timerView.setVisibility(View.VISIBLE);
         countDownTimer = new CountDownTimer(31000,1000) {
             @SuppressLint("DefaultLocale")
@@ -470,7 +477,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
             @Override
             public void onFinish() {
-                onTimerComplete();
+                onCountDownCompleted();
             }
         };
         timerView.setText(String.format("%02d",Math.round(countDownTimeRemaining / 1000)));
@@ -616,6 +623,12 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         continueButton.setVisibility(View.VISIBLE);
     }
 
+    //
+
+    /**
+     * Called upon pressing the continue button.
+     * @param view the continue button
+     */
     public void onContinue(View view) {
         Log.v(TAG, "We have continued in this state: " + gameState);
         assertTrue(gameState == GameState.TEAM_TRANSITION || gameState == GameState.WORD_TRANSITION);
@@ -681,19 +694,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
     }
 
-        /**
-         * Setup so that we cannot return to TurnActivity from WinnerActivity
-         * @param requestCode The integer request code originally supplied to startActivityForResult(),
-         *                    allowing you to identify who this result came from.
-         * @param resultCode The integer result code returned by the child activity through its setResult().
-         * @param data An Intent, which can return result data to the caller (various data can be attached to Intent "extras").
-         */
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//        finish();
-//    }
-
     /**
      * Helper method to be called every time is word is completed
      * Updates the result variables based on who successfully guessed the word and how many points
@@ -739,8 +739,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         } else {
             mainLay.setBackgroundColor(Color.RED);
         }
-        //wordTransition = true;
-        //wordAccepted = false;
         gameState = GameState.WORD_TRANSITION;
     }
 
@@ -782,6 +780,11 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         return false;
     }
 
+    /**
+     * Called when the pause button is pressed.
+     * In reality this only gives you the ability to return to the start screen
+     * @param view
+     */
     public void pauseGame(View view) {
         if (gameState == GameState.AWAITING_WORDS) {
             Log.d(TAG, "Trying to pause in Awaiting Words Mode");
@@ -807,26 +810,11 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     }
 
     /**
-     * Called when the viewPager has initialized its first view
-     * allowing us to set the background color if we are in the middle of a word transition
-     */
-    @Override
-    public void onTextPagerAdapterReady() {
-        if (gameState == GameState.WORD_TRANSITION) {
-//            if (previousCorrect)
-//                adapter.getCurrentView().setBackgroundColor(Color.GREEN);
-//            else
-//                adapter.getCurrentView().setBackgroundColor(Color.RED);
-        }
-    }
-
-    /**
      *
-     * Called when the TimerPie finishes its countdown
+     * Called when the CountdownTimer finishes its countdown
      *
      */
-    @Override
-    public void onTimerComplete() {
+    public void onCountDownCompleted() {
         Log.v(TAG, "Timer Complete!");
         // Simulate a Incorrect Button press
         Button incorrectButton = findViewById(R.id.failureButton);

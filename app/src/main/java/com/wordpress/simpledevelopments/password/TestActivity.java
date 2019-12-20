@@ -6,7 +6,6 @@ import android.view.View;
 
 public class TestActivity extends AppCompatActivity {
 
-    TimerPie timerPie;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
