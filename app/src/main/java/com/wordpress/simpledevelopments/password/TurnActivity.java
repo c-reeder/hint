@@ -232,10 +232,29 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 initWords();
                 ppSpinnerView.setSpinner(currPP);
                 updateDisplay();
+                ConstraintLayout currLay = findViewById(R.id.activity_turn);
                 if (gameState == GameState.TEAM_TRANSITION) {
                     promptForContinue(getString(R.string.pass_phone_next));
                 } else if (gameState == GameState.WORD_TRANSITION) {
                     promptForContinue(getString(R.string.pass_phone_across));
+                    if (previousCorrect) {
+                        currLay.setBackgroundColor(Color.GREEN);
+
+                    } else {
+                        currLay.setBackgroundColor(Color.RED);
+                    }
+                    wordHolder.setText(wordList[viewPager.getCurrentItem()]);
+                    viewPager.setVisibility(View.INVISIBLE);
+                    ConstraintSet newSet = new ConstraintSet();
+                    newSet.clear(R.id.wordHolder);
+                    newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+                    newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+                    newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.messageView, ConstraintSet.BOTTOM,0);
+                    newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
+                    newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
+                    newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.continueButton, ConstraintSet.TOP,0);
+                    newSet.applyTo(currLay);
+                    Log.d(TAG, "Restarting in Word Transition!");
                 } else if (gameState == GameState.WORD_APPROVAL) {
                     acceptWordButton.setVisibility(View.VISIBLE);
                 } else if (gameState == GameState.PLAYING) {
@@ -539,6 +558,19 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             } else if (gameState == GameState.WORD_TRANSITION) {
                 promptForContinue(getString(R.string.pass_phone_across));
             }
+
+            ConstraintLayout currLay = findViewById(R.id.activity_turn);
+            ConstraintSet newSet = new ConstraintSet();
+            newSet.clear(R.id.wordHolder);
+            newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+            newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+            newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.messageView, ConstraintSet.BOTTOM,0);
+            newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
+            newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
+            newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.continueButton, ConstraintSet.TOP,0);
+            TransitionManager.beginDelayedTransition(currLay);
+            newSet.applyTo(currLay);
+            loadingIcon.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -750,10 +782,10 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     @Override
     public void onTextPagerAdapterReady() {
         if (gameState == GameState.WORD_TRANSITION) {
-            if (previousCorrect)
-                adapter.getCurrentView().setBackgroundColor(Color.GREEN);
-            else
-                adapter.getCurrentView().setBackgroundColor(Color.RED);
+//            if (previousCorrect)
+//                adapter.getCurrentView().setBackgroundColor(Color.GREEN);
+//            else
+//                adapter.getCurrentView().setBackgroundColor(Color.RED);
         }
     }
 
