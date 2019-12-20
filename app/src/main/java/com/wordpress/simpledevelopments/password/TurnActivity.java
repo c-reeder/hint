@@ -96,6 +96,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private DownloadFragment downloadFragment;
 
     private CountDownTimer countDownTimer;
+    private long countDownTimeRemaining;
 
 
 
@@ -129,18 +130,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         viewPager.setOnTouchListener(this);
 
 
-        countDownTimer = new CountDownTimer(31000,1000) {
-            @SuppressLint("DefaultLocale")
-            @Override
-            public void onTick(long millisUntilFinished) {
-                timerView.setText(String.format("%02d",Math.round(millisUntilFinished / 1000)));
-            }
-
-            @Override
-            public void onFinish() {
-                onTimerComplete();
-            }
-        };
 
         // If the game is started for the first time
         if (savedInstanceState == null) {
@@ -206,6 +195,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             currSkipCountB = savedInstanceState.getInt(GK.CURR_SKIP_COUNT_B);
             previousCorrect = savedInstanceState.getBoolean(GK.PREVIOUS_CORRECT);
             gameState = (GameState) savedInstanceState.getSerializable(GK.GAME_STATE);
+            countDownTimeRemaining = savedInstanceState.getLong(GK.TIME_REMAINING);
 
             Log.v(TAG, "Game state on restart: " + gameState);
 
@@ -259,6 +249,32 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                     acceptWordButton.setVisibility(View.VISIBLE);
                 } else if (gameState == GameState.PLAYING) {
                     //timerPieFragment.setVisibility(View.VISIBLE);
+                    countDownTimer = new CountDownTimer(countDownTimeRemaining,1000) {
+                        @SuppressLint("DefaultLocale")
+                        @Override
+                        public void onTick(long millisUntilFinished) {
+                            countDownTimeRemaining = millisUntilFinished;
+                            timerView.setText(String.format("%02d",Math.round(millisUntilFinished / 1000)));
+                        }
+
+                        @Override
+                        public void onFinish() {
+                            onTimerComplete();
+                        }
+                    };
+                    countDownTimer.start();
+                    ConstraintSet newSet = new ConstraintSet();
+                    wordHolder.setText(wordList[viewPager.getCurrentItem()]);
+                    viewPager.setVisibility(View.INVISIBLE);
+                    newSet.clear(R.id.wordHolder);
+                    newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+                    newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+                    newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.timerView, ConstraintSet.BOTTOM,0);
+                    newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
+                    newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
+                    newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
+                    newSet.applyTo(currLay);
+                    timerView.setText(String.format("%02d",Math.round(countDownTimeRemaining / 1000)));
                     timerView.setVisibility(View.VISIBLE);
                 }
             } else {
@@ -295,6 +311,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         savedInstanceState.putInt(GK.CURR_SKIP_COUNT_B,currSkipCountB);
         savedInstanceState.putBoolean(GK.PREVIOUS_CORRECT, previousCorrect);
         savedInstanceState.putSerializable(GK.GAME_STATE, gameState);
+        savedInstanceState.putLong(GK.TIME_REMAINING, countDownTimeRemaining);
 
         // Results Variables to be Passed to the Winner Screen
         savedInstanceState.putStringArray(GK.A_WORDS,aWords);
@@ -443,6 +460,20 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
 
         timerView.setVisibility(View.VISIBLE);
+        countDownTimer = new CountDownTimer(31000,1000) {
+            @SuppressLint("DefaultLocale")
+            @Override
+            public void onTick(long millisUntilFinished) {
+                countDownTimeRemaining = millisUntilFinished;
+                timerView.setText(String.format("%02d",Math.round(millisUntilFinished / 1000)));
+            }
+
+            @Override
+            public void onFinish() {
+                onTimerComplete();
+            }
+        };
+        timerView.setText(String.format("%02d",Math.round(countDownTimeRemaining / 1000)));
         countDownTimer.start();
     }
 
