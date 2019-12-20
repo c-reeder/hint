@@ -86,6 +86,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private int currSkipCountB;
     private boolean previousCorrect;
     private GameState gameState;
+    private int wordIdx;
 
     // Results Variables to be Passed to the Winner Screen
     private String[] aWords;
@@ -151,6 +152,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             currSkipCountA = 0;
             currSkipCountB = 0;
             gameState = GameState.AWAITING_WORDS;
+            wordIdx = 0;
 
             // Init Results Variables
             aWords = new String[NUM_ROUNDS];
@@ -198,6 +200,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             currSkipCountB = savedInstanceState.getInt(GK.CURR_SKIP_COUNT_B);
             previousCorrect = savedInstanceState.getBoolean(GK.PREVIOUS_CORRECT);
             gameState = (GameState) savedInstanceState.getSerializable(GK.GAME_STATE);
+            wordIdx = savedInstanceState.getInt(GK.WORD_IDX);
             countDownTimeRemaining = savedInstanceState.getLong(GK.TIME_REMAINING);
 
             Log.v(TAG, "Game state on restart: " + gameState);
@@ -235,7 +238,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                     } else {
                         currLay.setBackgroundColor(Color.RED);
                     }
-                    wordHolder.setText(wordList[viewPager.getCurrentItem()]);
+                    Log.v(TAG, "Restarting in Word Transition!");
+                    wordHolder.setText(wordList[wordIdx]);
                     viewPager.setVisibility(View.INVISIBLE);
                     ConstraintSet newSet = new ConstraintSet();
                     newSet.clear(R.id.wordHolder);
@@ -246,7 +250,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                     newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
                     newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.continueButton, ConstraintSet.TOP,0);
                     newSet.applyTo(currLay);
-                    Log.d(TAG, "Restarting in Word Transition!");
                 } else if (gameState == GameState.WORD_APPROVAL) {
                     acceptWordButton.setVisibility(View.VISIBLE);
                 } else if (gameState == GameState.PLAYING) {
@@ -269,7 +272,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
                     // Correctly restore position of the WordHolder vertically between the timerView and the buttonrow
                     ConstraintSet newSet = new ConstraintSet();
-                    wordHolder.setText(wordList[viewPager.getCurrentItem()]);
+                    wordHolder.setText(wordList[wordIdx]);
                     viewPager.setVisibility(View.INVISIBLE);
                     newSet.clear(R.id.wordHolder);
                     newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
@@ -317,6 +320,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         savedInstanceState.putInt(GK.CURR_SKIP_COUNT_B,currSkipCountB);
         savedInstanceState.putBoolean(GK.PREVIOUS_CORRECT, previousCorrect);
         savedInstanceState.putSerializable(GK.GAME_STATE, gameState);
+        savedInstanceState.putSerializable(GK.WORD_IDX, wordIdx);
         savedInstanceState.putLong(GK.TIME_REMAINING, countDownTimeRemaining);
 
         // Results Variables to be Passed to the Winner Screen
@@ -383,6 +387,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      */
     @Override
     public void onSwiped(int newIndex) {
+        Log.v(TAG, "onSwiped: " + wordIdx + "->" + newIndex);
+        wordIdx = newIndex;
         if (isPartnerB) {
             currSkipCountB++;
         } else {
@@ -451,7 +457,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 ConstraintLayout currLay = findViewById(R.id.activity_turn);
                 currLay.removeOnLayoutChangeListener(this);
 
-                Log.d(TAG, "Layout Changed");
                 ConstraintSet newSet = new ConstraintSet();
                 newSet.clear(R.id.wordHolder);
                 newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
@@ -746,7 +751,9 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      * Advances the word-swiper to the next word
      */
     private void nextWord() {
+        Log.v(TAG, "nextWord");
         viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
+        wordIdx++;
     }
 
     /**
@@ -787,7 +794,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      */
     public void pauseGame(View view) {
         if (gameState == GameState.AWAITING_WORDS) {
-            Log.d(TAG, "Trying to pause in Awaiting Words Mode");
+            Log.v(TAG, "Trying to pause in Awaiting Words Mode");
             return;
         }
 
