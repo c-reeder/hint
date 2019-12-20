@@ -133,7 +133,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             @SuppressLint("DefaultLocale")
             @Override
             public void onTick(long millisUntilFinished) {
-                timerView.setText(String.format("%d",Math.round(millisUntilFinished / 1000)));
+                timerView.setText(String.format("%02d",Math.round(millisUntilFinished / 1000)));
             }
 
             @Override

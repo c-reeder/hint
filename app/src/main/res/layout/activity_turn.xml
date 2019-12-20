@@ -49,6 +49,7 @@
         android:id="@+id/timerView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:fontFamily="@font/dseg7_classic_mini_bold"
         android:text="00"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
