@@ -27,6 +27,8 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.Arrays;
+
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertTrue;
 
@@ -586,6 +588,20 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             winnerIntent.putExtra(GK.TEAM_NAME_2, teamName2);
             winnerIntent.putExtra(GK.DIFFICULTY, difficulty);
             winnerIntent.putExtra(GK.LANGUAGE, language);
+
+            // Print Intent Goodies
+            Log.d(TAG, "aScores1: " + Arrays.toString(aScores1));
+            Log.d(TAG, "aScores2: " + Arrays.toString(aScores2));
+            Log.d(TAG, "bScores1: " + Arrays.toString(bScores1));
+            Log.d(TAG, "bScores2: " + Arrays.toString(bScores2));
+            Log.d(TAG, "aWords: " + Arrays.toString(aWords));
+            Log.d(TAG, "bWords: " + Arrays.toString(bWords));
+            Log.d(TAG, "totalScore1: " + totalScore1);
+            Log.d(TAG, "totalScore2 " + totalScore2);
+            Log.d(TAG, "teamName1: " + teamName1);
+            Log.d(TAG, "teamName2: " + teamName2);
+            Log.d(TAG, "difficulty: " + difficulty);
+            Log.d(TAG, "language: " + language);
 
             //Launch Winner Activity
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
