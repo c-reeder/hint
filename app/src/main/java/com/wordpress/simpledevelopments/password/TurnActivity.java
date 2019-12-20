@@ -11,11 +11,14 @@ import android.support.constraint.ConstraintSet;
 import android.support.transition.TransitionManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.transition.ChangeBounds;
 import android.transition.Explode;
+import android.support.transition.Transition;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -388,25 +391,64 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
     private void startPlaying() {
         gameState = GameState.PLAYING;
+        ConstraintLayout currLay = (ConstraintLayout) findViewById(R.id.activity_turn);
 
         String tmp = wordList[viewPager.getCurrentItem()];
         wordHolder.setText(tmp);//here
         //viewPager.setVisibility(View.INVISIBLE);
         wordHolder.setVisibility(View.VISIBLE);
+        wordHolder.invalidate();
 
-        ConstraintLayout normLay = (ConstraintLayout) findViewById(R.id.activity_turn);
-        ConstraintSet newSet = new ConstraintSet();
-        //newSet.clone(this,R.layout.activity_turn_modified);
+        Transition immediateChange = new ChangeBounds();
+        immediateChange.setDuration(0);
+        immediateChange.setInterpolator(new LinearInterpolator());
+
+
+        // Transistion from NORMAL to LOW
+        ConstraintSet currSet = new ConstraintSet();
+        currSet.clear(R.id.wordHolder);
+        currSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+        currSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+        currSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.topBar, ConstraintSet.BOTTOM,0);
+        currSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
+        currSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
+        currSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
+        //TransitionManager.beginDelayedTransition(currLay,immediateChange);
+        //TransitionManager.endTransitions(currLay);
+        currSet.applyTo(currLay);
+
+
         Log.d(TAG, "aaaaaaaaaaaaaaaa");
-        newSet.clear(R.id.wordHolder);
-        newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
-        newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
-        newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.timerView, ConstraintSet.BOTTOM,0);
-        newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
-        newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
-        newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
-        TransitionManager.beginDelayedTransition(normLay);
-        newSet.applyTo(normLay);
+
+
+        currLay.invalidate();
+        currLay.requestLayout();
+        currLay.forceLayout();
+        currLay.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+                ConstraintLayout currLay = (ConstraintLayout) findViewById(R.id.activity_turn);
+                currLay.removeOnLayoutChangeListener(this);
+
+
+                Transition changeBounds = new ChangeBounds();
+                changeBounds.setDuration(3000);
+                changeBounds.setInterpolator(new LinearInterpolator());
+
+                Log.d(TAG, "Layout Changed");
+                ConstraintSet newSet = new ConstraintSet();
+                newSet.clear(R.id.wordHolder);
+                newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+                newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+                newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.timerView, ConstraintSet.BOTTOM,0);
+                newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
+                newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
+                newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
+                TransitionManager.beginDelayedTransition(currLay,changeBounds);
+                newSet.applyTo(currLay);
+            }
+        });
+
 
         timerView.setVisibility(View.VISIBLE);
         countDownTimer.start();
@@ -552,9 +594,27 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         } else if (gameState == GameState.WORD_TRANSITION) {
             // The other two players now start giving hints and a new word is approved
 
+
+            Transition changeBounds = new ChangeBounds();
+            changeBounds.setDuration(500);
+            changeBounds.setInterpolator(new LinearInterpolator());
+
+            // Transition from Low to NORMAL
             ConstraintLayout currLay = (ConstraintLayout) findViewById(R.id.activity_turn);
+            ConstraintSet currSet = new ConstraintSet();
+            currSet.clear(R.id.wordHolder);
+            currSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+            currSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+            currSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.timerView, ConstraintSet.BOTTOM,0);
+            currSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
+            currSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
+            currSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
+            currSet.applyTo(currLay);
+
+
+            Log.d(TAG, "bbbbbbbbbbbbbbbbb");
+
             ConstraintSet newSet = new ConstraintSet();
-            Log.d(TAG, "bbbbbbbbbbbbbbbbbb");
             newSet.clear(R.id.wordHolder);
             newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
             newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
@@ -562,8 +622,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
             newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
             newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
-
-            TransitionManager.beginDelayedTransition(currLay);
+            TransitionManager.beginDelayedTransition(currLay, changeBounds);
             newSet.applyTo(currLay);
             loadingIcon.setVisibility(View.INVISIBLE);
 
