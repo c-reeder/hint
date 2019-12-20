@@ -7,15 +7,15 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.CountDownTimer;
-import android.support.annotation.NonNull;
-import android.support.constraint.ConstraintLayout;
-import android.support.constraint.ConstraintSet;
-import android.support.transition.AutoTransition;
-import android.support.transition.TransitionManager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.Explode;
-import android.support.transition.Transition;
+import androidx.transition.Transition;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,8 +29,6 @@ import org.json.JSONException;
 
 import java.util.Arrays;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertTrue;
 
 /**
  * Main activity which is displayed during gameplay.
@@ -436,7 +434,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
     // State transition called when the AcceptButton is pressed
     public void onAcceptWord(View view) {
-        assertEquals(gameState, GameState.WORD_APPROVAL);
         Log.v(TAG, "Word Accepted");
         acceptWordButton.setVisibility(View.INVISIBLE);
         startPlaying();
@@ -652,7 +649,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      */
     public void onContinue(View view) {
         Log.v(TAG, "We have continued in this state: " + gameState);
-        assertTrue(gameState == GameState.TEAM_TRANSITION || gameState == GameState.WORD_TRANSITION);
         messageView.setVisibility(View.INVISIBLE);
         continueButton.setVisibility(View.INVISIBLE);
 
