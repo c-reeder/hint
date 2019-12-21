@@ -11,298 +11,48 @@
     app:layout_constraintEnd_toEndOf="parent"
     tools:context="com.wordpress.simpledevelopments.password.WinnerActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <ImageView
+        android:id="@+id/vectorView"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:srcCompat="@drawable/green_balloon" />
+
+    <TextView
+        android:id="@+id/textView3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="250dp"
+        android:text="@string/winner_announcement"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/winnerText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="@string/team1"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+
+    <Button
+        android:id="@+id/restartButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        android:onClick="restartGame"
+        android:text="@string/restart_button"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:layout_editor_absoluteX="149dp"
-        tools:layout_editor_absoluteY="0dp">
-
-        <androidx.core.widget.NestedScrollView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fillViewport="true"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            >
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="250dp"
-                    android:text="@string/winner_announcement"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/winnerText"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:text="@string/team1"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-                <TextView
-                    android:id="@+id/textView13"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="170dp"
-                    android:text="Score:"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Display1"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/winnerText" />
-
-                <TableLayout
-                    android:id="@+id/scoreTable"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="10dp"
-                    android:layout_marginBottom="64dp"
-                    android:stretchColumns="*"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView13">
-
-                    <TableRow
-                        android:id="@+id/titleRow"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:id="@+id/textView5"
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@drawable/border"
-                            android:text="@string/team1"
-                            android:textAlignment="center"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
-
-                        <TextView
-                            android:id="@+id/textView6"
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@drawable/border"
-                            android:text="@string/team2"
-                            android:textAlignment="center"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Display1" />
-                    </TableRow>
-
-                    <TableRow
-                        android:id="@+id/row1"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <LinearLayout
-                            android:layout_width="0dip"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/border"
-                            android:orientation="vertical"
-                            android:padding="10dp">
-
-                            <!--                            <TextView-->
-                            <!--                                android:id="@+id/textView11"-->
-                            <!--                                android:layout_width="match_parent"-->
-                            <!--                                android:layout_height="wrap_content"-->
-                            <!--                                android:layout_marginStart="10dp"-->
-                            <!--                                android:layout_marginTop="10dp"-->
-                            <!--                                android:layout_marginEnd="10dp"-->
-                            <!--                                android:layout_marginBottom="10dp"-->
-                            <!--                                android:text="TextView"-->
-                            <!--                                android:textAlignment="textStart"-->
-                            <!--                                android:textAppearance="@style/TextAppearance.AppCompat.Large" />-->
-
-                            <!--                            <TextView-->
-                            <!--                                android:id="@+id/textView12"-->
-                            <!--                                android:layout_width="match_parent"-->
-                            <!--                                android:layout_height="wrap_content"-->
-                            <!--                                android:text="TextView" />-->
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:layout_width="0dip"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/border"
-                            android:orientation="vertical"
-                            android:padding="10dp" />
-                    </TableRow>
-
-                    <TableRow
-                        android:id="@+id/row2"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <LinearLayout
-                            android:layout_width="0dip"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/border"
-                            android:orientation="vertical"
-                            android:padding="10dp" />
-
-                        <LinearLayout
-                            android:layout_width="0dip"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/border"
-                            android:orientation="vertical"
-                            android:padding="10dp" />
-                    </TableRow>
-
-                    <TableRow
-                        android:id="@+id/row3"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <LinearLayout
-                            android:layout_width="0dip"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/border"
-                            android:orientation="vertical"
-                            android:padding="10dp" />
-
-                        <LinearLayout
-                            android:layout_width="0dip"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/border"
-                            android:orientation="vertical"
-                            android:padding="10dp" />
-                    </TableRow>
-
-                    <TableRow
-                        android:id="@+id/row4"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <LinearLayout
-                            android:layout_width="0dip"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/border"
-                            android:orientation="vertical"
-                            android:padding="10dp" />
-
-                        <LinearLayout
-                            android:layout_width="0dip"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/border"
-                            android:orientation="vertical"
-                            android:padding="10dp" />
-                    </TableRow>
-
-                    <TableRow
-                        android:id="@+id/row5"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <LinearLayout
-                            android:layout_width="0dip"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/border"
-                            android:orientation="vertical"
-                            android:padding="10dp" />
-
-                        <LinearLayout
-                            android:layout_width="0dip"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/border"
-                            android:orientation="vertical"
-                            android:padding="10dp" />
-                    </TableRow>
-
-                    <TableRow
-                        android:id="@+id/row6"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <LinearLayout
-                            android:layout_width="0dip"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/border"
-                            android:orientation="vertical"
-                            android:padding="10dp" />
-
-                        <LinearLayout
-                            android:layout_width="0dip"
-                            android:layout_height="match_parent"
-                            android:layout_weight="1"
-                            android:background="@drawable/border"
-                            android:orientation="vertical"
-                            android:padding="10dp" />
-                    </TableRow>
-
-                    <TableRow
-                        android:id="@+id/sumRow"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-                        <TextView
-                            android:id="@+id/sum1"
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@drawable/border"
-                            android:padding="10dp"
-                            android:textAlignment="center"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-                            android:textSize="30sp" />
-
-                        <TextView
-                            android:id="@+id/sum2"
-                            android:layout_width="0dip"
-                            android:layout_height="wrap_content"
-                            android:layout_weight="1"
-                            android:background="@drawable/border"
-                            android:padding="10dp"
-                            android:textAlignment="center"
-                            android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-                            android:textSize="30sp" />
-
-                    </TableRow>
-
-                </TableLayout>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </androidx.core.widget.NestedScrollView>
-
-        <Button
-            android:id="@+id/restartButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
-            android:onClick="restartGame"
-            android:text="@string/restart_button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

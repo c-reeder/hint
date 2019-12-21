@@ -39,4 +39,5 @@
     <string name="english">English</string>
     <string name="spanish">Spanish</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="title_activity_score">ScoreActivity</string>
 </resources>
