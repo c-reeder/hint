@@ -12,14 +12,26 @@
     tools:context="com.wordpress.simpledevelopments.password.WinnerActivity">
 
     <ImageView
-        android:id="@+id/vectorView"
+        android:id="@+id/greenBalloon"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginTop="10dp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
         app:srcCompat="@drawable/green_balloon" />
+    <ImageView
+        android:id="@+id/redBalloon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:srcCompat="@drawable/red_balloon" />
+    <ImageView
+        android:id="@+id/blueBalloon"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:srcCompat="@drawable/blue_balloon" />
 
     <TextView
         android:id="@+id/textView3"

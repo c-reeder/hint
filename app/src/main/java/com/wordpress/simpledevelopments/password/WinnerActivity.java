@@ -8,12 +8,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.os.Handler;
 import android.transition.Explode;
+import android.util.Log;
 import android.view.Display;
 import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.View;
+
+import java.util.Random;
 
 public class WinnerActivity extends AppCompatActivity {
 
@@ -43,24 +47,41 @@ public class WinnerActivity extends AppCompatActivity {
         } else {
             winnerView.setText(R.string.its_a_tie);
         }
+
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                ImageView vectorView = findViewById(R.id.vectorView);
+                ImageView[] balloons = new ImageView[3];
+                int[] xs = new int[3];
+                ObjectAnimator[] animators = new ObjectAnimator[3];
+
+
+                balloons[0] = findViewById(R.id.greenBalloon);
+                balloons[1] = findViewById(R.id.redBalloon);
+                balloons[2] = findViewById(R.id.blueBalloon);
+
+                Random random = new Random();
                 Display display = getWindowManager().getDefaultDisplay();
                 Point size = new Point();
-                display.getSize(size);
+                display.getRealSize(size);
                 float screenHeight = size.y;
-                float vectorHeight = vectorView.getHeight();
+                float screenWidth = size.x;
 
-                ObjectAnimator textViewAnimator = ObjectAnimator.ofFloat(vectorView, "translationY",screenHeight + vectorHeight, 0f);
-                textViewAnimator.setDuration(5000);
-                textViewAnimator.setInterpolator(new AccelerateDecelerateInterpolator());
-                textViewAnimator.start();
+                for (int i = 0; i < 3; i++) {
+                    xs[i] = random.nextInt((int) (screenWidth - balloons[0].getWidth() + 1));
+                    balloons[i].setTranslationX(xs[i]);
+                    //balloons[i].setTranslationY(-1 * screenHeight);
+                    animators[i] = ObjectAnimator.ofFloat(balloons[i], "translationY",0, -1 * (screenHeight + balloons[0].getHeight()));
+                    animators[i].setDuration(5000);
+                    animators[i].setInterpolator(new LinearInterpolator());
+                    animators[i].setStartDelay(random.nextInt(4001));
+                    animators[i].start();
+                }
+
             }
         };
         Handler handler =  new Handler();
-        handler.postDelayed(runnable, 1100);
+        handler.postDelayed(runnable, 1000);
 
 
     }
