@@ -6,7 +6,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.Explode;
 import android.util.Log;
+import android.view.ViewGroup;
 import android.view.Window;
+import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -37,7 +39,7 @@ public class WinnerActivity extends AppCompatActivity {
             getWindow().setEnterTransition(new Explode());
         }
 
-        setContentView(R.layout.activity_winner);
+        setContentView(R.layout.activity_winner_new);
 
         Intent parentIntent = new Intent();
         parentIntent.putExtra(GK.A_SCORES_1,new int[]{10, 9, 10, 0, 10, 9});
@@ -55,7 +57,7 @@ public class WinnerActivity extends AppCompatActivity {
         parentIntent.putExtra(GK.WINNER_TEAM_NAME, "Team 1");
 
         //Intent parentIntent = getIntent();
-        TextView winnerView = (TextView) findViewById(R.id.winnerText);
+        TextView winnerView = findViewById(R.id.winnerText);
 
         if (parentIntent.getStringExtra(GK.WINNER_TEAM_NAME) != null) {
             winnerView.setText(parentIntent.getStringExtra(GK.WINNER_TEAM_NAME));
@@ -110,20 +112,28 @@ public class WinnerActivity extends AppCompatActivity {
             Log.d(TAG, "totalScore2 not passed correctly!");
         }
 
-        TableLayout scoreTable = (TableLayout) findViewById(R.id.scoreTable);
+        TableLayout scoreTable = findViewById(R.id.scoreTable);
         for (int i = 0; i < NUM_ROUNDS; i++) {
             TableRow row = (TableRow) scoreTable.getChildAt(i + 1);
-            DiagonalDoubleTextView wordDouble = (DiagonalDoubleTextView) row.getChildAt(1);
-            wordDouble.setText1("" + aWords[i]);
-            wordDouble.setText2("" + bWords[i]);
+            LinearLayout leftSide = (LinearLayout) row.getChildAt(0);
+            LinearLayout rightSide = (LinearLayout) row.getChildAt(1);
 
-            DiagonalDoubleTextView team1View = (DiagonalDoubleTextView) row.getChildAt(2);
-            team1View.setText1("" + aScores1[i]);
-            team1View.setText2("" + bScores1[i]);
-
-            DiagonalDoubleTextView team2View = (DiagonalDoubleTextView) row.getChildAt(3);
-            team2View.setText1("" + aScores2[i]);
-            team2View.setText2("" + bScores2[i]);
+            TextView aWordView = (TextView) getLayoutInflater().inflate(R.layout.winner_table_textview, null);
+            if (aScores1[i] > 0) {
+                aWordView.setText(aWords[i] + " +" + aScores1[i]);
+                leftSide.addView(aWordView);
+            } else {
+                aWordView.setText(aWords[i] + " +" + aScores2[i]);
+                rightSide.addView(aWordView);
+            }
+            TextView bWordView = (TextView) getLayoutInflater().inflate(R.layout.winner_table_textview, null);
+            if (bScores1[i] > 0) {
+                bWordView.setText(bWords[i] + " +" + bScores1[i]);
+                leftSide.addView(bWordView);
+            } else {
+                bWordView.setText(bWords[i] + " +" + bScores2[i]);
+                rightSide.addView(bWordView);
+            }
         }
 
         TextView sum1View = (TextView) findViewById(R.id.sum1);
