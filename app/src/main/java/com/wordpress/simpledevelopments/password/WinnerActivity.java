@@ -151,7 +151,7 @@ public class WinnerActivity extends AppCompatActivity {
         return Color.rgb(red, green, blue);
     }
     public void restartGame(View view) {
-        //supportFinishAfterTransition();
+        supportFinishAfterTransition();
     }
 
     @Override
