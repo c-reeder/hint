@@ -11,44 +11,6 @@
     app:layout_constraintEnd_toEndOf="parent"
     tools:context="com.wordpress.simpledevelopments.password.WinnerActivity">
 
-<!--    <ImageView-->
-<!--        android:id="@+id/greenBalloon"-->
-<!--        android:layout_width="100dp"-->
-<!--        android:layout_height="100dp"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="parent"-->
-<!--        app:srcCompat="@drawable/green_balloon" />-->
-<!--    <ImageView-->
-<!--        android:id="@+id/redBalloon"-->
-<!--        android:layout_width="100dp"-->
-<!--        android:layout_height="100dp"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="parent"-->
-<!--        app:srcCompat="@drawable/red_balloon" />-->
-<!--    <ImageView-->
-<!--        android:id="@+id/blueBalloon"-->
-<!--        android:layout_width="100dp"-->
-<!--        android:layout_height="100dp"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="parent"-->
-<!--        app:srcCompat="@drawable/blue_balloon" />-->
-
-<!--    <ImageView-->
-<!--        android:id="@+id/testBalloon"-->
-<!--        android:layout_width="100dp"-->
-<!--        android:layout_height="100dp"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:srcCompat="@drawable/balloon_list" />-->
-
-<!--    <ImageView-->
-<!--        android:id="@+id/testBalloon2"-->
-<!--        android:layout_width="100dp"-->
-<!--        android:layout_height="100dp"-->
-<!--        android:layout_marginStart="160dp"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:srcCompat="@drawable/balloon_list" />-->
 
     <TextView
         android:id="@+id/textView3"

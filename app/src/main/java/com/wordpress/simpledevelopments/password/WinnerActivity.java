@@ -1,6 +1,7 @@
 package com.wordpress.simpledevelopments.password;
 
 import android.animation.ObjectAnimator;
+import android.animation.PropertyValuesHolder;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Point;
@@ -25,6 +26,8 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.View;
+
+import org.w3c.dom.Text;
 
 import java.util.Random;
 
@@ -51,7 +54,7 @@ public class WinnerActivity extends AppCompatActivity {
         parentIntent.putExtra(GK.WINNER_TEAM_NAME, "Team 1");
 
         //Intent parentIntent = getIntent();
-        TextView winnerView = findViewById(R.id.winnerText);
+        final TextView winnerView = findViewById(R.id.winnerText);
 
         if (parentIntent.getStringExtra(GK.WINNER_TEAM_NAME) != null) {
             winnerView.setText(parentIntent.getStringExtra(GK.WINNER_TEAM_NAME));
@@ -59,7 +62,7 @@ public class WinnerActivity extends AppCompatActivity {
             winnerView.setText(R.string.its_a_tie);
         }
 
-        Runnable runnable = new Runnable() {
+        Runnable balloonRunnable = new Runnable() {
             @Override
             public void run() {
 
@@ -117,8 +120,24 @@ public class WinnerActivity extends AppCompatActivity {
 
             }
         };
+        Runnable textRunnable = new Runnable() {
+            @Override
+            public void run() {
+                ObjectAnimator textAnimation = ObjectAnimator.ofPropertyValuesHolder(
+                        winnerView,
+                        PropertyValuesHolder.ofFloat("scaleX", 1.2f),
+                        PropertyValuesHolder.ofFloat("scaleY", 1.2f));
+                textAnimation.setDuration(310);
+
+                textAnimation.setRepeatCount(ObjectAnimator.INFINITE);
+                textAnimation.setRepeatMode(ObjectAnimator.REVERSE);
+
+                textAnimation.start();
+            }
+        };
         Handler handler =  new Handler();
-        handler.postDelayed(runnable, 1000);
+        handler.postDelayed(textRunnable, 500);
+        handler.postDelayed(balloonRunnable, 1000);
 
 
     }
