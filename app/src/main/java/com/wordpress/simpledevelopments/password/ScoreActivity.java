@@ -1,6 +1,8 @@
 package com.wordpress.simpledevelopments.password;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Build;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -14,6 +16,11 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+/**
+ * Activity which shows the score table and totals at the end of the game (after the winner screen)
+ * @author Connor Reeder
+ * written December 22, 2019
+ */
 public class ScoreActivity extends AppCompatActivity {
 
     private static final int NUM_ROUNDS = 6;
@@ -110,32 +117,93 @@ public class ScoreActivity extends AppCompatActivity {
 
         TableLayout scoreTable = findViewById(R.id.scoreTable);
         for (int i = 0; i < NUM_ROUNDS; i++) {
+            // Get references to each part of the row
             TableRow row = (TableRow) scoreTable.getChildAt(i + 1);
             LinearLayout leftSide = (LinearLayout) row.getChildAt(0);
             LinearLayout rightSide = (LinearLayout) row.getChildAt(1);
 
+            // Create components of each score record (for word and score)
             TextView aWordView = (TextView) getLayoutInflater().inflate(R.layout.winner_table_textview, null);
-            if (aScores1[i] > 0) {
-                aWordView.setText(aWords[i] + " +" + aScores1[i]);
-                leftSide.addView(aWordView);
-            } else {
-                aWordView.setText(aWords[i] + " +" + aScores2[i]);
-                rightSide.addView(aWordView);
-            }
             TextView bWordView = (TextView) getLayoutInflater().inflate(R.layout.winner_table_textview, null);
-            if (bScores1[i] > 0) {
-                bWordView.setText(bWords[i] + " +" + bScores1[i]);
-                leftSide.addView(bWordView);
+
+            TextView aWordPoints = new TextView(getApplicationContext());
+            TextView bWordPoints = new TextView(getApplicationContext());
+
+            LinearLayout aWordLayout = new LinearLayout(getApplicationContext());
+            LinearLayout bWordLayout = new LinearLayout(getApplicationContext());
+
+            // Join components together for form a score record
+            aWordLayout.setOrientation(LinearLayout.HORIZONTAL);
+            aWordLayout.addView(aWordView);
+            aWordLayout.addView(aWordPoints);
+            aWordView.setText(aWords[i]);
+
+            bWordLayout.setOrientation(LinearLayout.HORIZONTAL);
+            bWordLayout.addView(bWordView);
+            bWordLayout.addView(bWordPoints);
+            bWordView.setText(bWords[i]);
+
+            // Place score record on the correct side (left or right)
+            // and correctly format the score (color and size)
+
+            // for the a words
+            if (aScores1[i] > 0) {
+                aWordPoints.setText(" +" + aScores1[i]);
+                formatScore(aWordPoints,aScores1[i]);
+                leftSide.addView(aWordLayout);
             } else {
-                bWordView.setText(bWords[i] + " +" + bScores2[i]);
-                rightSide.addView(bWordView);
+                aWordPoints.setText(" +" + aScores2[i]);
+                formatScore(aWordPoints,aScores2[i]);
+                rightSide.addView(aWordLayout);
+            }
+
+            // for the b words
+            if (bScores1[i] > 0) {
+                bWordPoints.setText(" +" + bScores1[i]);
+                formatScore(bWordPoints,bScores1[i]);
+                leftSide.addView(bWordLayout);
+            } else {
+                bWordPoints.setText(" +" + bScores2[i]);
+                formatScore(bWordPoints,bScores2[i]);
+                rightSide.addView(bWordLayout);
             }
         }
 
+        // Fill and format the score totals at the bottom
         TextView sum1View = findViewById(R.id.sum1);
         TextView sum2View = findViewById(R.id.sum2);
-        sum1View.setText(String.format("%d",totalScore1));
-        sum2View.setText(String.format("%d",totalScore2));
+        sum1View.setText(Integer.toString(totalScore1));
+        sum2View.setText(Integer.toString(totalScore2));
+
+
+        if (totalScore1 > totalScore2) {
+            sum1View.setTextColor(Color.parseColor("#006400"));
+        } else if (totalScore2 > totalScore1) {
+            sum2View.setTextColor(Color.parseColor("#006400"));
+        }
+    }
+
+    // Helper method to format the score textview for an individual score record
+    private void formatScore(TextView textView, int score) {
+        switch (score) {
+            case 10:
+            case 9:
+                textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
+                textView.setTextColor(Color.parseColor("#006400"));
+                textView.setTextSize(22);
+                break;
+            case 8:
+            case 7:
+            case 6:
+                textView.setTypeface(textView.getTypeface(), Typeface.BOLD);
+                textView.setTextColor(Color.parseColor("#006400"));
+                textView.setTextSize(20);
+                break;
+            default:
+                textView.setTextColor(Color.parseColor("#006400"));
+                textView.setTextSize(20);
+                break;
+        }
     }
 
     @Override

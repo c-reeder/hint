@@ -24,15 +24,16 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.View;
-
-
 import java.util.Random;
 
+/**
+ * Activity which displays the name of the winning team at the end of the game in a fun way!
+ * @author Connor Reeder
+ * written December 21, 2019
+ */
 public class WinnerActivity extends AppCompatActivity {
 
     private static final String TAG = "WinnerActivity";
-
-    private static final int NUM_ROUNDS = 6;
 
     private final int NUM_BALLOONS = 16;
 
@@ -49,24 +50,25 @@ public class WinnerActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_winner_new);
 
-        Intent parentIntent = new Intent();
-        parentIntent.putExtra(GK.A_SCORES_1,new int[]{10, 9, 10, 0, 10, 9});
-        parentIntent.putExtra(GK.A_SCORES_2,new int[]{0, 0, 0, 10,0, 0});
-        parentIntent.putExtra(GK.B_SCORES_1,new int[]{0, 9, 0, 0, 10, 9});
-        parentIntent.putExtra(GK.B_SCORES_2,new int[]{9, 0, 9, 10, 0, 0});
-        parentIntent.putExtra(GK.A_WORDS,new String[]{"bunk bed", "stove", "condition", "sweater", "rope", "edit"});
-        parentIntent.putExtra(GK.B_WORDS,new String[]{"flight", "president", "bushes", "tomorrow", "pastry", "disc golf (frisbee golf)"});
-        parentIntent.putExtra(GK.TOTAL_SCORE_1, 76);
-        parentIntent.putExtra(GK.TOTAL_SCORE_2, 38);
-        parentIntent.putExtra(GK.TEAM_NAME_1, "Team 1");
-        parentIntent.putExtra(GK.TEAM_NAME_2, "Team 2");
-        parentIntent.putExtra(GK.DIFFICULTY, "easy");
-        parentIntent.putExtra(GK.LANGUAGE, "English");
-        parentIntent.putExtra(GK.WINNER_TEAM_NAME, "Team 1");
+        // For testing purposes only
+//        Intent parentIntent = new Intent();
+//        parentIntent.putExtra(GK.A_SCORES_1,new int[]{10, 9, 10, 0, 10, 9});
+//        parentIntent.putExtra(GK.A_SCORES_2,new int[]{0, 0, 0, 10,0, 0});
+//        parentIntent.putExtra(GK.B_SCORES_1,new int[]{0, 9, 0, 0, 10, 9});
+//        parentIntent.putExtra(GK.B_SCORES_2,new int[]{9, 0, 9, 10, 0, 0});
+//        parentIntent.putExtra(GK.A_WORDS,new String[]{"bunk bed", "stove", "condition", "sweater", "rope", "edit"});
+//        parentIntent.putExtra(GK.B_WORDS,new String[]{"flight", "president", "bushes", "tomorrow", "pastry", "disc golf (frisbee golf)"});
+//        parentIntent.putExtra(GK.TOTAL_SCORE_1, 76);
+//        parentIntent.putExtra(GK.TOTAL_SCORE_2, 38);
+//        parentIntent.putExtra(GK.TEAM_NAME_1, "Team 1");
+//        parentIntent.putExtra(GK.TEAM_NAME_2, "Team 2");
+//        parentIntent.putExtra(GK.DIFFICULTY, "easy");
+//        parentIntent.putExtra(GK.LANGUAGE, "English");
+//        parentIntent.putExtra(GK.WINNER_TEAM_NAME, "Team 1");
 
+
+        Intent parentIntent = getIntent();
         scoreExtras = parentIntent.getExtras();
-
-        //Intent parentIntent = getIntent();
         final TextView winnerView = findViewById(R.id.winnerText);
 
         if (parentIntent.getStringExtra(GK.WINNER_TEAM_NAME) != null) {
@@ -176,9 +178,7 @@ public class WinnerActivity extends AppCompatActivity {
         } else {
             startActivity(viewScoreIntent);
         }
-        //finish();
         supportFinishAfterTransition();
-        //finishActivity(0);
     }
 
     @Override
