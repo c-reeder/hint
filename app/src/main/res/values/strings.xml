@@ -40,4 +40,6 @@
     <string name="spanish">Spanish</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="title_activity_score">ScoreActivity</string>
+    <string name="view_score">View Score</string>
+    <string name="score">Score</string>
 </resources>
