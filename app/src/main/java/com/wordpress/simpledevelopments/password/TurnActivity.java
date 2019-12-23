@@ -1,5 +1,6 @@
 package com.wordpress.simpledevelopments.password;
 
+import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.app.FragmentManager;
@@ -230,6 +231,17 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 ConstraintLayout currLay = findViewById(R.id.activity_turn);
                 if (gameState == GameState.TEAM_TRANSITION) {
                     promptForContinue(getString(R.string.pass_phone_next));
+
+                    // Position wordHolder between the continueButton and the messageView
+                    ConstraintSet newSet = new ConstraintSet();
+                    newSet.clear(R.id.wordHolder);
+                    newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+                    newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+                    newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.messageView, ConstraintSet.BOTTOM,0);
+                    newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
+                    newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
+                    newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.continueButton, ConstraintSet.TOP,0);
+                    newSet.applyTo(currLay);
                 } else if (gameState == GameState.WORD_TRANSITION) {
                     promptForContinue(getString(R.string.pass_phone_across));
                     if (previousCorrect) {
@@ -241,6 +253,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                     Log.v(TAG, "Restarting in Word Transition!");
                     wordHolder.setText(wordList[wordIdx]);
                     viewPager.setVisibility(View.INVISIBLE);
+
+                    // Position wordHolder between the continueButton and the messageView
                     ConstraintSet newSet = new ConstraintSet();
                     newSet.clear(R.id.wordHolder);
                     newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
@@ -448,7 +462,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         viewPager.setVisibility(View.INVISIBLE);
         wordHolder.setVisibility(View.VISIBLE);
 
-        // Animate WordHolder from Center Position to Low Position (beneath the timerView)
         currLay.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
@@ -456,6 +469,40 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 ConstraintLayout currLay = findViewById(R.id.activity_turn);
                 currLay.removeOnLayoutChangeListener(this);
 
+
+
+                Transition transition = new AutoTransition();
+                transition.addListener(new Transition.TransitionListener() {
+                    @Override
+                    public void onTransitionStart(@NonNull Transition transition) {
+
+                    }
+
+                    @Override
+                    public void onTransitionEnd(@NonNull Transition transition) {
+                        ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(wordHolder,"alpha",1f,0f);
+                        alphaAnimator.setDuration(500);
+                        alphaAnimator.setStartDelay(1000);
+                        alphaAnimator.start();
+                    }
+
+                    @Override
+                    public void onTransitionCancel(@NonNull Transition transition) {
+
+                    }
+
+                    @Override
+                    public void onTransitionPause(@NonNull Transition transition) {
+
+                    }
+
+                    @Override
+                    public void onTransitionResume(@NonNull Transition transition) {
+
+                    }
+                });
+
+                // Animate WordHolder from Center Position to Low Position (beneath the timerView)
                 ConstraintSet newSet = new ConstraintSet();
                 newSet.clear(R.id.wordHolder);
                 newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
@@ -464,7 +511,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
                 newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
                 newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
-                TransitionManager.beginDelayedTransition(currLay);
+                TransitionManager.beginDelayedTransition(currLay, transition);
                 newSet.applyTo(currLay);
             }
         });
