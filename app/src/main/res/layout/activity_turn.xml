@@ -76,14 +76,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/topBar"
-        android:background="@color/acceptBlue"
         />
 
-    <View
+    <TextView
         android:id="@+id/wordCover"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:gravity="center"
+        android:textSize="56sp"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:background="@color/colorAccent"
+        android:textColor="@color/white"
+        android:text="Tap to reveal"
         app:layout_constraintBottom_toBottomOf="@id/wordHolder"
         app:layout_constraintEnd_toEndOf="@id/wordHolder"
         app:layout_constraintStart_toStartOf="@id/wordHolder"

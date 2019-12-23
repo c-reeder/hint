@@ -7,6 +7,7 @@ package com.wordpress.simpledevelopments.password;
 
 class GK {
     public static final String WORD_IDX = "WORD_IDX";
+    public static final String WORD_HIDDEN = "WORD_HIDDEN";
     static final String TIME_REMAINING = "TIME_REMAINING";
     static final String TEAM_NAME_1 = "TEAM_NAME_1";
     static final String TEAM_NAME_2 = "TEAM_NAME_2";

@@ -45,8 +45,22 @@ public class OneDirectionViewPager extends ViewPager {
     @Override
     public boolean onTouchEvent (MotionEvent event) {
         gestureDetector.onTouchEvent(event);
+        switch (event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                return true;
+
+            case MotionEvent.ACTION_UP:
+                performClick();
+                return true;
+        }
         return true;
     }
+    @Override
+    public boolean performClick() {
+        super.performClick();
+        return true;
+    }
+
 
 
     /**

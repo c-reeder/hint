@@ -64,6 +64,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private TextView timerView;
     private TextView wordHolder;
     private View wordCover;
+    private ConstraintLayout layout;
 
     //Word-Swiper Functionality
     private TextPagerAdapter adapter;
@@ -89,7 +90,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private boolean previousCorrect;
     private GameState gameState;
     private int wordIdx;
-    private boolean isWordHidden = true;
+    private boolean isWordHidden;
 
     // Results Variables to be Passed to the Winner Screen
     private String[] aWords;
@@ -104,6 +105,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     // CountDown used for the game timer
     private CountDownTimer countDownTimer;
     private long countDownTimeRemaining;
+    private ObjectAnimator coverAlphaAnimator;
 
 
 
@@ -135,7 +137,43 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         wordHolder = findViewById(R.id.wordHolder);
         wordCover = findViewById(R.id.wordCover);
         loadingIcon = findViewById(R.id.progressBar);
+        layout = findViewById(R.id.activity_turn);
         viewPager.setOnTouchListener(this);
+
+        coverAlphaAnimator = new ObjectAnimator();
+        layout.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                if (gameState == GameState.PLAYING || gameState == GameState.TEAM_TRANSITION) {
+                    if (motionEvent.getActionMasked() == MotionEvent.ACTION_DOWN) {
+                        Log.d(TAG, "layout ACTION_DOWN");
+                        isWordHidden = false;
+                        //coverAlphaAnimator.cancel();
+                        if (coverAlphaAnimator.isRunning()) {
+                            coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",(float)coverAlphaAnimator.getAnimatedValue(),0f);
+                        } else {
+                            coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",1f,0f);
+                        }
+                        coverAlphaAnimator.setDuration(500);
+                        coverAlphaAnimator.start();
+                        return true;
+                    } else if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP) {
+                        Log.d(TAG, "layout ACTION_UP");
+                        isWordHidden = true;
+                        //coverAlphaAnimator.cancel();
+                        if (coverAlphaAnimator.isRunning()) {
+                            coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",(float)coverAlphaAnimator.getAnimatedValue(),1f);
+                        } else {
+                            coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",0f,1f);
+                        }
+                        coverAlphaAnimator.setDuration(500);
+                        coverAlphaAnimator.start();
+                        return true;
+                    }
+                }
+                return false;
+            }
+        });
 
 
 
@@ -207,6 +245,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             gameState = (GameState) savedInstanceState.getSerializable(GK.GAME_STATE);
             wordIdx = savedInstanceState.getInt(GK.WORD_IDX);
             countDownTimeRemaining = savedInstanceState.getLong(GK.TIME_REMAINING);
+            isWordHidden = savedInstanceState.getBoolean(GK.WORD_HIDDEN);
 
             Log.v(TAG, "Game state on restart: " + gameState);
 
@@ -232,7 +271,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 initWords();
                 ppSpinnerView.setSpinner(currPP);
                 updateDisplay();
-                ConstraintLayout currLay = findViewById(R.id.activity_turn);
                 if (gameState == GameState.TEAM_TRANSITION) {
                     promptForContinue(getString(R.string.pass_phone_next));
 
@@ -253,14 +291,14 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                     newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
                     newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
                     newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.continueButton, ConstraintSet.TOP,0);
-                    newSet.applyTo(currLay);
+                    newSet.applyTo(layout);
                 } else if (gameState == GameState.WORD_TRANSITION) {
                     promptForContinue(getString(R.string.pass_phone_across));
                     if (previousCorrect) {
-                        currLay.setBackgroundColor(Color.GREEN);
+                        layout.setBackgroundColor(Color.GREEN);
 
                     } else {
-                        currLay.setBackgroundColor(Color.RED);
+                        layout.setBackgroundColor(Color.RED);
                     }
                     Log.v(TAG, "Restarting in Word Transition!");
                     wordHolder.setText(wordList[wordIdx]);
@@ -275,7 +313,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                     newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
                     newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
                     newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.continueButton, ConstraintSet.TOP,0);
-                    newSet.applyTo(currLay);
+                    newSet.applyTo(layout);
                 } else if (gameState == GameState.WORD_APPROVAL) {
                     acceptWordButton.setVisibility(View.VISIBLE);
                 } else if (gameState == GameState.PLAYING) {
@@ -310,7 +348,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                     newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
                     newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
                     newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
-                    newSet.applyTo(currLay);
+                    newSet.applyTo(layout);
                     timerView.setText(String.format("%02d",Math.round(countDownTimeRemaining / 1000)));
                     timerView.setVisibility(View.VISIBLE);
                 }
@@ -351,6 +389,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         savedInstanceState.putSerializable(GK.GAME_STATE, gameState);
         savedInstanceState.putSerializable(GK.WORD_IDX, wordIdx);
         savedInstanceState.putLong(GK.TIME_REMAINING, countDownTimeRemaining);
+        savedInstanceState.putBoolean(GK.WORD_HIDDEN, isWordHidden);
 
         // Results Variables to be Passed to the Winner Screen
         savedInstanceState.putStringArray(GK.A_WORDS,aWords);
@@ -471,18 +510,16 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     // State transition to the actual guessing/playing stage
     private void startPlaying() {
         gameState = GameState.PLAYING;
-        ConstraintLayout currLay = findViewById(R.id.activity_turn);
 
         wordHolder.setText(wordList[viewPager.getCurrentItem()]);
         viewPager.setVisibility(View.INVISIBLE);
         wordHolder.setVisibility(View.VISIBLE);
 
-        currLay.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+        layout.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
             @Override
             public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
 
-                ConstraintLayout currLay = findViewById(R.id.activity_turn);
-                currLay.removeOnLayoutChangeListener(this);
+                layout.removeOnLayoutChangeListener(this);
 
 
 
@@ -495,10 +532,11 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
                     @Override
                     public void onTransitionEnd(@NonNull Transition transition) {
-                        ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",0f,1f);
-                        alphaAnimator.setDuration(500);
-                        alphaAnimator.setStartDelay(1000);
-                        alphaAnimator.start();
+                        coverAlphaAnimator.cancel();
+                        coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",0f,1f);
+                        coverAlphaAnimator.setDuration(500);
+                        coverAlphaAnimator.setStartDelay(1000);
+                        coverAlphaAnimator.start();
                     }
 
                     @Override
@@ -526,8 +564,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
                 newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
                 newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
-                TransitionManager.beginDelayedTransition(currLay, transition);
-                newSet.applyTo(currLay);
+                TransitionManager.beginDelayedTransition(layout, transition);
+                newSet.applyTo(layout);
             }
         });
 
@@ -677,7 +715,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 promptForContinue(getString(R.string.pass_phone_across));
             }
 
-            ConstraintLayout currLay = findViewById(R.id.activity_turn);
             ConstraintSet newSet = new ConstraintSet();
             newSet.clear(R.id.wordHolder);
             newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
@@ -686,8 +723,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
             newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
             newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.continueButton, ConstraintSet.TOP,0);
-            TransitionManager.beginDelayedTransition(currLay);
-            newSet.applyTo(currLay);
+            TransitionManager.beginDelayedTransition(layout);
+            newSet.applyTo(layout);
             loadingIcon.setVisibility(View.INVISIBLE);
         }
     }
@@ -720,8 +757,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         } else if (gameState == GameState.WORD_TRANSITION) {
             // The other two players now start giving hints and a new word is approved
 
-            ConstraintLayout mainLay = findViewById(R.id.activity_turn);
-            mainLay.setBackgroundColor(Color.WHITE);
+            layout.setBackgroundColor(Color.WHITE);
 
             Transition transition = new AutoTransition();
             transition.addListener(new Transition.TransitionListener() {
@@ -757,7 +793,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             });
 
             // Animation WordHolder from Low Position to Normal Position
-            ConstraintLayout currLay = findViewById(R.id.activity_turn);
             ConstraintSet newSet = new ConstraintSet();
             newSet.clear(R.id.wordHolder);
             newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
@@ -766,8 +801,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
             newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
             newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
-            TransitionManager.beginDelayedTransition(currLay, transition);
-            newSet.applyTo(currLay);
+            TransitionManager.beginDelayedTransition(layout, transition);
+            newSet.applyTo(layout);
             loadingIcon.setVisibility(View.INVISIBLE);
         }
 
@@ -811,12 +846,11 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      */
     private void transitionToNextWord(boolean success) {
         previousCorrect = success;
-        ConstraintLayout mainLay = findViewById(R.id.activity_turn);
         if (success) {
-            mainLay.setBackgroundColor(Color.GREEN);
+            layout.setBackgroundColor(Color.GREEN);
 
         } else {
-            mainLay.setBackgroundColor(Color.RED);
+            layout.setBackgroundColor(Color.RED);
         }
         gameState = GameState.WORD_TRANSITION;
     }
