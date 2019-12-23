@@ -532,11 +532,12 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
                     @Override
                     public void onTransitionEnd(@NonNull Transition transition) {
-                        coverAlphaAnimator.cancel();
-                        coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",0f,1f);
-                        coverAlphaAnimator.setDuration(500);
-                        coverAlphaAnimator.setStartDelay(1000);
-                        coverAlphaAnimator.start();
+                        if (wordCover.getAlpha() != 1f) {
+                            coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",0f,1f);
+                            coverAlphaAnimator.setDuration(500);
+                            coverAlphaAnimator.setStartDelay(1000);
+                            coverAlphaAnimator.start();
+                        }
                     }
 
                     @Override
@@ -598,6 +599,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             return;
         }
 
+
         // Get rid of the timer and reset it for next time we use it.
         timerView.setVisibility(View.INVISIBLE);
         countDownTimer.cancel();
@@ -605,6 +607,11 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         // If the guess was correct
         if (view.getId() == R.id.successButton) {
             storeResult();
+
+
+            coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",1f,0f);
+            coverAlphaAnimator.setDuration(500);
+            coverAlphaAnimator.start();
 
             // Score Addition Logic
             if (!isTeam2) {
@@ -636,6 +643,12 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             // The word was NEVER guessed and there are not more tries left
             // Next Turn Logic
             if (currPP < 1) {
+
+
+                coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",1f,0f);
+                coverAlphaAnimator.setDuration(500);
+                coverAlphaAnimator.start();
+
                 // if the word was not guessed AT ALL
                 //-------CHANGE WORD HERE----------
                 ppSpinnerView.resetSpinner();
