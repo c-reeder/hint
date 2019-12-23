@@ -71,11 +71,25 @@
         android:text="Current Word"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="56sp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/acceptWordButton"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@id/buttonRow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        android:background="@color/acceptBlue"
+        />
+
+    <View
+        android:id="@+id/wordCover"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@color/colorAccent"
+        app:layout_constraintBottom_toBottomOf="@id/wordHolder"
+        app:layout_constraintEnd_toEndOf="@id/wordHolder"
+        app:layout_constraintStart_toStartOf="@id/wordHolder"
+        app:layout_constraintTop_toTopOf="@id/wordHolder"
+        android:alpha="0"
+        />
 
     <RelativeLayout
         android:id="@+id/topBar"

@@ -63,6 +63,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private TextView messageView;
     private TextView timerView;
     private TextView wordHolder;
+    private View wordCover;
 
     //Word-Swiper Functionality
     private TextPagerAdapter adapter;
@@ -88,6 +89,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private boolean previousCorrect;
     private GameState gameState;
     private int wordIdx;
+    private boolean isWordHidden = true;
 
     // Results Variables to be Passed to the Winner Screen
     private String[] aWords;
@@ -131,6 +133,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         messageView = findViewById(R.id.messageView);
         timerView = findViewById(R.id.timerView);
         wordHolder = findViewById(R.id.wordHolder);
+        wordCover = findViewById(R.id.wordCover);
         loadingIcon = findViewById(R.id.progressBar);
         viewPager.setOnTouchListener(this);
 
@@ -154,6 +157,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             currSkipCountB = 0;
             gameState = GameState.AWAITING_WORDS;
             wordIdx = 0;
+            isWordHidden = false;
 
             // Init Results Variables
             aWords = new String[NUM_ROUNDS];
@@ -232,6 +236,14 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 if (gameState == GameState.TEAM_TRANSITION) {
                     promptForContinue(getString(R.string.pass_phone_next));
 
+                    if (isWordHidden)
+                        wordCover.setAlpha(1f);
+
+
+                    wordHolder.setText(wordList[wordIdx]);
+                    viewPager.setVisibility(View.INVISIBLE);
+
+
                     // Position wordHolder between the continueButton and the messageView
                     ConstraintSet newSet = new ConstraintSet();
                     newSet.clear(R.id.wordHolder);
@@ -283,6 +295,9 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                         }
                     };
                     countDownTimer.start();
+
+                    if (isWordHidden)
+                        wordCover.setAlpha(1f);
 
                     // Correctly restore position of the WordHolder vertically between the timerView and the buttonrow
                     ConstraintSet newSet = new ConstraintSet();
@@ -475,12 +490,12 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 transition.addListener(new Transition.TransitionListener() {
                     @Override
                     public void onTransitionStart(@NonNull Transition transition) {
-
+                        isWordHidden = true;
                     }
 
                     @Override
                     public void onTransitionEnd(@NonNull Transition transition) {
-                        ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(wordHolder,"alpha",1f,0f);
+                        ObjectAnimator alphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",0f,1f);
                         alphaAnimator.setDuration(500);
                         alphaAnimator.setStartDelay(1000);
                         alphaAnimator.start();

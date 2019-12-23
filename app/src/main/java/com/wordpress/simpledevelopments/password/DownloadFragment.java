@@ -55,7 +55,7 @@ public class DownloadFragment extends Fragment {
             Log.e(TAG, "Not connected to network");
         } */
         // For testing purposes
-        listenerActivity.onDownloadComplete("[\"pop\",\"pond\",\"dude\",\"mascot\",\"cargo\",\"telephone booth\",\"albatross\",\"wheat\",\"paper clips\",\"photograph\",\"car dealership\",\"wipe\",\"snatch\",\"winter\",\"ratchet\",\"passport\",\"tiptoe\",\"lemon\",\"seat\",\"disc jockey\",\"succeed\",\"treatment\"]");
+        listenerActivity.onDownloadComplete("[\"pop\",\"Pond\",\"dude\",\"mascot\",\"cargo\",\"telephone booth\",\"albatross\",\"wheat\",\"paper clips\",\"photograph\",\"car dealership\",\"wipe\",\"snatch\",\"winter\",\"ratchet\",\"passport\",\"tiptoe\",\"lemon\",\"seat\",\"disc jockey\",\"succeed\",\"treatment\"]");
         TESTING_STATUS = AsyncTask.Status.FINISHED;
     }
 
