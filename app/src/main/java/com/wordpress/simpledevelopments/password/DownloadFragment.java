@@ -25,7 +25,7 @@ public class DownloadFragment extends Fragment {
     OnDownloadCompleteListener listenerActivity;
     JSONTask task;
 
-    private AsyncTask.Status TESTING_STATUS = AsyncTask.Status.PENDING;
+    //private AsyncTask.Status TESTING_STATUS = AsyncTask.Status.PENDING;
 
 
     @Override
@@ -39,7 +39,7 @@ public class DownloadFragment extends Fragment {
 
         // Check Network Status and if connected perform GET request to acquire word list from server
         // There should be 22 words. 2 Words * 6 Rounds + 5 Word-Skips * 2 Teams = 22 Words
-        /*ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         if (netInfo != null && netInfo.isConnected()) {
             // Define behavior to occur upon receiving the JSON word data
@@ -53,10 +53,10 @@ public class DownloadFragment extends Fragment {
                 Log.v(TAG, "URL: " + "https://wordvault-heroku-18.herokuapp.com/passwords/" + language + "/" + difficulty);
         } else {
             Log.e(TAG, "Not connected to network");
-        } */
+        }
         // For testing purposes
-        listenerActivity.onDownloadComplete("[\"pop\",\"Pond\",\"dude\",\"mascot\",\"cargo\",\"telephone booth\",\"albatross\",\"wheat\",\"paper clips\",\"photograph\",\"car dealership\",\"wipe\",\"snatch\",\"winter\",\"ratchet\",\"passport\",\"tiptoe\",\"lemon\",\"seat\",\"disc jockey\",\"succeed\",\"treatment\"]");
-        TESTING_STATUS = AsyncTask.Status.FINISHED;
+        //listenerActivity.onDownloadComplete("[\"pop\",\"Pond\",\"dude\",\"mascot\",\"cargo\",\"telephone booth\",\"albatross\",\"wheat\",\"paper clips\",\"photograph\",\"car dealership\",\"wipe\",\"snatch\",\"winter\",\"ratchet\",\"passport\",\"tiptoe\",\"lemon\",\"seat\",\"disc jockey\",\"succeed\",\"treatment\"]");
+        //TESTING_STATUS = AsyncTask.Status.FINISHED;
     }
 
     @Override
@@ -78,8 +78,8 @@ public class DownloadFragment extends Fragment {
 
     public boolean isComplete() {
         // For testing purposes
-        return TESTING_STATUS == AsyncTask.Status.FINISHED;
-        //return task.getStatus() == AsyncTask.Status.FINISHED;
+        //return TESTING_STATUS == AsyncTask.Status.FINISHED;
+        return task.getStatus() == AsyncTask.Status.FINISHED;
     }
 
 }
