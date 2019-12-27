@@ -1,5 +1,9 @@
 apply plugin: 'com.android.application'
 
+def serverInfoPropertiesFile = rootProject.file("serverInfo.properties")
+def serverInfoProperties = new Properties()
+serverInfoProperties.load(new FileInputStream(serverInfoPropertiesFile))
+
 android {
     compileSdkVersion 28
     defaultConfig {
@@ -10,6 +14,7 @@ android {
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
+		buildConfigField("String", "url", serverInfoProperties['url'])
     }
     buildTypes {
         release {

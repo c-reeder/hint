@@ -13,3 +13,4 @@ gradle/*
 .externalNativeBuild
 Notes.txt
 Password_States.png
+serverInfo.properties

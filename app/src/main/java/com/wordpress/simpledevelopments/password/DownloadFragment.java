@@ -49,8 +49,9 @@ public class DownloadFragment extends Fragment {
                     listenerActivity.onDownloadComplete(result);
                 }
             };
-                task.execute("https://wordvault-heroku-18.herokuapp.com/passwords/" + language + "/" + difficulty);
-                Log.v(TAG, "URL: " + "https://wordvault-heroku-18.herokuapp.com/passwords/" + language + "/" + difficulty);
+            String requestURL = com.wordpress.simpledevelopments.password.BuildConfig.url + "/passwords/" + language + "/" + difficulty;
+            task.execute(requestURL);
+            Log.v(TAG,requestURL);
         } else {
             Log.e(TAG, "Not connected to network");
         }
