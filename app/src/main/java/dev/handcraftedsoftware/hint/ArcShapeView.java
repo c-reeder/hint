@@ -1,4 +1,4 @@
-package com.wordpress.simpledevelopments.password;
+package dev.handcraftedsoftware.hint;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -8,6 +8,8 @@ import android.graphics.Paint;
 import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.wordpress.simpledevelopments.hint.R;
 
 /**
  * A partial circle which appears in the left corner as a background to the round number.
@@ -27,7 +29,7 @@ public class ArcShapeView extends View {
 
     public ArcShapeView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        TypedArray arr = context.getTheme().obtainStyledAttributes(attrs,R.styleable.ArcShapeView,0,0);
+        TypedArray arr = context.getTheme().obtainStyledAttributes(attrs, R.styleable.ArcShapeView,0,0);
         try {
             arcColor = arr.getColor(R.styleable.ArcShapeView_arcColor,Color.BLACK);
         } finally {

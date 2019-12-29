@@ -1,4 +1,4 @@
-package com.wordpress.simpledevelopments.password;
+package dev.handcraftedsoftware.hint;
 
 import android.content.Context;
 import androidx.viewpager.widget.PagerAdapter;
@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.wordpress.simpledevelopments.hint.R;
 
 import java.util.ArrayList;
 import java.util.Collections;

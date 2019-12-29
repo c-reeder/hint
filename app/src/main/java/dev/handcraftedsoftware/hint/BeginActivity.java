@@ -1,4 +1,4 @@
-package com.wordpress.simpledevelopments.password;
+package dev.handcraftedsoftware.hint;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
@@ -13,6 +13,8 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+
+import com.wordpress.simpledevelopments.hint.R;
 
 /**
  * Initial Activity upon opening the app.

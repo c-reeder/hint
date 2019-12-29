@@ -1,4 +1,4 @@
-package com.wordpress.simpledevelopments.password;
+package dev.handcraftedsoftware.hint;
 
 /**
  * Game Values class

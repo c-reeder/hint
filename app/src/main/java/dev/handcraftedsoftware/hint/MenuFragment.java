@@ -1,4 +1,4 @@
-package com.wordpress.simpledevelopments.password;
+package dev.handcraftedsoftware.hint;
 
 import android.app.Dialog;
 import android.content.Context;
@@ -17,6 +17,8 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+
+import com.wordpress.simpledevelopments.hint.R;
 
 /**
  * Menu that pops up when you pause the game.

@@ -7,7 +7,7 @@ serverInfoProperties.load(new FileInputStream(serverInfoPropertiesFile))
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "com.wordpress.simpledevelopments.password"
+        applicationId "dev.handcraftedsoftware.hint"
         minSdkVersion 19
         targetSdkVersion 28
         versionCode 1

@@ -1,4 +1,4 @@
-package com.wordpress.simpledevelopments.password;
+package dev.handcraftedsoftware.hint;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
@@ -24,6 +24,8 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
+import com.wordpress.simpledevelopments.hint.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

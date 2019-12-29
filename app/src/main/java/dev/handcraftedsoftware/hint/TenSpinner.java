@@ -1,4 +1,4 @@
-package com.wordpress.simpledevelopments.password;
+package dev.handcraftedsoftware.hint;
 
 import android.animation.Animator;
 import android.animation.ValueAnimator;
@@ -12,6 +12,8 @@ import android.graphics.RectF;
 import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.wordpress.simpledevelopments.hint.R;
 
 /**
  * Custom UI element which represents a spinnable wheel.
@@ -58,7 +60,7 @@ public class TenSpinner extends View {
 
     public TenSpinner(Context context, AttributeSet attrs) {
         super(context, attrs);
-        TypedArray arr = context.getTheme().obtainStyledAttributes(attrs,R.styleable.TenSpinner,0,0);
+        TypedArray arr = context.getTheme().obtainStyledAttributes(attrs, R.styleable.TenSpinner,0,0);
         try {
             rDiameter = arr.getDimensionPixelSize(R.styleable.TenSpinner_diameter, -1);
             hGravity = Gravity.values()[arr.getInt(R.styleable.TenSpinner_horizontalGravity, 0)];

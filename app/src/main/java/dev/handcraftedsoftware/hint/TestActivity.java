@@ -1,8 +1,10 @@
-package com.wordpress.simpledevelopments.password;
+package dev.handcraftedsoftware.hint;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+
+import com.wordpress.simpledevelopments.hint.R;
 
 public class TestActivity extends AppCompatActivity {
 

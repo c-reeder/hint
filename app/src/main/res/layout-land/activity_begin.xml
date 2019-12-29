@@ -5,7 +5,7 @@
     android:id="@+id/activity_begin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.wordpress.simpledevelopments.password.BeginActivity"
+    tools:context="com.wordpress.simpledevelopments.hint.dev.wordpress.simpledevelopments.hint.BeginActivity"
     tools:layout_editor_absoluteY="25dp"
     tools:layout_editor_absoluteX="0dp">
 

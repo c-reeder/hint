@@ -5,7 +5,7 @@
     android:id="@+id/activity_winner"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.wordpress.simpledevelopments.password.WinnerActivity">
+    tools:context="com.wordpress.simpledevelopments.hint.dev.wordpress.simpledevelopments.hint.WinnerActivity">
 
     <TextView
         android:id="@+id/textView7"
@@ -125,7 +125,7 @@
                 android:text="@string/round1"
                 android:textAlignment="center" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <dev.handcraftedsoftware.hint.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:textSize="@dimen/diagonalTextSize"
@@ -137,7 +137,7 @@
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <dev.handcraftedsoftware.hint.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:textSize="@dimen/diagonalTextSize"
@@ -149,7 +149,7 @@
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <dev.handcraftedsoftware.hint.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:textSize="@dimen/diagonalTextSize"
@@ -182,7 +182,7 @@
                 android:text="@string/round2"
                 android:textAlignment="center" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <dev.handcraftedsoftware.hint.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:textSize="@dimen/diagonalTextSize"
@@ -194,7 +194,7 @@
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <dev.handcraftedsoftware.hint.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:textSize="@dimen/diagonalTextSize"
@@ -206,7 +206,7 @@
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <dev.handcraftedsoftware.hint.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:textSize="@dimen/diagonalTextSize"
@@ -240,7 +240,7 @@
                 android:text="@string/round3"
                 android:textAlignment="center" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <dev.handcraftedsoftware.hint.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:textSize="@dimen/diagonalTextSize"
@@ -252,7 +252,7 @@
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <dev.handcraftedsoftware.hint.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:textSize="@dimen/diagonalTextSize"
@@ -264,7 +264,7 @@
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <dev.handcraftedsoftware.hint.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:textSize="@dimen/diagonalTextSize"
@@ -297,7 +297,7 @@
                 android:text="@string/round4"
                 android:textAlignment="center" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <dev.handcraftedsoftware.hint.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:textSize="@dimen/diagonalTextSize"
@@ -309,7 +309,7 @@
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <dev.handcraftedsoftware.hint.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:textSize="@dimen/diagonalTextSize"
@@ -321,7 +321,7 @@
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <dev.handcraftedsoftware.hint.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:textSize="@dimen/diagonalTextSize"
@@ -354,7 +354,7 @@
                 android:text="@string/round5"
                 android:textAlignment="center" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <dev.handcraftedsoftware.hint.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:textSize="@dimen/diagonalTextSize"
@@ -366,7 +366,7 @@
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <dev.handcraftedsoftware.hint.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:textSize="@dimen/diagonalTextSize"
@@ -378,7 +378,7 @@
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <dev.handcraftedsoftware.hint.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:textSize="@dimen/diagonalTextSize"
@@ -413,7 +413,7 @@
                 android:text="@string/round6"
                 android:textAlignment="center" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <dev.handcraftedsoftware.hint.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:textSize="@dimen/diagonalTextSize"
@@ -425,7 +425,7 @@
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <dev.handcraftedsoftware.hint.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:textSize="@dimen/diagonalTextSize"
@@ -437,7 +437,7 @@
                 android:layout_marginLeft="1dp"
                 android:layout_marginRight="1dp" />
 
-            <com.wordpress.simpledevelopments.password.DiagonalDoubleTextView
+            <dev.handcraftedsoftware.hint.DiagonalDoubleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 app:textSize="@dimen/diagonalTextSize"

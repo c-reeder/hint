@@ -1,4 +1,4 @@
-package com.wordpress.simpledevelopments.password;
+package dev.handcraftedsoftware.hint;
 import android.os.AsyncTask;
 
 import java.io.BufferedInputStream;

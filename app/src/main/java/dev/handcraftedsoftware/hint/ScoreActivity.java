@@ -1,4 +1,4 @@
-package com.wordpress.simpledevelopments.password;
+package dev.handcraftedsoftware.hint;
 
 import android.content.Intent;
 import android.graphics.Color;
@@ -15,6 +15,8 @@ import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+
+import com.wordpress.simpledevelopments.hint.R;
 
 /**
  * Activity which shows the score table and totals at the end of the game (after the winner screen)

@@ -1,4 +1,4 @@
-package com.wordpress.simpledevelopments.password;
+package dev.handcraftedsoftware.hint;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -7,6 +7,8 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
+
+import com.wordpress.simpledevelopments.hint.R;
 
 /**
  * Custom View which displays two words separated by a diagonal line.
@@ -31,7 +33,7 @@ public class DiagonalDoubleTextView extends View {
 
     public DiagonalDoubleTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        TypedArray arr = context.getTheme().obtainStyledAttributes(attrs,R.styleable.DiagonalDoubleTextView,0,0);
+        TypedArray arr = context.getTheme().obtainStyledAttributes(attrs, R.styleable.DiagonalDoubleTextView,0,0);
         try {
             text1 = arr.getString(R.styleable.DiagonalDoubleTextView_text1);
             if (text1 == null)

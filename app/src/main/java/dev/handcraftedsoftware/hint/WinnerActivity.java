@@ -1,4 +1,4 @@
-package com.wordpress.simpledevelopments.password;
+package dev.handcraftedsoftware.hint;
 
 import android.animation.ObjectAnimator;
 import android.animation.PropertyValuesHolder;
@@ -24,6 +24,9 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.View;
+
+import com.wordpress.simpledevelopments.hint.R;
+
 import java.util.Random;
 
 /**

@@ -9,7 +9,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    tools:context="com.wordpress.simpledevelopments.password.WinnerActivity">
+    tools:context="com.wordpress.simpledevelopments.hint.dev.wordpress.simpledevelopments.hint.WinnerActivity">
 
 
     <TextView
