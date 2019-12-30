@@ -13,7 +13,6 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <activity
             android:name=".ScoreActivity"
-            android:label="@string/title_activity_score"
             android:theme="@style/NoActionBar"></activity>
         <!-- android:theme="@style/AppTheme" -->
         <activity android:name=".TurnActivity" />
@@ -26,7 +25,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".TestActivity" />
         <activity
             android:name=".WinnerActivity"
             android:exported="true" />
@@ -40,10 +38,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="dev.handcraftedsoftware.hint.BeginActivity" />
         </activity>
-        <activity
-            android:name=".ScrollingActivity"
-            android:label="@string/title_activity_scrolling"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar" />
     </application>
 
 </manifest>

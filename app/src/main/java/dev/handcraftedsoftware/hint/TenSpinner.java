@@ -13,11 +13,10 @@ import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
-import dev.handcraftedsoftware.hint.R;
 
 /**
  * Custom UI element which represents a spinnable wheel.
- * By Connor Reeder
+ * @author Connor Reeder
  */
 
 public class TenSpinner extends View {

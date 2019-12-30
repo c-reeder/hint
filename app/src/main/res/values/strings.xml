@@ -38,8 +38,7 @@
     <string name="large_text">This is some large text</string>
     <string name="english">English</string>
     <string name="spanish">Spanish</string>
-    <string name="title_activity_scrolling">ScrollingActivity</string>
-    <string name="title_activity_score">ScoreActivity</string>
     <string name="view_score">View Score</string>
     <string name="score">Score</string>
+    <string name="dismiss">Dismiss</string>
 </resources>

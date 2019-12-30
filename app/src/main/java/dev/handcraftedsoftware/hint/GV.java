@@ -3,6 +3,7 @@ package dev.handcraftedsoftware.hint;
 /**
  * Game Values class
  * Contains static strings passed as values through intents or bundles.
+ * @author Connor Reeder
  */
 class GV {
     static final String EASY = "easy";

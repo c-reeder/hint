@@ -1,5 +1,6 @@
 package dev.handcraftedsoftware.hint;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -16,7 +17,8 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import dev.handcraftedsoftware.hint.R;
+import java.util.Locale;
+
 
 /**
  * Activity which shows the score table and totals at the end of the game (after the winner screen)
@@ -125,14 +127,15 @@ public class ScoreActivity extends AppCompatActivity {
             LinearLayout rightSide = (LinearLayout) row.getChildAt(1);
 
             // Create components of each score record (for word and score)
-            TextView aWordView = (TextView) getLayoutInflater().inflate(R.layout.winner_table_textview, null);
-            TextView bWordView = (TextView) getLayoutInflater().inflate(R.layout.winner_table_textview, null);
+            LinearLayout aWordLayout = new LinearLayout(getApplicationContext());
+            LinearLayout bWordLayout = new LinearLayout(getApplicationContext());
+
+            @SuppressLint("InflateParams") TextView aWordView = (TextView) getLayoutInflater().inflate(R.layout.winner_table_textview, null);
+            @SuppressLint("InflateParams") TextView bWordView = (TextView) getLayoutInflater().inflate(R.layout.winner_table_textview, null);
 
             TextView aWordPoints = new TextView(getApplicationContext());
             TextView bWordPoints = new TextView(getApplicationContext());
 
-            LinearLayout aWordLayout = new LinearLayout(getApplicationContext());
-            LinearLayout bWordLayout = new LinearLayout(getApplicationContext());
 
             // Join components together for form a score record
             aWordLayout.setOrientation(LinearLayout.HORIZONTAL);
@@ -150,22 +153,22 @@ public class ScoreActivity extends AppCompatActivity {
 
             // for the a words
             if (aScores1[i] > 0) {
-                aWordPoints.setText(" +" + aScores1[i]);
+                aWordPoints.setText(String.format(Locale.getDefault()," +%d",aScores1[i]));
                 formatScore(aWordPoints,aScores1[i]);
                 leftSide.addView(aWordLayout);
             } else {
-                aWordPoints.setText(" +" + aScores2[i]);
+                aWordPoints.setText(String.format(Locale.getDefault()," +%d",aScores2[i]));
                 formatScore(aWordPoints,aScores2[i]);
                 rightSide.addView(aWordLayout);
             }
 
             // for the b words
             if (bScores1[i] > 0) {
-                bWordPoints.setText(" +" + bScores1[i]);
+                bWordPoints.setText(String.format(Locale.getDefault()," +%d",bScores1[i]));
                 formatScore(bWordPoints,bScores1[i]);
                 leftSide.addView(bWordLayout);
             } else {
-                bWordPoints.setText(" +" + bScores2[i]);
+                bWordPoints.setText(String.format(Locale.getDefault()," +%d",bScores2[i]));
                 formatScore(bWordPoints,bScores2[i]);
                 rightSide.addView(bWordLayout);
             }
@@ -174,8 +177,8 @@ public class ScoreActivity extends AppCompatActivity {
         // Fill and format the score totals at the bottom
         TextView sum1View = findViewById(R.id.sum1);
         TextView sum2View = findViewById(R.id.sum2);
-        sum1View.setText(Integer.toString(totalScore1));
-        sum2View.setText(Integer.toString(totalScore2));
+        sum1View.setText(String.format(Locale.getDefault(),"%d",totalScore1));
+        sum2View.setText(String.format(Locale.getDefault(),"%d",totalScore2));
 
 
         if (totalScore1 > totalScore2) {
@@ -185,7 +188,7 @@ public class ScoreActivity extends AppCompatActivity {
         }
     }
 
-    // Helper method to format the score textview for an individual score record
+    // Helper method to format the score TextView for an individual score record
     private void formatScore(TextView textView, int score) {
         switch (score) {
             case 10:

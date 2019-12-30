@@ -2,10 +2,13 @@ package dev.handcraftedsoftware.hint;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.res.Resources;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
+
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,16 +21,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import dev.handcraftedsoftware.hint.R;
+import java.util.Objects;
+
 
 /**
  * Menu that pops up when you pause the game.
  * Gives the option to resume the game or restart it.
- * By Connor Reeder
+ * @author Connor Reeder
  */
 
 public class MenuFragment extends DialogFragment {
-    public static final String TAG = "MenuFragment";
+    private static final String TAG = "MenuFragment";
     private MenuActionsHandler handler;
 
     @NonNull
@@ -37,7 +41,10 @@ public class MenuFragment extends DialogFragment {
         final MenuDialog menuDialog = new MenuDialog(getActivity());
         menuDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         menuDialog.setContentView(R.layout.dialog_menu);
-        DisplayMetrics metrics = getActivity().getResources().getDisplayMetrics();
+        FragmentActivity fragmentActivity = getActivity();
+        assert fragmentActivity != null;
+        Resources resources = fragmentActivity.getResources();
+        DisplayMetrics metrics = resources.getDisplayMetrics();
         int width = metrics.widthPixels;
 
         Window window = menuDialog.getWindow();
@@ -46,7 +53,7 @@ public class MenuFragment extends DialogFragment {
         }
 
         ArrayAdapter<String> menuOptionsAdapter = new MenuAdapter(menuOptions);
-        ListView optionsListView = (ListView) menuDialog.findViewById(R.id.optionsList);
+        ListView optionsListView = menuDialog.findViewById(R.id.optionsList);
         optionsListView.setAdapter(menuOptionsAdapter);
         optionsListView.setOnItemClickListener(new ListView.OnItemClickListener(){
             @Override
@@ -68,9 +75,11 @@ public class MenuFragment extends DialogFragment {
 
     @Nullable
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = super.onCreateView(inflater, container, savedInstanceState);
-        getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
+        FragmentActivity fragmentActivity = getActivity();
+        assert fragmentActivity != null;
+        fragmentActivity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
                 | View.SYSTEM_UI_FLAG_FULLSCREEN
                 | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -92,19 +101,21 @@ public class MenuFragment extends DialogFragment {
             if (window != null) {
                 window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE,
                         WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
+
+                copySystemUiVisibility();
+                setCancelable(false);
+                super.show();
+
+                // Set the dialog to focusable again.
+                window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
             }
 
-            copySystemUiVisibility();
-            setCancelable(false);
-            super.show();
-
-            // Set the dialog to focusable again.
-            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         }
         private void copySystemUiVisibility() {
             if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.KITKAT) {
                 Window window = getWindow();
-                if (window != null) {
+                FragmentActivity fragmentActivity = getActivity();
+                if (window != null && fragmentActivity != null) {
                     window.getDecorView().setSystemUiVisibility(
                             getActivity().getWindow().getDecorView().getSystemUiVisibility());
                 }
@@ -115,7 +126,7 @@ public class MenuFragment extends DialogFragment {
     private class MenuAdapter extends ArrayAdapter<String> {
 
         MenuAdapter(String[] menuOptions) {
-            super(getActivity(), 0, menuOptions);
+            super(Objects.requireNonNull(getActivity()), 0, menuOptions);
         }
 
         @NonNull
@@ -127,7 +138,7 @@ public class MenuFragment extends DialogFragment {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.item_menu, parent, false);
             }
 
-            TextView textView = (TextView) convertView.findViewById(R.id.menuItemText);
+            TextView textView = convertView.findViewById(R.id.menuItemText);
 
             textView.setText(optionText);
             return convertView;
@@ -139,7 +150,7 @@ public class MenuFragment extends DialogFragment {
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         Log.d(TAG, "onAttach: ");
         super.onAttach(context);
         try {

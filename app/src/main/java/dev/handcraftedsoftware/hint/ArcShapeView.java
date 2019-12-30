@@ -9,11 +9,10 @@ import android.graphics.RectF;
 import android.util.AttributeSet;
 import android.view.View;
 
-import dev.handcraftedsoftware.hint.R;
 
 /**
  * A partial circle which appears in the left corner as a background to the round number.
- * By Connor Reeder
+ * @author Connor Reeder
  */
 
 public class ArcShapeView extends View {

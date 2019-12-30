@@ -11,7 +11,7 @@ import java.net.URL;
 
 /**
  * Asynchronous task that gets JSON data and returns it as a JSONArray
- * Connor Reeder
+ * @author Connor Reeder
  */
 
 class JSONTask extends AsyncTask<String, Void, String> {

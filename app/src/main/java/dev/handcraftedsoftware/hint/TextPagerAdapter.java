@@ -1,13 +1,14 @@
 package dev.handcraftedsoftware.hint;
 
 import android.content.Context;
+
+import androidx.annotation.NonNull;
 import androidx.viewpager.widget.PagerAdapter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import dev.handcraftedsoftware.hint.R;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -15,7 +16,7 @@ import java.util.List;
 
 /**
  * Adaptor that is used to display a swipeable word in the ViewPager of the TurnActivity.
- * By Connor Reeder
+ * @author Connor Reeder
  */
 
 class TextPagerAdapter extends PagerAdapter {
@@ -30,18 +31,19 @@ class TextPagerAdapter extends PagerAdapter {
         Collections.addAll(this.textList, textList);
     }
 
+    @NonNull
     @Override
-    public Object instantiateItem(ViewGroup container, int position) {
+    public Object instantiateItem(@NonNull ViewGroup container, int position) {
         LayoutInflater inflater = LayoutInflater.from(context);
         ViewGroup newbie = (ViewGroup) inflater.inflate(R.layout.single_text, container, false);
-        TextView singleTextView = (TextView) newbie.findViewById(R.id.singleTextView);
+        TextView singleTextView = newbie.findViewById(R.id.singleTextView);
         singleTextView.setText(textList.get(position));
         container.addView(newbie);
         return newbie;
     }
 
     @Override
-    public void destroyItem (ViewGroup container, int position, Object object) {
+    public void destroyItem (ViewGroup container, int position, @NonNull Object object) {
         container.removeView((View) object);
     }
 
@@ -52,12 +54,12 @@ class TextPagerAdapter extends PagerAdapter {
     }
 
     @Override
-    public boolean isViewFromObject(View view, Object object) {
+    public boolean isViewFromObject(@NonNull View view, @NonNull Object object) {
         return view == object;
     }
 
     @Override
-    public void setPrimaryItem(ViewGroup container, int position, Object object) {
+    public void setPrimaryItem(@NonNull ViewGroup container, int position, @NonNull Object object) {
         currentView = (ViewGroup) object;
         super.setPrimaryItem(container,position,object);
     }

@@ -14,12 +14,11 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
-import dev.handcraftedsoftware.hint.R;
 
 /**
  * Initial Activity upon opening the app.
  * Allows the user to choose team names and difficulty for the game.
- * By Connor Reeder
+ * @author Connor Reeder
  */
 public class BeginActivity extends AppCompatActivity {
 
@@ -39,11 +38,11 @@ public class BeginActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_begin);
         Intent parentIntent = getIntent();
-        nameText1 = (EditText) findViewById(R.id.team1NameBox);
-        nameText2 = (EditText) findViewById(R.id.team2NameBox);
-        diffGroup = (RadioGroup) findViewById(R.id.diffGroup);
-        langGroup = (RadioGroup) findViewById(R.id.langGroup);
-        ImageButton helpButton = (ImageButton) findViewById(R.id.helpButton);
+        nameText1 = findViewById(R.id.team1NameBox);
+        nameText2 = findViewById(R.id.team2NameBox);
+        diffGroup = findViewById(R.id.diffGroup);
+        langGroup = findViewById(R.id.langGroup);
+        ImageButton helpButton = findViewById(R.id.helpButton);
 
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -122,6 +121,7 @@ public class BeginActivity extends AppCompatActivity {
             nameText2.setText(savedInstanceState.getString(GK.TEAM_NAME_2));
 
             String difficulty = savedInstanceState.getString(GK.DIFFICULTY);
+            assert difficulty != null;
             switch (difficulty) {
                 case GV.EASY:
                     diffGroup.check(R.id.easyButton);
@@ -135,10 +135,14 @@ public class BeginActivity extends AppCompatActivity {
             }
 
             String lang = savedInstanceState.getString(GK.LANGUAGE);
-            if (lang.equals(GV.ENGLISH))
+            if (lang != null) {
+                if (lang.equals(GV.ENGLISH))
+                    langGroup.check(R.id.englishButton);
+                else if (lang.equals(GV.SPANISH))
+                    langGroup.check(R.id.spanishButton);
+            } else {
                 langGroup.check(R.id.englishButton);
-            else if (lang.equals(GV.SPANISH))
-                langGroup.check(R.id.spanishButton);
+            }
 
         }
 
@@ -194,8 +198,8 @@ public class BeginActivity extends AppCompatActivity {
         Intent intent = new Intent(this, TurnActivity.class);
         intent.putExtra(GK.TEAM_NAME_1, nameText1.getText().toString());
         intent.putExtra(GK.TEAM_NAME_2, nameText2.getText().toString());
-        RadioButton selectedDiff = (RadioButton) findViewById(diffGroup.getCheckedRadioButtonId());
-        RadioButton selectedLang = (RadioButton) findViewById(langGroup.getCheckedRadioButtonId());
+        RadioButton selectedDiff = findViewById(diffGroup.getCheckedRadioButtonId());
+        RadioButton selectedLang = findViewById(langGroup.getCheckedRadioButtonId());
         if (selectedDiff.getId() == R.id.easyButton) {
             intent.putExtra(GK.DIFFICULTY, GV.EASY);
         } else if (selectedDiff.getId() == R.id.mediumButton) {

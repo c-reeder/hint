@@ -25,7 +25,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.View;
 
-import dev.handcraftedsoftware.hint.R;
 
 import java.util.Random;
 
@@ -36,7 +35,7 @@ import java.util.Random;
  */
 public class WinnerActivity extends AppCompatActivity {
 
-    private static final String TAG = "WinnerActivity";
+    //private static final String TAG = "WinnerActivity";
 
     private final int NUM_BALLOONS = 16;
 
@@ -51,7 +50,7 @@ public class WinnerActivity extends AppCompatActivity {
             getWindow().setEnterTransition(new Explode());
         }
 
-        setContentView(R.layout.activity_winner_new);
+        setContentView(R.layout.activity_winner);
 
         // For testing purposes only
 //        Intent parentIntent = new Intent();
@@ -115,6 +114,7 @@ public class WinnerActivity extends AppCompatActivity {
 
                     // Create Drawable to add to ImageView
                     LayerDrawable layerDrawable = (LayerDrawable) ContextCompat.getDrawable(getApplicationContext(), R.drawable.balloon_list);
+                    assert layerDrawable != null;
                     balloonView.setImageDrawable(layerDrawable);
                     DrawableCompat.setTint(layerDrawable.getDrawable(0).mutate(),generateRandomPastelColor(random));
 
@@ -132,7 +132,6 @@ public class WinnerActivity extends AppCompatActivity {
                     balloonAnimator.setDuration(5000);
                     balloonAnimator.setInterpolator(new LinearInterpolator());
                     balloonAnimator.setStartDelay(500 * i);
-                    //balloonAnimator.setStartDelay(random.nextInt(10000));
                     balloonAnimator.start();
                 }
 

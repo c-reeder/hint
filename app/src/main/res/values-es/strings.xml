@@ -34,4 +34,7 @@
     <string name="large_text">This is some large text</string>
     <string name="english">Inglés</string>
     <string name="spanish">Español</string>
+    <string name="dismiss">Cerrar</string>
+    <string name="score">Puntaje</string>
+    <string name="view_score">Ver Puntaje</string>
 </resources>

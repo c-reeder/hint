@@ -3,7 +3,6 @@ package dev.handcraftedsoftware.hint;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Build;
@@ -11,6 +10,7 @@ import android.os.CountDownTimer;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.fragment.app.FragmentManager;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 import androidx.appcompat.app.AppCompatActivity;
@@ -25,12 +25,11 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import dev.handcraftedsoftware.hint.R;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 
 import java.util.Arrays;
+import java.util.Locale;
 
 
 /**
@@ -102,8 +101,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private int[] bScores1;
     private int[] bScores2;
 
-    private DownloadFragment downloadFragment;
-
     // CountDown used for the game timer
     private CountDownTimer countDownTimer;
     private long countDownTimeRemaining;
@@ -111,6 +108,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
 
 
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -150,7 +148,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                     if (motionEvent.getActionMasked() == MotionEvent.ACTION_DOWN) {
                         Log.d(TAG, "layout ACTION_DOWN");
                         isWordHidden = false;
-                        //coverAlphaAnimator.cancel();
                         if (coverAlphaAnimator.isRunning()) {
                             coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",(float)coverAlphaAnimator.getAnimatedValue(),0f);
                         } else {
@@ -162,7 +159,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                     } else if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP) {
                         Log.d(TAG, "layout ACTION_UP");
                         isWordHidden = true;
-                        //coverAlphaAnimator.cancel();
                         if (coverAlphaAnimator.isRunning()) {
                             coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",(float)coverAlphaAnimator.getAnimatedValue(),1f);
                         } else {
@@ -180,6 +176,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
 
         // If the game is started for the first time
+        DownloadFragment downloadFragment;
         if (savedInstanceState == null) {
 //            Log.d(TAG, "From scratch");
             // Init Game Values
@@ -213,7 +210,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             fragmentBundle.putString(GK.DIFFICULTY, difficulty);
 
             // Create DownloadFragment and start it.
-            FragmentManager fm = getFragmentManager();
+            FragmentManager fm = getSupportFragmentManager();
             downloadFragment = (DownloadFragment) fm.findFragmentByTag(GK.DOWNLOAD_FRAGMENT);
 
             if (downloadFragment != null) {
@@ -260,105 +257,103 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             bScores2 = savedInstanceState.getIntArray(GK.B_SCORES_2);
 
             // Recover Download Fragment
-            FragmentManager fm = getFragmentManager();
+            FragmentManager fm = getSupportFragmentManager();
             downloadFragment = (DownloadFragment) fm.findFragmentByTag(GK.DOWNLOAD_FRAGMENT);
 
             if (downloadFragment == null) {
                 Log.e(TAG, "Download Fragment doesn't exist!");
-            }
-
-            if (downloadFragment.isComplete()) {
-                // Hide the loading icon IMMEDIATELY since we are only re-starting the activity and have already obtained our word data
-                loadingIcon.setVisibility(View.INVISIBLE);
-                initWords();
-                ppSpinnerView.setSpinner(currPP);
-                updateDisplay();
-                if (gameState == GameState.TEAM_TRANSITION) {
-                    promptForContinue(getString(R.string.pass_phone_next));
-
-                    if (isWordHidden)
-                        wordCover.setAlpha(1f);
-
-
-                    wordHolder.setText(wordList[wordIdx]);
-                    viewPager.setVisibility(View.INVISIBLE);
-
-
-                    // Position wordHolder between the continueButton and the messageView
-                    ConstraintSet newSet = new ConstraintSet();
-                    newSet.clear(R.id.wordHolder);
-                    newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
-                    newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
-                    newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.messageView, ConstraintSet.BOTTOM,0);
-                    newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
-                    newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
-                    newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.continueButton, ConstraintSet.TOP,0);
-                    newSet.applyTo(layout);
-                } else if (gameState == GameState.WORD_TRANSITION) {
-                    promptForContinue(getString(R.string.pass_phone_across));
-                    if (previousCorrect) {
-                        layout.setBackgroundColor(Color.GREEN);
-
-                    } else {
-                        layout.setBackgroundColor(Color.RED);
-                    }
-                    Log.v(TAG, "Restarting in Word Transition!");
-                    wordHolder.setText(wordList[wordIdx]);
-                    viewPager.setVisibility(View.INVISIBLE);
-
-                    // Position wordHolder between the continueButton and the messageView
-                    ConstraintSet newSet = new ConstraintSet();
-                    newSet.clear(R.id.wordHolder);
-                    newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
-                    newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
-                    newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.messageView, ConstraintSet.BOTTOM,0);
-                    newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
-                    newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
-                    newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.continueButton, ConstraintSet.TOP,0);
-                    newSet.applyTo(layout);
-                } else if (gameState == GameState.WORD_APPROVAL) {
-                    acceptWordButton.setVisibility(View.VISIBLE);
-                } else if (gameState == GameState.PLAYING) {
-
-                    // Initialize the CountDownTimer from where it was before we stopped
-                    countDownTimer = new CountDownTimer(countDownTimeRemaining,1000) {
-                        @SuppressLint("DefaultLocale")
-                        @Override
-                        public void onTick(long millisUntilFinished) {
-                            countDownTimeRemaining = millisUntilFinished;
-                            timerView.setText(String.format("%02d",Math.round(millisUntilFinished / 1000)));
-                        }
-
-                        @Override
-                        public void onFinish() {
-                            onCountDownCompleted();
-                        }
-                    };
-                    countDownTimer.start();
-
-                    if (isWordHidden)
-                        wordCover.setAlpha(1f);
-
-                    // Correctly restore position of the WordHolder vertically between the timerView and the buttonrow
-                    ConstraintSet newSet = new ConstraintSet();
-                    wordHolder.setText(wordList[wordIdx]);
-                    viewPager.setVisibility(View.INVISIBLE);
-                    newSet.clear(R.id.wordHolder);
-                    newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
-                    newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
-                    newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.timerView, ConstraintSet.BOTTOM,0);
-                    newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
-                    newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
-                    newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
-                    newSet.applyTo(layout);
-                    timerView.setText(String.format("%02d",Math.round(countDownTimeRemaining / 1000)));
-                    timerView.setVisibility(View.VISIBLE);
-                }
             } else {
-                Log.d(TAG, "Activity Restarted but words not ready yet!");
+                if (downloadFragment.isComplete()) {
+                    // Hide the loading icon IMMEDIATELY since we are only re-starting the activity and have already obtained our word data
+                    loadingIcon.setVisibility(View.INVISIBLE);
+                    initWords();
+                    ppSpinnerView.setSpinner(currPP);
+                    updateDisplay();
+                    if (gameState == GameState.TEAM_TRANSITION) {
+                        promptForContinue(getString(R.string.pass_phone_next));
+
+                        if (isWordHidden)
+                            wordCover.setAlpha(1f);
+
+
+                        wordHolder.setText(wordList[wordIdx]);
+                        viewPager.setVisibility(View.INVISIBLE);
+
+
+                        // Position wordHolder between the continueButton and the messageView
+                        ConstraintSet newSet = new ConstraintSet();
+                        newSet.clear(R.id.wordHolder);
+                        newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+                        newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.messageView, ConstraintSet.BOTTOM,0);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.continueButton, ConstraintSet.TOP,0);
+                        newSet.applyTo(layout);
+                    } else if (gameState == GameState.WORD_TRANSITION) {
+                        promptForContinue(getString(R.string.pass_phone_across));
+                        if (previousCorrect) {
+                            layout.setBackgroundColor(Color.GREEN);
+
+                        } else {
+                            layout.setBackgroundColor(Color.RED);
+                        }
+                        Log.v(TAG, "Restarting in Word Transition!");
+                        wordHolder.setText(wordList[wordIdx]);
+                        viewPager.setVisibility(View.INVISIBLE);
+
+                        // Position wordHolder between the continueButton and the messageView
+                        ConstraintSet newSet = new ConstraintSet();
+                        newSet.clear(R.id.wordHolder);
+                        newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+                        newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.messageView, ConstraintSet.BOTTOM,0);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.continueButton, ConstraintSet.TOP,0);
+                        newSet.applyTo(layout);
+                    } else if (gameState == GameState.WORD_APPROVAL) {
+                        acceptWordButton.setVisibility(View.VISIBLE);
+                    } else if (gameState == GameState.PLAYING) {
+
+                        // Initialize the CountDownTimer from where it was before we stopped
+                        countDownTimer = new CountDownTimer(countDownTimeRemaining,1000) {
+                            @SuppressLint("DefaultLocale")
+                            @Override
+                            public void onTick(long millisUntilFinished) {
+                                countDownTimeRemaining = millisUntilFinished;
+                                timerView.setText(String.format("%02d",Math.round(millisUntilFinished / 1000)));
+                            }
+
+                            @Override
+                            public void onFinish() {
+                                onCountDownCompleted();
+                            }
+                        };
+                        countDownTimer.start();
+
+                        if (isWordHidden)
+                            wordCover.setAlpha(1f);
+
+                        // Correctly restore position of the WordHolder vertically between the timerView and the buttonrow
+                        ConstraintSet newSet = new ConstraintSet();
+                        wordHolder.setText(wordList[wordIdx]);
+                        viewPager.setVisibility(View.INVISIBLE);
+                        newSet.clear(R.id.wordHolder);
+                        newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+                        newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.timerView, ConstraintSet.BOTTOM,0);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
+                        newSet.applyTo(layout);
+                        timerView.setText(String.format(Locale.getDefault(),"%02d",Math.round(countDownTimeRemaining / 1000)));
+                        timerView.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    Log.d(TAG, "Activity Restarted but words not ready yet!");
+                }
             }
-
-
             // Game has been successfully restarted
         }
     }
@@ -587,7 +582,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 onCountDownCompleted();
             }
         };
-        timerView.setText(String.format("%02d",Math.round(countDownTimeRemaining / 1000)));
+        timerView.setText(String.format(Locale.getDefault(),"%02d",Math.round(countDownTimeRemaining / 1000)));
         countDownTimer.start();
     }
 
@@ -905,6 +900,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      * @param motionEvent the motion event that occurred on the touched view
      * @return whether or not the touch was received
      */
+    @SuppressLint("ClickableViewAccessibility")
     @Override
     public boolean onTouch(View view, MotionEvent motionEvent) {
         return false;
@@ -913,7 +909,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     /**
      * Called when the pause button is pressed.
      * In reality this only gives you the ability to return to the start screen
-     * @param view
      */
     public void pauseGame(View view) {
         if (gameState == GameState.AWAITING_WORDS) {

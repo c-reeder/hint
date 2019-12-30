@@ -6,7 +6,7 @@ import android.widget.ProgressBar;
 
 /**
  * A custom perpetual progress bar to show while waiting for the words to arrive.
- * By Connor Reeder
+ * @author Connor Reeder
  */
 
 public class CustomProgressBar extends ProgressBar {

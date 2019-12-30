@@ -8,11 +8,9 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
-import dev.handcraftedsoftware.hint.R;
-
 /**
  * Custom View which displays two words separated by a diagonal line.
- * By Connor Reeder
+ * @author Connor Reeder
  */
 
 public class DiagonalDoubleTextView extends View {
@@ -140,17 +138,5 @@ public class DiagonalDoubleTextView extends View {
                 viewWidth,
                 0,
                 paint);
-    }
-
-    public void setText1(String text1) {
-        this.text1 = text1;
-        invalidate();
-        requestLayout();
-    }
-
-    public void setText2(String text2) {
-        this.text2 = text2;
-        invalidate();
-        requestLayout();
     }
 }
