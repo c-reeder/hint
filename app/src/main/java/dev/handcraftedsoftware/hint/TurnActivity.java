@@ -25,7 +25,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.wordpress.simpledevelopments.hint.R;
+import dev.handcraftedsoftware.hint.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;

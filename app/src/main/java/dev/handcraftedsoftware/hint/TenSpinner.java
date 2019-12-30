@@ -13,7 +13,7 @@ import androidx.core.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.wordpress.simpledevelopments.hint.R;
+import dev.handcraftedsoftware.hint.R;
 
 /**
  * Custom UI element which represents a spinnable wheel.

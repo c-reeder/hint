@@ -8,7 +8,7 @@ import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.wordpress.simpledevelopments.hint.R;
+import dev.handcraftedsoftware.hint.R;
 
 /**
  * Custom View which displays two words separated by a diagonal line.

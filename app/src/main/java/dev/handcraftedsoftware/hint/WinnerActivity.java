@@ -25,7 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.View;
 
-import com.wordpress.simpledevelopments.hint.R;
+import dev.handcraftedsoftware.hint.R;
 
 import java.util.Random;
 

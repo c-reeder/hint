@@ -49,7 +49,7 @@ public class DownloadFragment extends Fragment {
                     listenerActivity.onDownloadComplete(result);
                 }
             };
-            String requestURL = com.wordpress.simpledevelopments.hint.BuildConfig.url + "/passwords/" + language + "/" + difficulty;
+            String requestURL = dev.handcraftedsoftware.hint.BuildConfig.url + "/words/" + language + "/" + difficulty;
             task.execute(requestURL);
             Log.v(TAG,requestURL);
         } else {

@@ -3,7 +3,7 @@ package dev.handcraftedsoftware.hint;
 import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
-import com.wordpress.simpledevelopments.hint.R;
+import dev.handcraftedsoftware.hint.R;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;

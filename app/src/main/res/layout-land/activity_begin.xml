@@ -5,12 +5,12 @@
     android:id="@+id/activity_begin"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.wordpress.simpledevelopments.hint.dev.wordpress.simpledevelopments.hint.BeginActivity"
+    tools:context="dev.handcraftedsoftware.hint.BeginActivity"
     tools:layout_editor_absoluteY="25dp"
     tools:layout_editor_absoluteX="0dp">
 
     <TextView
-        android:text="Password"
+        android:text="Hint"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/titleView"

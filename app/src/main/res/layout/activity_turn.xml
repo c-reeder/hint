@@ -5,7 +5,7 @@
     android:id="@+id/activity_turn"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.wordpress.simpledevelopments.hint.dev.wordpress.simpledevelopments.hint.TurnActivity">
+    tools:context="dev.handcraftedsoftware.hint.TurnActivity">
 
     <dev.handcraftedsoftware.hint.OneDirectionViewPager
         android:id="@+id/pager"
