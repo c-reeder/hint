@@ -8,16 +8,14 @@
     tools:context="dev.handcraftedsoftware.hint.BeginActivity">
 
     <TextView
-        android:text="Hint"
+        android:id="@+id/titleView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/titleView"
-        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginStart="16dp"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_marginTop="40dp"
+        android:text="@string/app_name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Display2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -30,17 +28,18 @@
         app:layout_constraintLeft_toLeftOf="@+id/team1NameBox" />
 
     <EditText
+        android:id="@+id/team1NameBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textNoSuggestions|textPersonName"
-        android:ems="10"
-        android:id="@+id/team1NameBox"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleView"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:imeOptions="flagNoFullscreen|flagNoExtractUi"
         android:layout_marginTop="112dp"
-        android:text="@string/team1" />
+        android:ems="10"
+        android:hint="@string/team1"
+        android:imeOptions="flagNoFullscreen|flagNoExtractUi"
+        android:importantForAutofill="no"
+        android:inputType="textNoSuggestions|textPersonName"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/titleView" />
 
     <TextView
         android:id="@+id/team2Label"
@@ -52,17 +51,18 @@
         app:layout_constraintLeft_toLeftOf="@+id/team2NameBox" />
 
     <EditText
+        android:id="@+id/team2NameBox"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:inputType="textNoSuggestions|textPersonName"
+        android:layout_marginBottom="8dp"
         android:ems="10"
-        android:id="@+id/team2NameBox"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/team1NameBox"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:text="@string/team2"
+        android:hint="@string/team2"
+        android:importantForAutofill="no"
+        android:inputType="textNoSuggestions|textPersonName"
         app:layout_constraintBottom_toTopOf="@+id/diffGroup"
-        android:layout_marginBottom="8dp" />
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/team1NameBox" />
 
     <Button
         android:id="@+id/beginButton"
@@ -96,7 +96,8 @@
             android:layout_weight="1"
             android:checked="true"
             android:text="@string/english"
-            android:textAlignment="viewStart" />
+            android:textAlignment="viewStart"
+            android:layout_gravity="start" />
 
         <RadioButton
             android:id="@+id/spanishButton"
@@ -104,7 +105,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/spanish"
-            android:textAlignment="viewStart" />
+            android:textAlignment="viewStart"
+            android:layout_gravity="start"  />
     </RadioGroup>
 
     <RadioGroup
@@ -146,8 +148,7 @@
         android:id="@+id/helpButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
-        android:layout_marginRight="0dp"
+        android:contentDescription="@string/help"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:srcCompat="@android:drawable/ic_menu_help" />

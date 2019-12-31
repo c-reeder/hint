@@ -182,6 +182,12 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             // Init Game Values
             teamName1 = parentIntent.getStringExtra(GK.TEAM_NAME_1);
             teamName2 = parentIntent.getStringExtra(GK.TEAM_NAME_2);
+            if (teamName1.equals("")) {
+                teamName1 = getString(R.string.team1);
+            }
+            if (teamName2.equals("")) {
+                teamName2 = getString(R.string.team2);
+            }
             difficulty = parentIntent.getStringExtra(GK.DIFFICULTY);
             language = parentIntent.getStringExtra(GK.LANGUAGE);
             currRound = 1;
@@ -471,12 +477,14 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      * Sets app to fullscreen mode
      */
     private void setToFullScreen() {
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        int value = View.SYSTEM_UI_FLAG_LOW_PROFILE | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            value = value | View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+        }
+        getWindow().getDecorView().setSystemUiVisibility(value);
     }
 
     /**

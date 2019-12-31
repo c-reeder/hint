@@ -41,4 +41,5 @@
     <string name="view_score">View Score</string>
     <string name="score">Score</string>
     <string name="dismiss">Dismiss</string>
+    <string name="help">Help</string>
 </resources>
