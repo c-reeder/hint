@@ -9,6 +9,8 @@ import android.graphics.Point;
 import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
@@ -21,9 +23,9 @@ import android.view.Display;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.LinearInterpolator;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.view.View;
+import androidx.appcompat.widget.AppCompatImageView;
 
 
 import java.util.Random;
@@ -41,6 +43,9 @@ public class WinnerActivity extends AppCompatActivity {
 
     private Bundle scoreExtras;
 
+    static {
+        AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,23 +58,23 @@ public class WinnerActivity extends AppCompatActivity {
         setContentView(R.layout.activity_winner);
 
         // For testing purposes only
-//        Intent parentIntent = new Intent();
-//        parentIntent.putExtra(GK.A_SCORES_1,new int[]{10, 9, 10, 0, 10, 9});
-//        parentIntent.putExtra(GK.A_SCORES_2,new int[]{0, 0, 0, 10,0, 0});
-//        parentIntent.putExtra(GK.B_SCORES_1,new int[]{0, 9, 0, 0, 10, 9});
-//        parentIntent.putExtra(GK.B_SCORES_2,new int[]{9, 0, 9, 10, 0, 0});
-//        parentIntent.putExtra(GK.A_WORDS,new String[]{"bunk bed", "stove", "condition", "sweater", "rope", "edit"});
-//        parentIntent.putExtra(GK.B_WORDS,new String[]{"flight", "president", "bushes", "tomorrow", "pastry", "disc golf (frisbee golf)"});
-//        parentIntent.putExtra(GK.TOTAL_SCORE_1, 76);
-//        parentIntent.putExtra(GK.TOTAL_SCORE_2, 38);
-//        parentIntent.putExtra(GK.TEAM_NAME_1, "Team 1");
-//        parentIntent.putExtra(GK.TEAM_NAME_2, "Team 2");
-//        parentIntent.putExtra(GK.DIFFICULTY, "easy");
-//        parentIntent.putExtra(GK.LANGUAGE, "English");
-//        parentIntent.putExtra(GK.WINNER_TEAM_NAME, "Team 1");
+        Intent parentIntent = new Intent();
+        parentIntent.putExtra(GK.A_SCORES_1,new int[]{10, 9, 10, 0, 10, 9});
+        parentIntent.putExtra(GK.A_SCORES_2,new int[]{0, 0, 0, 10,0, 0});
+        parentIntent.putExtra(GK.B_SCORES_1,new int[]{0, 9, 0, 0, 10, 9});
+        parentIntent.putExtra(GK.B_SCORES_2,new int[]{9, 0, 9, 10, 0, 0});
+        parentIntent.putExtra(GK.A_WORDS,new String[]{"bunk bed", "stove", "condition", "sweater", "rope", "edit"});
+        parentIntent.putExtra(GK.B_WORDS,new String[]{"flight", "president", "bushes", "tomorrow", "pastry", "disc golf (frisbee golf)"});
+        parentIntent.putExtra(GK.TOTAL_SCORE_1, 76);
+        parentIntent.putExtra(GK.TOTAL_SCORE_2, 38);
+        parentIntent.putExtra(GK.TEAM_NAME_1, "Team 1");
+        parentIntent.putExtra(GK.TEAM_NAME_2, "Team 2");
+        parentIntent.putExtra(GK.DIFFICULTY, "easy");
+        parentIntent.putExtra(GK.LANGUAGE, "English");
+        parentIntent.putExtra(GK.WINNER_TEAM_NAME, "Team 1");
 
 
-        Intent parentIntent = getIntent();
+        //Intent parentIntent = getIntent();
         scoreExtras = parentIntent.getExtras();
         final TextView winnerView = findViewById(R.id.winnerText);
 
@@ -93,9 +98,15 @@ public class WinnerActivity extends AppCompatActivity {
                 // Get screen dimensions
                 Display display = getWindowManager().getDefaultDisplay();
                 Point size = new Point();
-                display.getRealSize(size);
-                float screenHeight = size.y;
-                float screenWidth = size.x;
+                float screenHeight;
+                float screenWidth;
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    display.getRealSize(size);
+                } else {
+                    display.getSize(size);
+                }
+                screenHeight = size.y;
+                screenWidth = size.x;
 
 
                 //ImageView[] balloons = new ImageView[NUM_BALLOONS];
@@ -107,15 +118,17 @@ public class WinnerActivity extends AppCompatActivity {
 
                 for (int i = 0; i < NUM_BALLOONS; i++) {
                     // Create Balloon ImageView with given size
-                    ImageView balloonView = new ImageView(getApplicationContext());
-                    balloonView.setId(View.generateViewId());
+                    AppCompatImageView balloonView = new AppCompatImageView(getApplicationContext());
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+                    } else {
+                        balloonView.setId(androidx.core.view.ViewCompat.generateViewId());
+                    }
                     ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(px,px);
                     balloonView.setLayoutParams(params);
 
                     // Create Drawable to add to ImageView
-                    LayerDrawable layerDrawable = (LayerDrawable) ContextCompat.getDrawable(getApplicationContext(), R.drawable.balloon_list);
-                    assert layerDrawable != null;
-                    balloonView.setImageDrawable(layerDrawable);
+                    balloonView.setImageResource(R.drawable.balloon_list);
+                    LayerDrawable layerDrawable = (LayerDrawable) balloonView.getDrawable();
                     DrawableCompat.setTint(layerDrawable.getDrawable(0).mutate(),generateRandomPastelColor(random));
 
                     // Add the Balloon ImageView at the default position
