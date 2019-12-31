@@ -9,6 +9,7 @@
         android:id="@+id/singleTextView"
         android:layout_width="match_parent"
         android:textAlignment="center"
+        android:gravity="center"
         android:layout_height="@dimen/word_height"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         app:autoSizeTextType="uniform"

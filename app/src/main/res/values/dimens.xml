@@ -9,4 +9,5 @@
     <dimen name="tenSpinnerText">30sp</dimen>
     <dimen name="tenSpinnerStroke">1dp</dimen>
     <dimen name="word_height">60dp</dimen>
+    <dimen name="msg_height">60dp</dimen>
 </resources>
