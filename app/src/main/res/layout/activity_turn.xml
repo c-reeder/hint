@@ -66,12 +66,14 @@
 
     <TextView
         android:id="@+id/wordHolder"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/word_height"
         android:text="Current Word"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        android:textSize="56sp"
         android:visibility="invisible"
+        android:gravity="center"
+        android:textAlignment="center"
+        app:autoSizeTextType="uniform"
         app:layout_constraintBottom_toTopOf="@id/buttonRow"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

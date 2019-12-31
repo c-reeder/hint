@@ -10,6 +10,7 @@ import android.os.CountDownTimer;
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
@@ -18,8 +19,11 @@ import android.os.Bundle;
 import android.transition.Explode;
 import androidx.transition.Transition;
 import android.util.Log;
+import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.ProgressBar;
@@ -28,6 +32,7 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -106,6 +111,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private long countDownTimeRemaining;
     private ObjectAnimator coverAlphaAnimator;
 
+    private int wordHeight;
+
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -117,6 +124,10 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             getWindow().setEnterTransition(new Explode());
             getWindow().setExitTransition(new Explode());
         }
+
+        wordHeight = getResources().getDimensionPixelSize(R.dimen.word_height);
+        Log.d(TAG, "wordHeight: " + wordHeight);
+
 
         setContentView(R.layout.activity_turn);
         Intent parentIntent = getIntent();
@@ -564,14 +575,20 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 // Animate WordHolder from Center Position to Low Position (beneath the timerView)
                 ConstraintSet newSet = new ConstraintSet();
                 newSet.clear(R.id.wordHolder);
-                newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
-                newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+                newSet.constrainHeight(R.id.wordHolder, wordHeight);
+                newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
                 newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.timerView, ConstraintSet.BOTTOM,0);
                 newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
                 newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
                 newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
+
+                Log.d(TAG, "wordHolder.getHeight()1:" + wordHolder.getHeight());
+                TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+
                 TransitionManager.beginDelayedTransition(layout, transition);
+                wordHolder.setGravity(Gravity.CENTER);
                 newSet.applyTo(layout);
+                Log.d(TAG, "wordHolder.getHeight()2:" + wordHolder.getHeight());
             }
         });
 
