@@ -18,8 +18,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.Explode;
 import androidx.transition.Transition;
+
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -128,6 +131,15 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         wordHeight = getResources().getDimensionPixelSize(R.dimen.word_height);
         Log.d(TAG, "wordHeight: " + wordHeight);
 
+        Display display = getWindowManager().getDefaultDisplay();
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        display.getMetrics(outMetrics);
+
+        float density  = getResources().getDisplayMetrics().density;
+        float dpHeight = outMetrics.heightPixels / density;
+        float dpWidth  = outMetrics.widthPixels / density;
+        Log.d(TAG, "dpHeight: " + dpHeight);
+        Log.d(TAG, "dpWidth: " + dpWidth);
 
         setContentView(R.layout.activity_turn);
         Intent parentIntent = getIntent();
