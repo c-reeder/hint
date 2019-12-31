@@ -23,18 +23,18 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="32dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="120dp"
         android:layout_marginRight="32dp"
+        android:gravity="center"
         android:text="This is a Message"
         android:textAlignment="center"
         android:textAppearance="@android:style/TextAppearance.Large"
         android:textSize="24sp"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:autoSizeTextType="uniform"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.25" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <dev.handcraftedsoftware.hint.CustomProgressBar
         android:layout_width="wrap_content"
@@ -78,22 +78,33 @@
         app:layout_constraintTop_toBottomOf="@id/topBar"
         />
 
-    <TextView
+    <LinearLayout
         android:id="@+id/wordCover"
+        android:gravity="center"
+        android:paddingStart="50dp"
+        android:paddingEnd="50dp"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:gravity="center"
-        android:textSize="56sp"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:layout_gravity="center"
         android:background="@color/colorAccent"
-        android:textColor="@color/white"
-        android:text="Tap to reveal"
         app:layout_constraintBottom_toBottomOf="@id/wordHolder"
         app:layout_constraintEnd_toEndOf="@id/wordHolder"
         app:layout_constraintStart_toStartOf="@id/wordHolder"
         app:layout_constraintTop_toTopOf="@id/wordHolder"
         android:alpha="0"
-        />
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textAlignment="center"
+            app:autoSizeTextType="uniform"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:background="@color/colorAccent"
+            android:textColor="@color/white"
+            android:text="@string/tap_to_reveal"
+
+            />
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/topBar"
@@ -243,7 +254,8 @@
             android:layout_marginStart="16dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginLeft="16dp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -255,7 +267,8 @@
             app:layout_constraintRight_toLeftOf="@+id/pauseButton"
             app:layout_constraintLeft_toRightOf="@+id/partnerLetterText"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent" />
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginLeft="8dp" />
 
         <ImageButton
             android:layout_width="wrap_content"

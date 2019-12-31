@@ -74,7 +74,7 @@ public class WinnerActivity extends AppCompatActivity {
         parentIntent.putExtra(GK.WINNER_TEAM_NAME, "Team 1");
 
 
-        //Intent parentIntent = getIntent();
+//        Intent parentIntent = getIntent();
         scoreExtras = parentIntent.getExtras();
         final TextView winnerView = findViewById(R.id.winnerText);
 

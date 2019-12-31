@@ -42,4 +42,5 @@
     <string name="score">Score</string>
     <string name="dismiss">Dismiss</string>
     <string name="help">Help</string>
+    <string name="tap_to_reveal">Tap to reveal</string>
 </resources>
