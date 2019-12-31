@@ -300,12 +300,14 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                         // Position wordHolder between the continueButton and the messageView
                         ConstraintSet newSet = new ConstraintSet();
                         newSet.clear(R.id.wordHolder);
-                        newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
-                        newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+                        newSet.constrainHeight(R.id.wordHolder, wordHeight);
+                        newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
                         newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.messageView, ConstraintSet.BOTTOM,0);
                         newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
                         newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
                         newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.continueButton, ConstraintSet.TOP,0);
+                        TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+                        wordHolder.setGravity(Gravity.CENTER);
                         newSet.applyTo(layout);
                     } else if (gameState == GameState.WORD_TRANSITION) {
                         promptForContinue(getString(R.string.pass_phone_across));
@@ -322,12 +324,14 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                         // Position wordHolder between the continueButton and the messageView
                         ConstraintSet newSet = new ConstraintSet();
                         newSet.clear(R.id.wordHolder);
-                        newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
-                        newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+                        newSet.constrainHeight(R.id.wordHolder, wordHeight);
+                        newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
                         newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.messageView, ConstraintSet.BOTTOM,0);
                         newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
                         newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
                         newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.continueButton, ConstraintSet.TOP,0);
+                        TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+                        wordHolder.setGravity(Gravity.CENTER);
                         newSet.applyTo(layout);
                     } else if (gameState == GameState.WORD_APPROVAL) {
                         acceptWordButton.setVisibility(View.VISIBLE);
@@ -357,12 +361,14 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                         wordHolder.setText(wordList[wordIdx]);
                         viewPager.setVisibility(View.INVISIBLE);
                         newSet.clear(R.id.wordHolder);
-                        newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
-                        newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+                        newSet.constrainHeight(R.id.wordHolder, wordHeight);
+                        newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
                         newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.timerView, ConstraintSet.BOTTOM,0);
                         newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
                         newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
                         newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
+                        TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+                        wordHolder.setGravity(Gravity.CENTER);
                         newSet.applyTo(layout);
                         timerView.setText(String.format(Locale.getDefault(),"%02d",Math.round(countDownTimeRemaining / 1000)));
                         timerView.setVisibility(View.VISIBLE);
@@ -752,13 +758,17 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
             ConstraintSet newSet = new ConstraintSet();
             newSet.clear(R.id.wordHolder);
-            newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
-            newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+            newSet.constrainHeight(R.id.wordHolder, wordHeight);
+            newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
             newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.messageView, ConstraintSet.BOTTOM,0);
             newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
             newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
             newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.continueButton, ConstraintSet.TOP,0);
+
+            TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+
             TransitionManager.beginDelayedTransition(layout);
+            wordHolder.setGravity(Gravity.CENTER);
             newSet.applyTo(layout);
             loadingIcon.setVisibility(View.INVISIBLE);
         }
@@ -830,13 +840,17 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             // Animation WordHolder from Low Position to Normal Position
             ConstraintSet newSet = new ConstraintSet();
             newSet.clear(R.id.wordHolder);
-            newSet.constrainHeight(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
-            newSet.constrainWidth(R.id.wordHolder, ConstraintSet.WRAP_CONTENT);
+            newSet.constrainHeight(R.id.wordHolder, wordHeight);
+            newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
             newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.topBar, ConstraintSet.BOTTOM,0);
             newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
             newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
             newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
+
+            TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+
             TransitionManager.beginDelayedTransition(layout, transition);
+            wordHolder.setGravity(Gravity.CENTER);
             newSet.applyTo(layout);
             loadingIcon.setVisibility(View.INVISIBLE);
         }
