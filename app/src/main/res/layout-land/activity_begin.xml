@@ -6,42 +6,43 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="dev.handcraftedsoftware.hint.BeginActivity"
-    tools:layout_editor_absoluteY="25dp"
-    tools:layout_editor_absoluteX="0dp">
+    tools:layout_editor_absoluteX="0dp"
+    tools:layout_editor_absoluteY="25dp">
 
     <TextView
-        android:text="Hint"
+        android:id="@+id/titleView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/titleView"
+        android:text="Hint"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="32dp" />
+        app:layout_constraintBottom_toTopOf="@+id/team1NameBox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/team1Label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/team1"
-        app:layout_constraintLeft_toLeftOf="@+id/team1NameBox"
-        android:layout_marginLeft="0dp"
-        android:layout_marginBottom="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/team1NameBox" />
+        app:layout_constraintBottom_toTopOf="@+id/team1NameBox"
+        app:layout_constraintStart_toStartOf="@+id/team1NameBox" />
 
     <EditText
         android:id="@+id/team1NameBox"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="32dp"
-        android:layout_marginStart="32dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="10dp"
         android:ems="10"
         android:imeOptions="flagNoFullscreen|flagNoExtractUi"
         android:inputType="textNoSuggestions|textPersonName"
         android:text="@string/team1"
         app:layout_constraintBottom_toTopOf="@+id/team2NameBox"
-        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/langGroup"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/titleView" />
 
     <TextView
@@ -49,53 +50,34 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/team2"
-        android:layout_marginLeft="0dp"
-        app:layout_constraintLeft_toLeftOf="@+id/team2NameBox"
-        android:layout_marginBottom="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/team2NameBox" />
+        app:layout_constraintBottom_toTopOf="@+id/team2NameBox"
+        app:layout_constraintStart_toStartOf="@+id/team2NameBox" />
 
     <EditText
         android:id="@+id/team2NameBox"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="10dp"
         android:ems="10"
         android:inputType="textNoSuggestions|textPersonName"
         android:text="@string/team2"
         app:layout_constraintBottom_toTopOf="@+id/beginButton"
-        app:layout_constraintLeft_toLeftOf="@+id/team1NameBox"
+        app:layout_constraintEnd_toStartOf="@+id/diffGroup"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/team1NameBox" />
-
-    <Button
-        android:id="@+id/beginButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:onClick="begin"
-        android:text="@string/begin_game"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintHorizontal_bias="0.502"
-        android:layout_marginBottom="16dp" />
-
-    <ImageButton
-        android:id="@+id/helpButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:srcCompat="@android:drawable/ic_menu_help"
-        android:layout_marginRight="0dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="0dp" />
 
     <RadioGroup
         android:id="@+id/langGroup"
-        android:layout_width="300dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="40dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/diffGroup"
-        app:layout_constraintTop_toBottomOf="@+id/titleView"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/team1NameBox"
+        app:layout_constraintTop_toTopOf="@+id/team1NameBox">
 
         <RadioButton
             android:id="@+id/englishButton"
@@ -117,13 +99,14 @@
 
     <RadioGroup
         android:id="@+id/diffGroup"
-        android:layout_width="300dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginRight="40dp"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/beginButton"
-        app:layout_constraintTop_toBottomOf="@+id/langGroup"
-        android:layout_marginLeft="0dp"
-        app:layout_constraintLeft_toLeftOf="@+id/langGroup">
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/team2NameBox"
+        app:layout_constraintTop_toTopOf="@+id/team2NameBox">
 
         <RadioButton
             android:id="@+id/easyButton"
@@ -147,5 +130,26 @@
             android:layout_weight="1"
             android:text="@string/hard" />
     </RadioGroup>
+
+    <Button
+        android:id="@+id/beginButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="begin"
+        android:text="@string/begin_game"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/team2NameBox" />
+
+    <ImageButton
+        android:id="@+id/helpButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="0dp"
+        android:layout_marginBottom="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:srcCompat="@android:drawable/ic_menu_help" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
