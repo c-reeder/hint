@@ -129,8 +129,8 @@
     </RelativeLayout>
 
     <dev.handcraftedsoftware.hint.ArcShapeView
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="@dimen/arc_shape_width"
+        android:layout_height="@dimen/arc_shape_width"
         android:id="@+id/roundCircle"
         app:arcColor="@color/colorAccent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -164,8 +164,8 @@
 
     <dev.handcraftedsoftware.hint.TenSpinner
         android:id="@+id/ppSpinner"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="@dimen/ten_spinner_height"
+        android:layout_height="@dimen/ten_spinner_height"
         app:layout_constraintRight_toRightOf="@+id/topBar"
         app:layout_constraintTop_toTopOf="parent" />
 
