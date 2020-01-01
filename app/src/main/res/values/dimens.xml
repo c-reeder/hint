@@ -13,4 +13,6 @@
     <dimen name="timer_font_size">50sp</dimen>
     <dimen name="ten_spinner_height">90dp</dimen>
     <dimen name="arc_shape_width">90dp</dimen>
+    <dimen name="round_top_margin">8dp</dimen>
+    <dimen name="round_number_margin_top">2dp</dimen>
 </resources>

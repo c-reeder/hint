@@ -32,7 +32,7 @@ public class DownloadFragment extends Fragment {
     private OnDownloadCompleteListener listenerActivity;
     private JSONTask task;
 
-    private AsyncTask.Status TESTING_STATUS = AsyncTask.Status.PENDING;
+//    private AsyncTask.Status TESTING_STATUS = AsyncTask.Status.PENDING;
 
 
     @SuppressLint("StaticFieldLeak")
@@ -53,22 +53,22 @@ public class DownloadFragment extends Fragment {
         ConnectivityManager cm = (ConnectivityManager) fragmentActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         if (netInfo != null && netInfo.isConnected()) {
-            // Define behavior to occur upon receiving the JSON word data
-//            task = new JSONTask() {
-//                @Override
-//                protected void onPostExecute(String result) {
-//                    listenerActivity.onDownloadComplete(result);
-//                }
-//            };
-//            String requestURL = dev.handcraftedsoftware.hint.BuildConfig.url + "/words/" + language + "/" + difficulty;
-//            task.execute(requestURL);
-//            Log.v(TAG,requestURL);
+             //Define behavior to occur upon receiving the JSON word data
+            task = new JSONTask() {
+                @Override
+                protected void onPostExecute(String result) {
+                    listenerActivity.onDownloadComplete(result);
+                }
+            };
+            String requestURL = dev.handcraftedsoftware.hint.BuildConfig.url + "/words/" + language + "/" + difficulty;
+            task.execute(requestURL);
+            Log.v(TAG,requestURL);
         } else {
             Log.e(TAG, "Not connected to network");
         }
         // For testing purposes
-        listenerActivity.onDownloadComplete("[\"Pond\",\"uncomfortable\",\"dude\",\"mascot\",\"cargo\",\"telephone booth\",\"albatross\",\"wheat\",\"paper clips\",\"photograph\",\"car dealership\",\"wipe\",\"snatch\",\"winter\",\"ratchet\",\"passport\",\"tiptoe\",\"lemon\",\"seat\",\"disc jockey\",\"succeed\",\"treatment\"]");
-        TESTING_STATUS = AsyncTask.Status.FINISHED;
+//        listenerActivity.onDownloadComplete("[\"Pond\",\"uncomfortable\",\"dude\",\"mascot\",\"cargo\",\"telephone booth\",\"albatross\",\"wheat\",\"paper clips\",\"photograph\",\"car dealership\",\"wipe\",\"snatch\",\"winter\",\"ratchet\",\"passport\",\"tiptoe\",\"lemon\",\"seat\",\"disc jockey\",\"succeed\",\"treatment\"]");
+//        TESTING_STATUS = AsyncTask.Status.FINISHED;
     }
 
     @Override
@@ -90,8 +90,8 @@ public class DownloadFragment extends Fragment {
 
     boolean isComplete() {
         // For testing purposes
-        return TESTING_STATUS == AsyncTask.Status.FINISHED;
-        //return task.getStatus() == AsyncTask.Status.FINISHED;
+//        return TESTING_STATUS == AsyncTask.Status.FINISHED;
+        return task.getStatus() == AsyncTask.Status.FINISHED;
     }
 
 }

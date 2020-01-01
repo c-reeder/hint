@@ -140,7 +140,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="@dimen/round_top_margin"
         android:text="@string/round"
         android:textSize="18sp"
         app:layout_constraintHorizontal_bias="0.4"

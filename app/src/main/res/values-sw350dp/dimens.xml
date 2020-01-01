@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="round_top_margin">16dp</dimen>
+    <dimen name="arc_shape_width">120dp</dimen>
+    <dimen name="ten_spinner_height">120dp</dimen>
+    <dimen name="word_height">60dp</dimen>
+    <dimen name="timer_font_size">100sp</dimen>
+</resources>
