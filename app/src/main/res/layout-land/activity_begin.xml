@@ -13,6 +13,7 @@
         android:id="@+id/titleView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="Hint"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         app:layout_constraintBottom_toTopOf="@+id/team1NameBox"
@@ -59,6 +60,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="10dp"
+        android:layout_marginTop="24dp"
         android:ems="10"
         android:inputType="textNoSuggestions|textPersonName"
         android:text="@string/team2"
@@ -137,7 +139,7 @@
         android:layout_height="wrap_content"
         android:onClick="begin"
         android:text="@string/begin_game"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/adFrame"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/team2NameBox" />
@@ -151,5 +153,19 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:srcCompat="@android:drawable/ic_menu_help" />
+
+
+    <FrameLayout
+        android:id="@+id/adFrame"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+        <include layout="@layout/ad_snippet" />
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
