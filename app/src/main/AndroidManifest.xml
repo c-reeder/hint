@@ -13,7 +13,7 @@
         android:theme="@style/Theme.AppCompat.Light.NoActionBar">
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="${adMobAppId}"/>
+            android:value="@string/adMobAppId"/>
         <activity
             android:name=".ScoreActivity"
             android:theme="@style/NoActionBar"></activity>

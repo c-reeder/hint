@@ -14,6 +14,10 @@ import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
 
 /**
  * Initial Activity upon opening the app.
@@ -22,7 +26,7 @@ import android.widget.RadioGroup;
  */
 public class BeginActivity extends AppCompatActivity {
 
-    private static final String TAG = "TurnActivity";
+    private static final String TAG = "BeginActivity";
 
     private EditText nameText1;
     private EditText nameText2;
@@ -36,6 +40,13 @@ public class BeginActivity extends AppCompatActivity {
             getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
             getWindow().setExitTransition(new Explode());
         }
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+
         setContentView(R.layout.activity_begin);
         Intent parentIntent = getIntent();
         nameText1 = findViewById(R.id.team1NameBox);
@@ -145,7 +156,6 @@ public class BeginActivity extends AppCompatActivity {
             }
 
         }
-
 
 
     }

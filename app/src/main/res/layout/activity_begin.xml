@@ -151,4 +151,6 @@
         app:layout_constraintRight_toRightOf="parent"
         app:srcCompat="@android:drawable/ic_menu_help" />
 
+    <include layout="@layout/ad_snippet" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

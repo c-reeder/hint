@@ -32,6 +32,7 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -127,6 +128,9 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             getWindow().setEnterTransition(new Explode());
             getWindow().setExitTransition(new Explode());
         }
+
+
+
 
         wordHeight = getResources().getDimensionPixelSize(R.dimen.word_height);
         Log.d(TAG, "wordHeight: " + wordHeight);
