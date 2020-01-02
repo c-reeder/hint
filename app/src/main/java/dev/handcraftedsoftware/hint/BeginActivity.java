@@ -10,10 +10,13 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
@@ -40,12 +43,6 @@ public class BeginActivity extends AppCompatActivity {
             getWindow().requestFeature(Window.FEATURE_CONTENT_TRANSITIONS);
             getWindow().setExitTransition(new Explode());
         }
-
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
 
         setContentView(R.layout.activity_begin);
         Intent parentIntent = getIntent();
@@ -157,6 +154,21 @@ public class BeginActivity extends AppCompatActivity {
 
         }
 
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        if (BuildConfig.FLAVOR.equals("free")) {
+            Log.d(TAG, "free");
+            FrameLayout frameLayout = findViewById(R.id.adFrame);
+            Log.d(TAG, "Class type: " + frameLayout.getChildAt(0).getClass());
+            AdView adView = (AdView) frameLayout.getChildAt(0);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        } else {
+            Log.d(TAG, "not free");
+        }
 
     }
 
