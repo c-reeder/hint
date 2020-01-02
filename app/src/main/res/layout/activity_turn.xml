@@ -169,39 +169,9 @@
         app:layout_constraintRight_toRightOf="@+id/topBar"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/acceptWordButton"
-        style="?android:attr/borderlessButtonStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
-        android:background="@color/acceptBlue"
-        android:onClick="onAcceptWord"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:text="@string/accept_word"
-        android:textColor="@color/white"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/buttonRow"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
 
-    <Button
-        android:id="@+id/continueButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@color/acceptBlue"
-        android:onClick="onContinue"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:text="Continue"
-        android:textColor="@color/white"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/buttonRow"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+
+
 
     <LinearLayout
         android:id="@+id/buttonRow"
@@ -235,6 +205,37 @@
             android:textColor="@color/white" />
 
     </LinearLayout>
+
+    <Button
+        android:id="@+id/acceptWordButton"
+        style="?android:attr/borderlessButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/acceptBlue"
+        android:onClick="onAcceptWord"
+        android:text="@string/accept_word"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonRow"
+        app:layout_constraintTop_toTopOf="@+id/buttonRow"
+        app:layout_constraintLeft_toLeftOf="@+id/buttonRow"
+        app:layout_constraintRight_toRightOf="@+id/buttonRow"
+        />
+
+    <Button
+        android:id="@+id/continueButton"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@color/acceptBlue"
+        android:onClick="onContinue"
+        android:text="@string/continue_button"
+        android:textColor="@color/white"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/buttonRow"
+        app:layout_constraintTop_toTopOf="@+id/buttonRow"
+        app:layout_constraintLeft_toLeftOf="@+id/buttonRow"
+        app:layout_constraintRight_toRightOf="@+id/buttonRow"
+        />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/teamNameBar"
