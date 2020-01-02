@@ -21,7 +21,9 @@
         <activity android:name=".TurnActivity" />
         <activity
             android:name=".BeginActivity"
-            android:windowSoftInputMode="adjustResize|stateHidden">
+            android:windowSoftInputMode="adjustResize|stateHidden"
+            android:theme="@style/BeginTheme"
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

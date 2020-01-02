@@ -25,5 +25,15 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="BeginTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar" >
+        <item name="android:windowBackground">@color/begin_background_color</item>
+        <item name="colorPrimary">@color/beginPrimaryColor</item>
+        <item name="colorPrimaryDark">@color/beginPrimaryDarkColor</item>
+        <item name="colorSecondary">@color/beginSecondaryColor</item>
+        <item name="android:textColor">@color/beginPrimaryTextColor</item>
+        <item name="android:textColorSecondary">@color/beginSecondaryTextColor</item>
+        <item name="colorAccent">@color/beginSecondaryDarkColor</item>
+    </style>
+
 
 </resources>

@@ -10,4 +10,16 @@
     <color name="spinnerFill">#67be6a</color>
     <color name="spinnerOutline">#303F9F</color>
     <color name="acceptBlue">#5656ce</color>
+
+    // BeginActivity Colors
+    <color name="begin_background_color">#fff59d</color>
+    <color name="begin_font_color">#000000</color>
+    <color name="beginPrimaryColor">#fff59d</color>
+    <color name="beginPrimaryLightColor">#ffffcf</color>
+    <color name="beginPrimaryDarkColor">#cbc26d</color>
+    <color name="beginSecondaryColor">#ffca28</color>
+    <color name="beginSecondaryLightColor">#fffd61</color>
+    <color name="beginSecondaryDarkColor">#c79a00</color>
+    <color name="beginPrimaryTextColor">#000000</color>
+    <color name="beginSecondaryTextColor">#000000</color>
 </resources>
