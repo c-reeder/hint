@@ -87,7 +87,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:background="@color/colorAccent"
+        android:background="@color/turnSecondaryLightColor"
         app:layout_constraintBottom_toBottomOf="@id/wordHolder"
         app:layout_constraintEnd_toEndOf="@id/wordHolder"
         app:layout_constraintStart_toStartOf="@id/wordHolder"
@@ -101,7 +101,7 @@
             android:gravity="center"
             app:autoSizeTextType="uniform"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:background="@color/colorAccent"
+            android:background="@color/turnSecondaryLightColor"
             android:textColor="@color/white"
             android:text="@string/tap_to_reveal"
 
@@ -110,7 +110,7 @@
 
     <RelativeLayout
         android:id="@+id/topBar"
-        android:background="@android:color/holo_green_dark"
+        android:background="@color/turnSecondaryColor"
         tools:alpha="1"
         android:layout_height="55dp"
         android:layout_width="0dp"
@@ -131,7 +131,7 @@
         android:layout_width="@dimen/arc_shape_width"
         android:layout_height="@dimen/arc_shape_width"
         android:id="@+id/roundCircle"
-        app:arcColor="@color/colorAccent"
+        app:arcColor="@color/turnSecondaryDarkColor"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -142,6 +142,7 @@
         android:layout_marginTop="@dimen/round_top_margin"
         android:text="@string/round"
         android:textSize="18sp"
+        android:textColor="@color/turnSecondaryTextColor"
         app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintLeft_toLeftOf="@+id/roundCircle"
         app:layout_constraintRight_toRightOf="@+id/roundCircle"
@@ -152,6 +153,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/roundText"
         android:textSize="18sp"
+        android:textColor="@color/turnSecondaryTextColor"
         app:layout_constraintBottom_toBottomOf="@+id/roundCircle"
         android:layout_marginTop="8dp"
         app:layout_constraintTop_toBottomOf="@+id/textView"
@@ -206,12 +208,11 @@
 
     </LinearLayout>
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/acceptWordButton"
-        style="?android:attr/borderlessButtonStyle"
+        style="@style/TurnButtonTheme"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/acceptBlue"
         android:onClick="onAcceptWord"
         android:text="@string/accept_word"
         android:textColor="@color/white"
@@ -224,9 +225,10 @@
 
     <Button
         android:id="@+id/continueButton"
+        style="@style/TurnButtonTheme"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/acceptBlue"
+        android:background="@color/turnSecondaryDarkColor"
         android:onClick="onContinue"
         android:text="@string/continue_button"
         android:textColor="@color/white"
@@ -240,7 +242,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/teamNameBar"
         android:layout_height="55dp"
-        android:background="@color/bottomBarBlue"
+        android:background="@color/turnSecondaryColor"
         android:layout_width="0dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -278,7 +280,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@android:drawable/ic_media_pause"
-            android:tint="@color/bottomBarBlue"
+            android:tint="@color/turnSecondaryDarkColor"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/pauseButton"

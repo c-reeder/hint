@@ -18,7 +18,9 @@
             android:name=".ScoreActivity"
             android:theme="@style/NoActionBar"></activity>
         <!-- android:theme="@style/AppTheme" -->
-        <activity android:name=".TurnActivity" />
+        <activity android:name=".TurnActivity"
+            android:theme="@style/TurnTheme"
+        />
         <activity
             android:name=".BeginActivity"
             android:windowSoftInputMode="adjustResize|stateHidden"

@@ -244,7 +244,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/teamNameBar"
         android:layout_height="55dp"
-        android:background="@color/bottomBarBlue"
+        android:background="@color/turnSecondaryColor"
         android:layout_width="0dp"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
@@ -280,7 +280,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:srcCompat="@android:drawable/ic_media_pause"
-            android:tint="@color/bottomBarBlue"
+            android:tint="@color/turnSecondaryDarkColor"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/pauseButton"

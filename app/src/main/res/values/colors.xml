@@ -6,9 +6,6 @@
     <color name="incorrectRed">#ea3838</color>
     <color name="correctGreen">#6ac16a</color>
     <color name="white">#FFFFFF</color>
-    <color name="bottomBarBlue">#28285c</color>
-    <color name="spinnerFill">#67be6a</color>
-    <color name="spinnerOutline">#303F9F</color>
     <color name="acceptBlue">#5656ce</color>
 
     // BeginActivity Colors
@@ -35,7 +32,11 @@
     <color name="turnSecondaryLightColor">#80d6ff</color>
     <color name="turnSecondaryDarkColor">#0077c2</color>
     <color name="turnPrimaryTextColor">#000000</color>
-    <color name="turnSecondaryTextColor">#000000</color>
+    <color name="turnSecondaryTextColor">#cbe8fb</color>
+    <color name="spinnerOutline">#303F9F</color>
+    <color name="spinnerFill">@color/turnSecondaryDarkColor</color>
+    <color name="spinnerTextColor1">@color/turnPrimaryTextColor</color>
+    <color name="spinnerTextColor2">@color/turnSecondaryTextColor</color>
 
 
 

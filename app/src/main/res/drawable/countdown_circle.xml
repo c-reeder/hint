@@ -5,5 +5,5 @@
     android:thicknessRatio="2"
     android:innerRadius="0px">
     <solid
-        android:color="@color/bottomBarBlue" />
+        android:color="@color/turnSecondaryDarkColor" />
 </shape>

@@ -10,6 +10,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.RectF;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.res.ResourcesCompat;
+
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -35,6 +38,7 @@ public class TenSpinner extends View {
     private Paint spinnerPaint;
     private Paint outlinePaint;
     private Paint textPaint;
+    private Typeface textTypeFace;
     private float origX;
     private float origY;
     private int radius;
@@ -75,10 +79,12 @@ public class TenSpinner extends View {
         textPaint = new Paint();
         textPaint.setAntiAlias(true);
         textPaint.setStyle(Paint.Style.FILL);
+        textTypeFace = ResourcesCompat.getFont(getContext(),R.font.blenda_script);
         Resources res = getResources();
         float textSize = res.getDimensionPixelSize(R.dimen.tenSpinnerText);
         float strokeWidth = res.getDimensionPixelSize(R.dimen.tenSpinnerStroke);
         textPaint.setTextSize(textSize);
+        textPaint.setTypeface(textTypeFace);
 
         outlinePaint = new Paint();
         outlinePaint.setStrokeWidth(strokeWidth);
@@ -206,6 +212,11 @@ public class TenSpinner extends View {
         for (int i = 0; i < 10; i++) {
             String currText = "" + (i + 1);
             float textWidth = textPaint.measureText(currText);
+            if (i % 2 == 0) {
+                textPaint.setColor(ContextCompat.getColor(getContext(), R.color.spinnerTextColor1));
+            } else {
+                textPaint.setColor(ContextCompat.getColor(getContext(), R.color.spinnerTextColor2));
+            }
             canvas.drawText(currText,origX + 2 * radius - (textWidth / 2),origY + (2 * radius) - (textHeight / 2), textPaint);
             canvas.rotate(36, origX + 2 * radius, origY);
         }
