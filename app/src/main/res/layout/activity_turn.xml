@@ -52,7 +52,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:fontFamily="@font/dseg7_classic_mini_bold"
-        android:text="00"
+        android:text="@string/default_timer_val"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="@dimen/timer_font_size"
@@ -67,7 +67,6 @@
         android:id="@+id/wordHolder"
         android:layout_width="match_parent"
         android:layout_height="@dimen/word_height"
-        android:text="Current Word"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:visibility="invisible"
         android:gravity="center"
@@ -279,7 +278,7 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/pauseButton"
-            android:contentDescription="@string/continue_button" />
+            android:contentDescription="@string/pause" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
