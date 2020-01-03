@@ -16,8 +16,7 @@
             android:value="@string/adMobAppId"/>
         <activity
             android:name=".ScoreActivity"
-            android:theme="@style/NoActionBar"></activity>
-        <!-- android:theme="@style/AppTheme" -->
+            android:theme="@style/ScoreTheme"></activity>
         <activity android:name=".TurnActivity"
             android:theme="@style/TurnTheme"
         />

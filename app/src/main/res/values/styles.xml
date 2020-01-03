@@ -63,14 +63,12 @@
         <item name="fontFamily">@font/blenda_script</item>
         <item name="android:textAllCaps">false</item>
     </style>
-
     <style name="TurnButtonTheme" parent="Widget.MaterialComponents.Button">
-<!--        <item name="android:textColor">#000000</item>-->
         <item name="backgroundTint">@color/turnSecondaryDarkColor</item>
         <item name="android:textSize">20sp</item>
     </style>
 
-
+<!--    WinnerActivity Themes-->
     <style name="WinnerTheme" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/winnerPrimaryColor</item>
         <item name="colorPrimaryDark">@color/winnerPrimaryDarkColor</item>
@@ -81,4 +79,21 @@
         <item name="android:textAllCaps">false</item>
     </style>
 
+<!--    ScoreActivity Themes-->
+
+    <style name="ScoreTheme" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@color/scoreBackgroundColor </item>
+        <item name="colorPrimary">@color/scorePrimaryColor</item>
+        <item name="colorPrimaryDark">@color/scorePrimaryDarkColor</item>
+        <item name="colorAccent">@color/scoreSecondaryColor</item>
+        <item name="android:textColor">@color/scorePrimaryDarkColor</item>
+        <item name="android:textColorSecondary">@color/turnSecondaryTextColor</item>
+        <item name="fontFamily">@font/blenda_script</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="buttonStyle">@style/ScoreButtonTheme</item>
+        <item name="android:buttonStyle">@style/ScoreButtonTheme</item>
+    </style>
+    <style name="ScoreButtonTheme" parent="Widget.MaterialComponents.Button">
+        <item name="android:textSize">20sp</item>
+    </style>
 </resources>

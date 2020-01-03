@@ -49,4 +49,17 @@
     <color name="winnerPrimaryTextColor">#ffffff</color>
     <color name="winnerSecondaryTextColor">#000000</color>
 
+
+
+    //ScoreActivity Colors
+    <color name="scoreBackgroundColor">#b0edb0</color>
+    <color name="scorePrimaryColor">#66bb6a</color>
+    <color name="scorePrimaryLightColor">#98ee99</color>
+    <color name="scorePrimaryDarkColor">#338a3e</color>
+    <color name="scoreSecondaryColor">#388e3c</color>
+    <color name="scoreSecondaryLightColor">#6abf69</color>
+    <color name="scoreSecondaryDarkColor">#00600f</color>
+    <color name="scorePrimaryTextColor">#000000</color>
+    <color name="scoreSecondaryTextColor">#000000</color>
+
 </resources>

@@ -27,6 +27,7 @@
                 android:layout_marginTop="32dp"
                 android:text="@string/score"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
+                android:textSize="45sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -239,8 +240,9 @@
             </TableLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/restartButton"
+        style="@style/ScoreButtonTheme"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="28dp"
