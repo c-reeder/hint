@@ -32,7 +32,7 @@
         <item name="colorSecondary">@color/beginSecondaryColor</item>
         <item name="android:textColor">@color/beginPrimaryTextColor</item>
         <item name="android:textColorSecondary">@color/beginSecondaryTextColor</item>
-        <item name="colorAccent">#ffca28</item>
+        <item name="colorAccent">@color/beginSecondaryColor</item>
 <!--        android:textSize="20sp"-->
         <item name="fontFamily">@font/blenda_script</item>
         <item name="android:textSize">17sp</item>
@@ -41,14 +41,14 @@
         <item name="android:buttonStyle">@style/BeginButtonTheme</item>
     </style>
 
-    <style name="BeginButtonTheme" parent="Widget.MaterialComponents.Button">
-        <item name="strokeWidth">10dp</item>
-    </style>
-    <style name="BeginButtonSecondaryTheme" parent="Widget.MaterialComponents.Button.OutlinedButton">
-<!--        <item name="strokeColor">@color/beginSecondaryDarkColor</item>-->
-<!--        <item name="strokeWidth">10dp</item>-->
-        <item name="backgroundTint">#00000000</item>
 
+    <style name="BeginButtonTheme" parent="Widget.MaterialComponents.Button">
+        <item name="android:textColor">#000000</item>
+    </style>
+
+    <style name="BeginButtonSecondaryTheme" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="strokeColor">@color/beginSecondaryDarkColor</item>
+        <item name="backgroundTint">#00000000</item>
     </style>
 
 

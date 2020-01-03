@@ -9,7 +9,7 @@
 
     <TextView
         android:id="@+id/titleView"
-        android:textSize="40sp"
+        android:textSize="60sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -141,31 +141,35 @@
         android:layout_marginBottom="50dp"
         android:onClick="begin"
         android:text="@string/begin_game"
+        android:textSize="20sp"
+        android:textColor="@color/beginPrimaryTextColor"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/diffGroup" />
 
+    <!--        android:theme="@style/Widget.MaterialComponents.Button.TextButton"-->
     <com.google.android.material.button.MaterialButton
         android:id="@+id/helpButton"
-        android:theme="@style/BeginButtonSecondaryTheme"
+        style="@style/BeginButtonSecondaryTheme"
         android:layout_width="50dp"
         android:layout_height="wrap_content"
         android:contentDescription="@string/help"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:layout_marginTop="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginRight="10dp"
-
         android:insetLeft="0dp"
         android:insetTop="0dp"
         android:insetRight="0dp"
         android:insetBottom="0dp"
         app:iconGravity="textStart"
-
         app:icon="@android:drawable/ic_menu_help"
         app:iconPadding="0dp"
+        android:background="#20000000"
+        app:iconTint="@color/beginSecondaryDarkColor"
         />
 
 <!--    android:foregroundGravity="center"-->
