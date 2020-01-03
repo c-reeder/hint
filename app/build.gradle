@@ -21,6 +21,7 @@ android {
         buildConfigField("String", "url", serverInfoProperties['url'])
         //AdMob strings
         resValue("string", "begin_banner_unit_id",adMobInfoProperties['begin_banner_unit_id'])
+        resValue("string", "turn_banner_unit_id",adMobInfoProperties['turn_banner_unit_id'])
         resValue("string", "adMobAppId", adMobInfoProperties['appId'])
     }
     buildTypes {

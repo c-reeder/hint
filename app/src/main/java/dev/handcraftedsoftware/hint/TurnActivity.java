@@ -29,9 +29,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -425,6 +432,21 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 }
             }
             // Game has been successfully restarted
+        }
+
+        // Setup add banner
+        if (BuildConfig.FLAVOR.equals("free")) {
+            FrameLayout frameLayout = findViewById(R.id.adFrame);
+            MobileAds.initialize(this, new OnInitializationCompleteListener() {
+                @Override
+                public void onInitializationComplete(InitializationStatus initializationStatus) {
+                }
+            });
+            AdView adView = (AdView) frameLayout.getChildAt(0);
+            AdRequest adRequest = new AdRequest.Builder().build();
+            adView.loadAd(adRequest);
+        } else {
+            Log.d(TAG, "not free");
         }
     }
 

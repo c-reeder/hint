@@ -17,6 +17,7 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
@@ -164,15 +165,13 @@ public class BeginActivity extends AppCompatActivity {
 
         }
 
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
         if (BuildConfig.FLAVOR.equals("free")) {
-            Log.d(TAG, "free");
             FrameLayout frameLayout = findViewById(R.id.adFrame);
-            Log.d(TAG, "Class type: " + frameLayout.getChildAt(0).getClass());
+            MobileAds.initialize(this, new OnInitializationCompleteListener() {
+                @Override
+                public void onInitializationComplete(InitializationStatus initializationStatus) {
+                }
+            });
             AdView adView = (AdView) frameLayout.getChildAt(0);
             AdRequest adRequest = new AdRequest.Builder().build();
             adView.loadAd(adRequest);
