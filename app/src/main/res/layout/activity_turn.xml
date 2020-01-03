@@ -190,7 +190,6 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_weight="1"
-            android:onClick="guessMade"
             android:visibility="invisible"
             android:text="@string/correct"
             android:textColor="@color/white" />
@@ -201,7 +200,6 @@
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_weight="1"
-            android:onClick="guessMade"
             android:visibility="invisible"
             android:text="@string/incorrect"
             android:textColor="@color/white" />
@@ -213,7 +211,6 @@
         style="@style/TurnButtonTheme"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:onClick="onAcceptWord"
         android:text="@string/accept_word"
         android:textColor="@color/white"
         android:visibility="invisible"
@@ -228,7 +225,6 @@
         style="@style/TurnButtonTheme"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:onClick="onContinue"
         android:text="@string/continue_button"
         android:textColor="@color/white"
         android:visibility="invisible"
@@ -283,7 +279,6 @@
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             android:id="@+id/pauseButton"
-            android:onClick="pauseGame"
             android:contentDescription="@string/continue_button" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

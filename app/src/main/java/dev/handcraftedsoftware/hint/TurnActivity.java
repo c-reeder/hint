@@ -200,7 +200,36 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             }
         });
 
-
+        acceptWordButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onAcceptWord(view);
+            }
+        });
+        continueButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onContinue(view);
+            }
+        });
+        findViewById(R.id.pauseButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pauseGame(view);
+            }
+        });
+        findViewById(R.id.successButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                guessMade(view);
+            }
+        });
+        findViewById(R.id.failureButton).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                guessMade(view);
+            }
+        });
 
         // If the game is started for the first time
         DownloadFragment downloadFragment;
