@@ -39,5 +39,14 @@
     <color name="spinnerTextColor2">@color/turnSecondaryTextColor</color>
 
 
+    //WinnerActivity Colors
+    <color name="winnerPrimaryColor">#d32f2f</color>
+    <color name="winnerPrimaryLightColor">#ff6659</color>
+    <color name="winnerPrimaryDarkColor">#9a0007</color>
+    <color name="winnerSecondaryColor">#e57373</color>
+    <color name="winnerSecondaryLightColor">#ffa4a2</color>
+    <color name="winnerSecondaryDarkColor">#af4448</color>
+    <color name="winnerPrimaryTextColor">#ffffff</color>
+    <color name="winnerSecondaryTextColor">#000000</color>
 
 </resources>

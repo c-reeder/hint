@@ -70,4 +70,15 @@
         <item name="android:textSize">20sp</item>
     </style>
 
+
+    <style name="WinnerTheme" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/winnerPrimaryColor</item>
+        <item name="colorPrimaryDark">@color/winnerPrimaryDarkColor</item>
+        <item name="colorAccent">@color/winnerSecondaryColor</item>
+        <item name="android:textColor">@color/winnerPrimaryColor</item>
+        <item name="android:textColorSecondary">@color/turnSecondaryTextColor</item>
+        <item name="fontFamily">@font/blenda_script</item>
+        <item name="android:textAllCaps">false</item>
+    </style>
+
 </resources>

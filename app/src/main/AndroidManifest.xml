@@ -34,7 +34,9 @@
         </activity>
         <activity
             android:name=".WinnerActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/WinnerTheme"
+            />
         <activity
             android:name=".InstructionsActivity"
             android:exported="true"

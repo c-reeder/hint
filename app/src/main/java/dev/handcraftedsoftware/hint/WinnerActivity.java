@@ -129,7 +129,7 @@ public class WinnerActivity extends AppCompatActivity {
                     // Create Drawable to add to ImageView
                     balloonView.setImageResource(R.drawable.balloon_list);
                     LayerDrawable layerDrawable = (LayerDrawable) balloonView.getDrawable();
-                    DrawableCompat.setTint(layerDrawable.getDrawable(0).mutate(),generateRandomPastelColor(random));
+                    DrawableCompat.setTint(layerDrawable.getDrawable(0).mutate(),generateRandomRedColor(random));
 
                     // Add the Balloon ImageView at the default position
                     // at X=0, Y=screenHeight (just below view)
@@ -179,6 +179,10 @@ public class WinnerActivity extends AppCompatActivity {
         final int blue = (Color.blue(baseColor) + rand.nextInt(256)) / 2;
 
         return Color.rgb(red, green, blue);
+    }
+    public int generateRandomRedColor(Random rand) {
+        final int greenAndBlue = rand.nextInt(165);
+        return Color.rgb(255, greenAndBlue, greenAndBlue);
     }
 
     public void restartGame(View view) {

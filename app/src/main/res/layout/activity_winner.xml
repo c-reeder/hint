@@ -38,7 +38,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/scoreButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -49,7 +49,7 @@
         app:layout_constraintStart_toEndOf="@+id/restartButton"
         app:layout_constraintTop_toTopOf="@+id/restartButton" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/restartButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
