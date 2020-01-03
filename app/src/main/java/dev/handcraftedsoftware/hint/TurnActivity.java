@@ -299,6 +299,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 if (downloadFragment.isComplete()) {
                     // Hide the loading icon IMMEDIATELY since we are only re-starting the activity and have already obtained our word data
                     loadingIcon.setVisibility(View.INVISIBLE);
+                    findViewById(R.id.successButton).setVisibility(View.VISIBLE);
+                    findViewById(R.id.failureButton).setVisibility(View.VISIBLE);
                     initWords();
                     ppSpinnerView.setSpinner(currPP);
                     updateDisplay();
@@ -327,12 +329,12 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                         newSet.applyTo(layout);
                     } else if (gameState == GameState.WORD_TRANSITION) {
                         promptForContinue(getString(R.string.pass_phone_across));
-                        if (previousCorrect) {
-                            layout.setBackgroundColor(Color.GREEN);
-
-                        } else {
-                            layout.setBackgroundColor(Color.RED);
-                        }
+//                        if (previousCorrect) {
+//                            layout.setBackgroundColor(Color.GREEN);
+//
+//                        } else {
+//                            layout.setBackgroundColor(Color.RED);
+//                        }
                         Log.v(TAG, "Restarting in Word Transition!");
                         wordHolder.setText(wordList[wordIdx]);
                         viewPager.setVisibility(View.INVISIBLE);
@@ -473,6 +475,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             //Hide Loading Icon now that Data has been received
             loadingIcon = findViewById(R.id.progressBar);
             loadingIcon.setVisibility(View.INVISIBLE);
+            findViewById(R.id.successButton).setVisibility(View.VISIBLE);
+            findViewById(R.id.failureButton).setVisibility(View.VISIBLE);
             initWords();
             updateDisplay();
             approveNextWord();
@@ -652,7 +656,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         if (view.getId() == R.id.successButton) {
             storeResult();
 
-
+            coverAlphaAnimator.cancel();
             coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",1f,0f);
             coverAlphaAnimator.setDuration(500);
             coverAlphaAnimator.start();
@@ -818,7 +822,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         } else if (gameState == GameState.WORD_TRANSITION) {
             // The other two players now start giving hints and a new word is approved
 
-            layout.setBackgroundColor(Color.WHITE);
+//            layout.setBackgroundColor(Color.WHITE);
 
             Transition transition = new AutoTransition();
             transition.addListener(new Transition.TransitionListener() {
@@ -911,12 +915,12 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      */
     private void transitionToNextWord(boolean success) {
         previousCorrect = success;
-        if (success) {
-            layout.setBackgroundColor(Color.GREEN);
-
-        } else {
-            layout.setBackgroundColor(Color.RED);
-        }
+//        if (success) {
+//            layout.setBackgroundColor(Color.GREEN);
+//
+//        } else {
+//            layout.setBackgroundColor(Color.RED);
+//        }
         gameState = GameState.WORD_TRANSITION;
     }
 

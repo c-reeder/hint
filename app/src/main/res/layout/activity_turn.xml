@@ -184,25 +184,25 @@
         tools:layout_constraintLeft_creator="1"
         tools:layout_constraintRight_creator="1">
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/successButton"
-            style="?android:attr/borderlessButtonStyle"
+            style="@style/TurnButtonTheme"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_weight="1"
-            android:background="@color/correctGreen"
             android:onClick="guessMade"
+            android:visibility="invisible"
             android:text="@string/correct"
             android:textColor="@color/white" />
 
-        <Button
+        <com.google.android.material.button.MaterialButton
             android:id="@+id/failureButton"
-            style="?android:attr/borderlessButtonStyle"
+            style="@style/TurnButtonTheme"
             android:layout_width="match_parent"
             android:layout_height="55dp"
             android:layout_weight="1"
-            android:background="@color/incorrectRed"
             android:onClick="guessMade"
+            android:visibility="invisible"
             android:text="@string/incorrect"
             android:textColor="@color/white" />
 
@@ -223,12 +223,11 @@
         app:layout_constraintRight_toRightOf="@+id/buttonRow"
         />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/continueButton"
         style="@style/TurnButtonTheme"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/turnSecondaryDarkColor"
         android:onClick="onContinue"
         android:text="@string/continue_button"
         android:textColor="@color/white"

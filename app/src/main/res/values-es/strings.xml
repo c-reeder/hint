@@ -15,9 +15,9 @@
     <string name="round4">Ronda #4</string>
     <string name="round5">Ronda #5</string>
     <string name="round6">Ronda #6</string>
-    <string name="restart_game">REINICIAR JUEGO</string>
+    <string name="restart_game">Reiniciar Juego</string>
     <string name="restart_button">Reiniciar</string>
-    <string name="resume_game">CONTINUAR JUEGO</string>
+    <string name="resume_game">Continuar Juego</string>
     <string name="menu">Menú</string>
     <string name="pass_phone_across">"\n        Pasa el celular al otro lado de la mesa y haz clic en continuar!\n    "</string>
     <string name="pass_phone_next">"\n        Pasa el celular al oponente que está al lado tuyo y haz clic en continuar!\n    "</string>
