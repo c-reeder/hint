@@ -25,6 +25,7 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+<!--    BeginActivity Themes-->
     <style name="BeginTheme" parent="@style/Theme.MaterialComponents.Light.NoActionBar" >
         <item name="android:windowBackground">@color/begin_background_color</item>
         <item name="colorPrimary">@color/beginPrimaryColor</item>
@@ -40,17 +41,19 @@
         <item name="buttonStyle">@style/BeginButtonTheme</item>
         <item name="android:buttonStyle">@style/BeginButtonTheme</item>
     </style>
-
-
     <style name="BeginButtonTheme" parent="Widget.MaterialComponents.Button">
         <item name="android:textColor">#000000</item>
     </style>
-
     <style name="BeginButtonSecondaryTheme" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="strokeColor">@color/beginSecondaryDarkColor</item>
         <item name="backgroundTint">#00000000</item>
     </style>
 
 
+    <!--    TurnActivity Themes-->
+    <style name="TurnTheme" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@color/turn_background_color</item>
+
+    </style>
 
 </resources>

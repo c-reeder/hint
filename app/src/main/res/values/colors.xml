@@ -23,4 +23,20 @@
     <color name="beginPrimaryTextColor">#000000</color>
     <color name="beginSecondaryTextColor">#000000</color>
     <color name="beginButtonColor">#fff176</color>
+
+
+    // TurnActivity Colors
+    <color name="turn_background_color">#bbdefb</color>
+    <color name="turn_font_color">#000000</color>
+    <color name="turnPrimaryColor">#bbdefb</color>
+    <color name="turnPrimaryLightColor">#eeffff</color>
+    <color name="turnPrimaryDarkColor">#8aacc8</color>
+    <color name="turnSecondaryColor">#42a5f5</color>
+    <color name="turnSecondaryLightColor">#80d6ff</color>
+    <color name="turnSecondaryDarkColor">#0077c2</color>
+    <color name="turnPrimaryTextColor">#000000</color>
+    <color name="turnSecondaryTextColor">#000000</color>
+
+
+
 </resources>
