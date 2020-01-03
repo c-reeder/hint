@@ -15,7 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="@string/app_name_with_padding"
-        app:fontFamily="@font/cream_puff"
+        app:fontFamily="@font/cream_puff_4"
         android:textSize="60sp"
         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
         app:layout_constraintBottom_toTopOf="@+id/team1NameBox"
