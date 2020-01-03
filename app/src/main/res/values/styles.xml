@@ -25,15 +25,32 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="BeginTheme" parent="@style/Theme.AppCompat.Light.DarkActionBar" >
+    <style name="BeginTheme" parent="@style/Theme.MaterialComponents.Light.NoActionBar" >
         <item name="android:windowBackground">@color/begin_background_color</item>
         <item name="colorPrimary">@color/beginPrimaryColor</item>
         <item name="colorPrimaryDark">@color/beginPrimaryDarkColor</item>
         <item name="colorSecondary">@color/beginSecondaryColor</item>
         <item name="android:textColor">@color/beginPrimaryTextColor</item>
         <item name="android:textColorSecondary">@color/beginSecondaryTextColor</item>
-        <item name="colorAccent">@color/beginSecondaryDarkColor</item>
+        <item name="colorAccent">#ffca28</item>
+<!--        android:textSize="20sp"-->
+        <item name="fontFamily">@font/blenda_script</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="buttonStyle">@style/BeginButtonTheme</item>
+        <item name="android:buttonStyle">@style/BeginButtonTheme</item>
     </style>
+
+    <style name="BeginButtonTheme" parent="Widget.MaterialComponents.Button">
+        <item name="strokeWidth">10dp</item>
+    </style>
+    <style name="BeginButtonSecondaryTheme" parent="Widget.MaterialComponents.Button.OutlinedButton">
+<!--        <item name="strokeColor">@color/beginSecondaryDarkColor</item>-->
+<!--        <item name="strokeWidth">10dp</item>-->
+        <item name="backgroundTint">#00000000</item>
+
+    </style>
+
 
 
 </resources>

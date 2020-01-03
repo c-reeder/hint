@@ -9,6 +9,7 @@ import android.transition.Explode;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
@@ -50,7 +51,7 @@ public class BeginActivity extends AppCompatActivity {
         nameText2 = findViewById(R.id.team2NameBox);
         diffGroup = findViewById(R.id.diffGroup);
         langGroup = findViewById(R.id.langGroup);
-        ImageButton helpButton = findViewById(R.id.helpButton);
+        Button helpButton = findViewById(R.id.helpButton);
 
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override

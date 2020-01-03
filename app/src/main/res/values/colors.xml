@@ -22,4 +22,5 @@
     <color name="beginSecondaryDarkColor">#c79a00</color>
     <color name="beginPrimaryTextColor">#000000</color>
     <color name="beginSecondaryTextColor">#000000</color>
+    <color name="beginButtonColor">#fff176</color>
 </resources>
