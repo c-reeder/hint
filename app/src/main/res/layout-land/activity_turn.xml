@@ -88,7 +88,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_gravity="center"
-        android:background="@color/colorAccent"
+        android:background="@color/turnSecondaryLightColor"
         app:layout_constraintBottom_toBottomOf="@id/wordHolder"
         app:layout_constraintEnd_toEndOf="@id/wordHolder"
         app:layout_constraintStart_toStartOf="@id/wordHolder"
@@ -102,7 +102,7 @@
             android:gravity="center"
             app:autoSizeTextType="uniform"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
-            android:background="@color/colorAccent"
+            android:background="@color/turnSecondaryLightColor"
             android:textColor="@color/white"
             android:text="@string/tap_to_reveal"
 
@@ -112,7 +112,7 @@
 
     <RelativeLayout
         android:id="@+id/topBar"
-        android:background="@android:color/holo_green_dark"
+        android:background="@color/turnSecondaryColor"
         tools:alpha="1"
         android:layout_height="55dp"
         android:layout_width="0dp"
@@ -133,7 +133,7 @@
         android:layout_width="@dimen/arc_shape_width"
         android:layout_height="@dimen/arc_shape_width"
         android:id="@+id/roundCircle"
-        app:arcColor="@color/colorAccent"
+        app:arcColor="@color/turnSecondaryDarkColor"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -184,7 +184,7 @@
         tools:layout_constraintRight_creator="1">
 
         <Button
-            style="?android:attr/borderlessButtonStyle"
+            style="@style/TurnButtonTheme"
             android:id="@+id/successButton"
             android:layout_width="match_parent"
             android:layout_height="55dp"
@@ -195,7 +195,7 @@
             android:textColor="@color/white" />
 
         <Button
-            style="?android:attr/borderlessButtonStyle"
+            style="@style/TurnButtonTheme"
             android:id="@+id/failureButton"
             android:layout_width="match_parent"
             android:layout_height="55dp"
@@ -208,12 +208,11 @@
     </LinearLayout>
 
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/acceptWordButton"
-        style="?android:attr/borderlessButtonStyle"
+        style="@style/TurnButtonTheme"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/acceptBlue"
         android:onClick="onAcceptWord"
         android:text="@string/accept_word"
         android:textColor="@color/white"
@@ -225,11 +224,11 @@
         />
 
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/continueButton"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:background="@color/acceptBlue"
+        style="@style/TurnButtonTheme"
         android:onClick="onContinue"
         android:text="@string/continue_button"
         android:textColor="@color/white"
