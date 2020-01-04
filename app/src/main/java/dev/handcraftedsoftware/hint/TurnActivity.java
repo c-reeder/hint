@@ -58,15 +58,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     private static final String TAG = "TurnActivity";
     public static final int NUM_ROUNDS = 6;
 
-    // Enum representing different states of the Game
-    private enum GameState {
-        AWAITING_WORDS,
-        WORD_APPROVAL,
-        PLAYING,
-        TEAM_TRANSITION,
-        WORD_TRANSITION,
-        GAME_OVER
-    }
 
     // Components of the Display
     private TextView roundView;
@@ -136,11 +127,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             getWindow().setExitTransition(new Explode());
         }
 
-
-
-
         wordHeight = getResources().getDimensionPixelSize(R.dimen.word_height);
-        Log.d(TAG, "wordHeight: " + wordHeight);
 
         Display display = getWindowManager().getDefaultDisplay();
         DisplayMetrics outMetrics = new DisplayMetrics();
@@ -476,7 +463,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         savedInstanceState.putInt(GK.CURR_SKIP_COUNT_B,currSkipCountB);
         savedInstanceState.putBoolean(GK.PREVIOUS_CORRECT, previousCorrect);
         savedInstanceState.putSerializable(GK.GAME_STATE, gameState);
-        savedInstanceState.putSerializable(GK.WORD_IDX, wordIdx);
+        savedInstanceState.putInt(GK.WORD_IDX, wordIdx);
         savedInstanceState.putLong(GK.TIME_REMAINING, countDownTimeRemaining);
         savedInstanceState.putBoolean(GK.WORD_HIDDEN, isWordHidden);
 
@@ -489,16 +476,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         savedInstanceState.putIntArray(GK.B_SCORES_2,bScores2);
 
         super.onSaveInstanceState(savedInstanceState);
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
     }
 
     /**
@@ -558,6 +535,11 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     @Override
     protected void onResume() {
         super.onResume();
+        Log.d(TAG, "onResume");
+        DownloadFragment downloadFragment = (DownloadFragment) getSupportFragmentManager().findFragmentByTag(GK.DOWNLOAD_FRAGMENT);
+        if (downloadFragment.isComplete()) {
+            loadingIcon.setVisibility(View.INVISIBLE);
+        }
         setToFullScreen();
     }
 
