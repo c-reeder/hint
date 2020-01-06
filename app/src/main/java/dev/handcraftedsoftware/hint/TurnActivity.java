@@ -4,7 +4,6 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.CountDownTimer;
 import androidx.annotation.NonNull;
@@ -26,7 +25,6 @@ import android.view.Display;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.FrameLayout;
@@ -44,7 +42,6 @@ import com.google.android.material.snackbar.Snackbar;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.lang.reflect.Type;
 import java.util.Arrays;
 import java.util.Locale;
 
@@ -57,7 +54,7 @@ import java.util.Locale;
 public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener, MenuFragment.MenuActionsHandler, DownloadFragment.OnDownloadCompleteListener {
 
     private static final String TAG = "TurnActivity";
-    public static final int NUM_ROUNDS = 6;
+    private static final int NUM_ROUNDS = 6;
 
 
     // Components of the Display
@@ -77,7 +74,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
     //Word-Swiper Functionality
     private TextPagerAdapter adapter;
-    ProgressBar loadingIcon;
+    private ProgressBar loadingIcon;
 
     // Values Constant for the Entirety of one Game
     //private boolean inPlay;
@@ -483,7 +480,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      * Initialize the Word Viewpager (for swiping/skipping through words)
      * This method sets up the word-slider by creating the adapter for the word list
      */
-    public void initWords() {
+    private void initWords() {
         adapter = new TextPagerAdapter(this, wordList);
         viewPager.setAdapter(adapter);
     }
@@ -514,14 +511,14 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             ex.printStackTrace();
             Log.e(TAG, "Contents of Response: ");
             Log.e(TAG, result);
-            makeSnackBar(R.string.download_error);
+            makeSnackBar();
 
         }
     }
 
-    private void makeSnackBar(int messageId) {
+    private void makeSnackBar() {
         Snackbar snackbar = Snackbar
-                .make(layout, messageId, 5000);
+                .make(layout, R.string.download_error, 5000);
         snackbar.addCallback(new Snackbar.Callback() {
             @Override
             public void onDismissed(Snackbar transientBottomBar, int event) {
@@ -530,7 +527,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         });
         View snackbarView = snackbar.getView();
         int snackbarTextId = com.google.android.material.R.id.snackbar_text;
-        TextView textView = (TextView)snackbarView.findViewById(snackbarTextId);
+        TextView textView = snackbarView.findViewById(snackbarTextId);
         textView.setTextColor(getResources().getColor(android.R.color.white));
         textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
         textView.setMaxLines(4);
@@ -563,7 +560,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     protected void onResume() {
         super.onResume();
         DownloadFragment downloadFragment = (DownloadFragment) getSupportFragmentManager().findFragmentByTag(GK.DOWNLOAD_FRAGMENT);
-        if (downloadFragment.isComplete()) {
+        if (downloadFragment != null && downloadFragment.isComplete()) {
             loadingIcon.setVisibility(View.INVISIBLE);
         }
         setToFullScreen();
@@ -602,7 +599,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     }
 
     // State transition called when the AcceptButton is pressed
-    public void onAcceptWord(View view) {
+    private void onAcceptWord(View view) {
         Log.v(TAG, "Word Accepted");
         acceptWordButton.setVisibility(View.INVISIBLE);
         startPlaying();
@@ -700,7 +697,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      * The method called when a guess has been made
      * @param view The button pressed to signal that a guess has been made
      */
-    public void guessMade(View view) {
+    private void guessMade(View view) {
         if (gameState != GameState.PLAYING) {
             Log.e(TAG, "Guess made while not playing!");
             return;
@@ -870,7 +867,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      * Called upon pressing the continue button.
      * @param view the continue button
      */
-    public void onContinue(View view) {
+    private void onContinue(View view) {
         Log.v(TAG, "We have continued in this state: " + gameState);
         messageView.setVisibility(View.INVISIBLE);
         continueButton.setVisibility(View.INVISIBLE);
@@ -1028,7 +1025,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      * Called when the pause button is pressed.
      * In reality this only gives you the ability to return to the start screen
      */
-    public void pauseGame(View view) {
+    private void pauseGame(View view) {
         if (gameState == GameState.AWAITING_WORDS) {
             Log.v(TAG, "Trying to pause in Awaiting Words Mode");
             return;
@@ -1057,7 +1054,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      * Called when the CountdownTimer finishes its countdown
      *
      */
-    public void onCountDownCompleted() {
+    private void onCountDownCompleted() {
         Log.v(TAG, "Timer Complete!");
         // Simulate a Incorrect Button press
         Button incorrectButton = findViewById(R.id.failureButton);

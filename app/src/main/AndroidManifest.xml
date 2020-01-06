@@ -6,7 +6,7 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
@@ -16,7 +16,7 @@
             android:value="@string/adMobAppId"/>
         <activity
             android:name=".ScoreActivity"
-            android:theme="@style/ScoreTheme"></activity>
+            android:theme="@style/ScoreTheme"/>
         <activity android:name=".TurnActivity"
             android:theme="@style/TurnTheme"
         />
@@ -40,7 +40,6 @@
             android:name=".InstructionsActivity"
             android:exported="true"
             android:label="@string/title_activity_instructions"
-            android:parentActivityName=".BeginActivity"
             android:theme="@style/InstructionsTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -34,10 +34,13 @@
 
     <EditText
         android:id="@+id/team1NameBox"
+        android:hint="@string/team1"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
         android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
         android:ems="10"
         android:imeOptions="flagNoFullscreen|flagNoExtractUi"
         android:inputType="textNoSuggestions|textPersonName"
@@ -46,7 +49,8 @@
         app:layout_constraintEnd_toStartOf="@+id/langGroup"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/titleView" />
+        app:layout_constraintTop_toBottomOf="@+id/titleView"
+        android:importantForAutofill="no" />
 
     <TextView
         android:id="@+id/team2Label"
@@ -58,10 +62,13 @@
 
     <EditText
         android:id="@+id/team2NameBox"
+        android:hint="@string/team2"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginLeft="40dp"
+        android:layout_marginStart="40dp"
         android:layout_marginRight="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginTop="24dp"
         android:ems="10"
         android:inputType="textNoSuggestions|textPersonName"
@@ -70,13 +77,15 @@
         app:layout_constraintEnd_toStartOf="@+id/diffGroup"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/team1NameBox" />
+        app:layout_constraintTop_toBottomOf="@+id/team1NameBox"
+        android:importantForAutofill="no" />
 
     <RadioGroup
         android:id="@+id/langGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="40dp"
+        android:layout_marginEnd="40dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -90,7 +99,8 @@
             android:layout_weight="1"
             android:checked="true"
             android:text="@string/english"
-            android:textAlignment="viewStart" />
+            android:textAlignment="viewStart"
+            android:gravity="start" />
 
         <RadioButton
             android:id="@+id/spanishButton"
@@ -98,7 +108,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/spanish"
-            android:textAlignment="viewStart" />
+            android:textAlignment="viewStart"
+            android:gravity="start" />
     </RadioGroup>
 
     <RadioGroup
@@ -106,6 +117,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginRight="40dp"
+        android:layout_marginEnd="40dp"
         android:orientation="horizontal"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -189,9 +201,7 @@
             android:layout_height="wrap_content"
             app:adSize="BANNER"
             app:adUnitId="@string/begin_banner_unit_id"
-            android:layout_gravity="center"
-            xmlns:android="http://schemas.android.com/apk/res/android"
-            xmlns:app="http://schemas.android.com/apk/res-auto"></com.google.android.gms.ads.AdView>
+            android:layout_gravity="center"/>
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

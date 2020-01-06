@@ -16,7 +16,7 @@ public class OneDirectionViewPager extends ViewPager {
 
     private static final String TAG = "OneDirectionViewPager";
 
-    private GestureDetector gestureDetector;
+    private final GestureDetector gestureDetector;
     private SwipeController swipeController;
 
     public OneDirectionViewPager(Context context, AttributeSet attrs) {

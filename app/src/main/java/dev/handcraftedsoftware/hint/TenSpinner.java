@@ -38,7 +38,6 @@ public class TenSpinner extends View {
     private Paint spinnerPaint;
     private Paint outlinePaint;
     private Paint textPaint;
-    private Typeface textTypeFace;
     private float origX;
     private float origY;
     private int radius;
@@ -79,7 +78,7 @@ public class TenSpinner extends View {
         textPaint = new Paint();
         textPaint.setAntiAlias(true);
         textPaint.setStyle(Paint.Style.FILL);
-        textTypeFace = ResourcesCompat.getFont(getContext(),R.font.blenda_script);
+        Typeface textTypeFace = ResourcesCompat.getFont(getContext(),R.font.blenda_script);
         Resources res = getResources();
         float textSize = res.getDimensionPixelSize(R.dimen.tenSpinnerText);
         float strokeWidth = res.getDimensionPixelSize(R.dimen.tenSpinnerStroke);

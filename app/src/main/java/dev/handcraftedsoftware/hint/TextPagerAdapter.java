@@ -21,8 +21,8 @@ import java.util.List;
 
 class TextPagerAdapter extends PagerAdapter {
 
-    private Context context;
-    private List<String> textList;
+    private final Context context;
+    private final List<String> textList;
     private ViewGroup currentView;
 
     TextPagerAdapter(Context context, String[] textList) {

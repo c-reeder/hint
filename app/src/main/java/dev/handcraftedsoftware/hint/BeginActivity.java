@@ -38,7 +38,6 @@ public class BeginActivity extends AppCompatActivity {
     private RadioGroup diffGroup;
     private RadioGroup langGroup;
     private Button beginButton;
-    private Button helpButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +53,7 @@ public class BeginActivity extends AppCompatActivity {
         nameText2 = findViewById(R.id.team2NameBox);
         diffGroup = findViewById(R.id.diffGroup);
         langGroup = findViewById(R.id.langGroup);
-        helpButton = findViewById(R.id.helpButton);
+        Button helpButton = findViewById(R.id.helpButton);
         beginButton = findViewById(R.id.beginButton);
 
         helpButton.setOnClickListener(new View.OnClickListener() {
@@ -228,7 +227,7 @@ public class BeginActivity extends AppCompatActivity {
     }
 
 
-    public void begin(View view) {
+    private void begin(View view) {
         Intent intent = new Intent(this, TurnActivity.class);
         intent.putExtra(GK.TEAM_NAME_1, nameText1.getText().toString());
         intent.putExtra(GK.TEAM_NAME_2, nameText2.getText().toString());

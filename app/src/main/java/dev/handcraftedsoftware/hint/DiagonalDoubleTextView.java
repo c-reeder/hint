@@ -20,14 +20,14 @@ public class DiagonalDoubleTextView extends View {
 
     private int textSize;
 
-    Paint paint;
-    float textWidth;
-    float textHeight;
-    float viewWidth;
-    float viewHeight;
-    Paint.FontMetrics metrics;
-    boolean exactWidth;
-    boolean exactHeight;
+    private Paint paint;
+    private float textWidth;
+    private float textHeight;
+    private float viewWidth;
+    private float viewHeight;
+    private Paint.FontMetrics metrics;
+    private boolean exactWidth;
+    private boolean exactHeight;
 
     public DiagonalDoubleTextView(Context context, AttributeSet attrs) {
         super(context, attrs);

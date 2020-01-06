@@ -3,6 +3,7 @@ package dev.handcraftedsoftware.hint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.res.Resources;
+import android.os.Build;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -30,7 +31,7 @@ import java.util.Objects;
  * @author Connor Reeder
  */
 
-public class MenuFragment extends DialogFragment {
+class MenuFragment extends DialogFragment {
     private static final String TAG = "MenuFragment";
     private MenuActionsHandler handler;
 
@@ -79,12 +80,14 @@ public class MenuFragment extends DialogFragment {
         View view = super.onCreateView(inflater, container, savedInstanceState);
         FragmentActivity fragmentActivity = getActivity();
         assert fragmentActivity != null;
-        fragmentActivity.getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LOW_PROFILE
-                | View.SYSTEM_UI_FLAG_FULLSCREEN
-                | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        int value = View.SYSTEM_UI_FLAG_LOW_PROFILE | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            value = value | View.SYSTEM_UI_FLAG_FULLSCREEN
+                    | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                    | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                    | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION;
+        }
+        fragmentActivity.getWindow().getDecorView().setSystemUiVisibility(value);
         return view;
     }
 

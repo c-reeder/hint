@@ -8,18 +8,10 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
-    <style name="MyListViewTheme" parent="@style/Widget.AppCompat.ListView">
-        <item name="android:textAlignment">center</item>
-    </style>
-
-    <style name="CustomDialogTheme" parent="@style/Theme.AppCompat.Light.Dialog.Alert">
-        <item name="android:textAlignment">center</item>
-    </style>
-
     <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
         <item name="android:textColorPrimary">@color/beginPrimaryTextColor</item>
         <item name="fontFamily">@font/cream_puff_4</item>
-        <item name="android:textSize">60dp</item>
+        <item name="android:textSize">50sp</item>
     </style>
 
     <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light">

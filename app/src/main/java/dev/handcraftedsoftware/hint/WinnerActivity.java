@@ -119,8 +119,7 @@ public class WinnerActivity extends AppCompatActivity {
                 for (int i = 0; i < NUM_BALLOONS; i++) {
                     // Create Balloon ImageView with given size
                     AppCompatImageView balloonView = new AppCompatImageView(getApplicationContext());
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
-                    } else {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR1) {
                         balloonView.setId(androidx.core.view.ViewCompat.generateViewId());
                     }
                     ViewGroup.LayoutParams params = new ViewGroup.LayoutParams(px,px);
@@ -180,7 +179,7 @@ public class WinnerActivity extends AppCompatActivity {
 
         return Color.rgb(red, green, blue);
     }
-    public int generateRandomRedColor(Random rand) {
+    private int generateRandomRedColor(Random rand) {
         final int greenAndBlue = rand.nextInt(165);
         return Color.rgb(255, greenAndBlue, greenAndBlue);
     }
