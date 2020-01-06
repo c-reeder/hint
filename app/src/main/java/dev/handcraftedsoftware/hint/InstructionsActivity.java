@@ -32,11 +32,11 @@ public class InstructionsActivity extends AppCompatActivity {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
 
-        Typeface typeface = ResourcesCompat.getFont(this, R.font.cream_puff_4);
+        Typeface blendaTypeface = ResourcesCompat.getFont(this, R.font.blenda_script);
         CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.toolbar_layout);
-        collapsingToolbarLayout.setTitle("My Title");
-        collapsingToolbarLayout.setCollapsedTitleTypeface(typeface);
-        collapsingToolbarLayout.setExpandedTitleTypeface(typeface);
+        collapsingToolbarLayout.setTitle("Game Instructions");
+        collapsingToolbarLayout.setCollapsedTitleTypeface(blendaTypeface);
+        collapsingToolbarLayout.setExpandedTitleTypeface(blendaTypeface);
 
     }
 }
