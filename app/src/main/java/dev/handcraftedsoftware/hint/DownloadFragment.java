@@ -60,7 +60,7 @@ public class DownloadFragment extends Fragment {
                     listenerActivity.onDownloadComplete(result);
                 }
             };
-            String requestURL = dev.handcraftedsoftware.hint.BuildConfig.url + "/words/" + language + "/" + difficulty;
+            String requestURL = dev.handcraftedsoftware.hint.BuildConfig.url + "d" + "/words/" + language + "/" + difficulty;
             task.execute(requestURL);
             Log.v(TAG,requestURL);
         } else {

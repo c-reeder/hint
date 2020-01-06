@@ -39,6 +39,7 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.material.snackbar.Snackbar;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -513,7 +514,33 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             ex.printStackTrace();
             Log.e(TAG, "Contents of Response: ");
             Log.e(TAG, result);
+            makeSnackBar(R.string.download_error);
+
         }
+    }
+
+    private void makeSnackBar(int messageId) {
+        Snackbar snackbar = Snackbar
+                .make(layout, messageId, 5000);
+        snackbar.addCallback(new Snackbar.Callback() {
+            @Override
+            public void onDismissed(Snackbar transientBottomBar, int event) {
+                finish();
+            }
+        });
+        View snackbarView = snackbar.getView();
+        int snackbarTextId = com.google.android.material.R.id.snackbar_text;
+        TextView textView = (TextView)snackbarView.findViewById(snackbarTextId);
+        textView.setTextColor(getResources().getColor(android.R.color.white));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
+        textView.setMaxLines(4);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
+            textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+            textView.setGravity(Gravity.CENTER);
+        } else {
+            textView.setGravity(Gravity.CENTER);
+        }
+        snackbar.show();
     }
 
     /**
