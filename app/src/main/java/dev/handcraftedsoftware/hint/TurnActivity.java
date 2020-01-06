@@ -32,9 +32,11 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
+import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.snackbar.Snackbar;
@@ -44,6 +46,8 @@ import org.json.JSONException;
 
 import java.util.Arrays;
 import java.util.Locale;
+
+import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE;
 
 
 /**
@@ -427,8 +431,14 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
                 public void onInitializationComplete(InitializationStatus initializationStatus) {
                 }
             });
+
+            RequestConfiguration requestConfiguration = MobileAds.getRequestConfiguration().toBuilder()
+                    .setTagForChildDirectedTreatment(TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE)
+                    .build();
+            MobileAds.setRequestConfiguration(requestConfiguration);
             AdView adView = (AdView) frameLayout.getChildAt(0);
-            AdRequest adRequest = new AdRequest.Builder().build();
+            Bundle extras = new Bundle(); extras.putString("max_ad_content_rating", "G");
+            AdRequest adRequest = new AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter.class, extras).build();
             adView.loadAd(adRequest);
         } else {
             Log.d(TAG, "not free");
