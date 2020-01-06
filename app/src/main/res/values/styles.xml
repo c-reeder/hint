@@ -59,6 +59,17 @@
         <item name="colorPrimary">@color/begin_background_color</item>
         <item name="android:windowBackground">@color/beginPrimaryLightColor</item>
     </style>
+    
+    <style name="InstructionsTitleStyle" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:layout_margin">16dp</item>
+        <item name="fontFamily">@font/blenda_script</item>
+    </style>
+
+    <style name="InstructionsBodyStyle" parent="TextAppearance.MaterialComponents.Body1">
+        <item name="android:layout_margin">18dp</item>
+        <item name="android:layout_marginStart">8dp</item>
+        <item name="android:layout_marginLeft">8dp</item>
+    </style>
 
 
     <!--    TurnActivity Themes-->
