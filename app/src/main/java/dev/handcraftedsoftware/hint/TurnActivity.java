@@ -195,19 +195,19 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         acceptWordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onAcceptWord(view);
+                onAcceptWord();
             }
         });
         continueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onContinue(view);
+                onContinue();
             }
         });
         findViewById(R.id.pauseButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                pauseGame(view);
+                pauseGame();
             }
         });
         findViewById(R.id.successButton).setOnClickListener(new View.OnClickListener() {
@@ -599,7 +599,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     }
 
     // State transition called when the AcceptButton is pressed
-    private void onAcceptWord(View view) {
+    private void onAcceptWord() {
         Log.v(TAG, "Word Accepted");
         acceptWordButton.setVisibility(View.INVISIBLE);
         startPlaying();
@@ -865,9 +865,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
 
     /**
      * Called upon pressing the continue button.
-     * @param view the continue button
      */
-    private void onContinue(View view) {
+    private void onContinue() {
         Log.v(TAG, "We have continued in this state: " + gameState);
         messageView.setVisibility(View.INVISIBLE);
         continueButton.setVisibility(View.INVISIBLE);
@@ -1025,7 +1024,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
      * Called when the pause button is pressed.
      * In reality this only gives you the ability to return to the start screen
      */
-    private void pauseGame(View view) {
+    private void pauseGame() {
         if (gameState == GameState.AWAITING_WORDS) {
             Log.v(TAG, "Trying to pause in Awaiting Words Mode");
             return;

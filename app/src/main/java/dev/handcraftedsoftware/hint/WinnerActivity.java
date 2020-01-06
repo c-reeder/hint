@@ -10,9 +10,7 @@ import android.graphics.drawable.LayerDrawable;
 import android.os.Build;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.core.content.ContextCompat;
 import androidx.core.graphics.drawable.DrawableCompat;
 
 import android.os.Bundle;
@@ -23,6 +21,7 @@ import android.view.Display;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.TextView;
 import android.view.View;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -168,27 +167,35 @@ public class WinnerActivity extends AppCompatActivity {
         handler.postDelayed(textRunnable, 500);
         handler.postDelayed(balloonRunnable, 1000);
 
+        Button scoreButton = findViewById(R.id.scoreButton);
+        Button restartButton = findViewById(R.id.restartButton);
+
+        scoreButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                viewScore();
+            }
+        });
+        restartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                restartGame();
+            }
+        });
+
 
     }
-    public int generateRandomPastelColor(Random rand) {
-        final int baseColor = Color.WHITE;
 
-        final int red = (Color.red(baseColor) + rand.nextInt(256)) / 2;
-        final int green = (Color.green(baseColor) + rand.nextInt(256)) / 2;
-        final int blue = (Color.blue(baseColor) + rand.nextInt(256)) / 2;
-
-        return Color.rgb(red, green, blue);
-    }
     private int generateRandomRedColor(Random rand) {
         final int greenAndBlue = rand.nextInt(165);
         return Color.rgb(255, greenAndBlue, greenAndBlue);
     }
 
-    public void restartGame(View view) {
+    private void restartGame() {
         supportFinishAfterTransition();
     }
 
-    public void viewScore(View view) {
+    private void viewScore() {
         Intent viewScoreIntent = new Intent(this, ScoreActivity.class);
         viewScoreIntent.putExtras(scoreExtras);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

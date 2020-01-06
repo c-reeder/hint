@@ -12,12 +12,10 @@ import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.initialization.InitializationStatus;
@@ -37,7 +35,6 @@ public class BeginActivity extends AppCompatActivity {
     private EditText nameText2;
     private RadioGroup diffGroup;
     private RadioGroup langGroup;
-    private Button beginButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +51,7 @@ public class BeginActivity extends AppCompatActivity {
         diffGroup = findViewById(R.id.diffGroup);
         langGroup = findViewById(R.id.langGroup);
         Button helpButton = findViewById(R.id.helpButton);
-        beginButton = findViewById(R.id.beginButton);
+        Button beginButton = findViewById(R.id.beginButton);
 
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,7 +63,7 @@ public class BeginActivity extends AppCompatActivity {
         beginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                begin(beginButton);
+                begin();
             }
         });
         
@@ -227,7 +224,7 @@ public class BeginActivity extends AppCompatActivity {
     }
 
 
-    private void begin(View view) {
+    private void begin() {
         Intent intent = new Intent(this, TurnActivity.class);
         intent.putExtra(GK.TEAM_NAME_1, nameText1.getText().toString());
         intent.putExtra(GK.TEAM_NAME_2, nameText2.getText().toString());

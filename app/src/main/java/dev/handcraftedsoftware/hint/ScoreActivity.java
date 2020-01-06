@@ -12,6 +12,7 @@ import android.transition.Explode;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
 import android.widget.TableRow;
@@ -186,6 +187,14 @@ public class ScoreActivity extends AppCompatActivity {
         } else if (totalScore2 > totalScore1) {
             sum2View.setTextColor(Color.parseColor("#006400"));
         }
+
+        final Button restartButton = findViewById(R.id.restartButton);
+        restartButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                restartGame();
+            }
+        });
     }
 
     // Helper method to format the score TextView for an individual score record
@@ -233,7 +242,7 @@ public class ScoreActivity extends AppCompatActivity {
     }
 
 
-    public void restartGame(View view) {
+    private void restartGame() {
         supportFinishAfterTransition();
     }
 }

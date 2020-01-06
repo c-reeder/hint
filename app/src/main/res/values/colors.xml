@@ -1,32 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3f51b5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
-    <color name="colorAccent">#ff4081</color>
     <color name="incorrectRed">#ea3838</color>
     <color name="correctGreen">#6ac16a</color>
     <color name="white">#FFFFFF</color>
-    <color name="acceptBlue">#5656ce</color>
 
     // BeginActivity Colors
     <color name="begin_background_color">#fff59d</color>
-    <color name="begin_font_color">#000000</color>
     <color name="beginPrimaryColor">#fff59d</color>
     <color name="beginPrimaryLightColor">#ffffcf</color>
     <color name="beginPrimaryDarkColor">#cbc26d</color>
     <color name="beginSecondaryColor">#ffca28</color>
-    <color name="beginSecondaryLightColor">#fffd61</color>
     <color name="beginSecondaryDarkColor">#c79a00</color>
     <color name="beginPrimaryTextColor">#000000</color>
     <color name="beginSecondaryTextColor">#000000</color>
-    <color name="beginButtonColor">#fff176</color>
 
 
     // TurnActivity Colors
     <color name="turn_background_color">#bbdefb</color>
-    <color name="turn_font_color">#000000</color>
     <color name="turnPrimaryColor">#bbdefb</color>
-    <color name="turnPrimaryLightColor">#eeffff</color>
     <color name="turnPrimaryDarkColor">#8aacc8</color>
     <color name="turnSecondaryColor">#42a5f5</color>
     <color name="turnSecondaryLightColor">#80d6ff</color>
@@ -41,25 +32,15 @@
 
     //WinnerActivity Colors
     <color name="winnerPrimaryColor">#d32f2f</color>
-    <color name="winnerPrimaryLightColor">#ff6659</color>
     <color name="winnerPrimaryDarkColor">#9a0007</color>
     <color name="winnerSecondaryColor">#e57373</color>
-    <color name="winnerSecondaryLightColor">#ffa4a2</color>
-    <color name="winnerSecondaryDarkColor">#af4448</color>
-    <color name="winnerPrimaryTextColor">#ffffff</color>
-    <color name="winnerSecondaryTextColor">#000000</color>
 
 
 
     //ScoreActivity Colors
     <color name="scoreBackgroundColor">#b0edb0</color>
     <color name="scorePrimaryColor">#66bb6a</color>
-    <color name="scorePrimaryLightColor">#98ee99</color>
     <color name="scorePrimaryDarkColor">#338a3e</color>
     <color name="scoreSecondaryColor">#388e3c</color>
-    <color name="scoreSecondaryLightColor">#6abf69</color>
-    <color name="scoreSecondaryDarkColor">#00600f</color>
-    <color name="scorePrimaryTextColor">#000000</color>
-    <color name="scoreSecondaryTextColor">#000000</color>
 
 </resources>

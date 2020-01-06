@@ -62,7 +62,7 @@ class DownloadFragment extends Fragment {
             };
             String requestURL = dev.handcraftedsoftware.hint.BuildConfig.url + "/words/" + language + "/" + difficulty;
             task.execute(requestURL);
-            Log.v(TAG,requestURL);
+//            Log.v(TAG,requestURL);
         } else {
             Log.e(TAG, "Not connected to network");
         }

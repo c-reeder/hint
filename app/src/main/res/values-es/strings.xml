@@ -2,19 +2,11 @@
     <string name="app_name">Hint</string>
     <string name="app_name_with_padding">Hint&#x200A;</string>
 
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_instructions">InstructionsActivity</string>
-    <string name="action_settings">Configuraciones</string>
     <string name="accept_word">Aceptar Palabra?</string>
     <string name="correct">CORRECTO</string>
     <string name="incorrect">INCORRECTO</string>
     <string name="round">Ronda</string>
-    <string name="round1">Ronda #1</string>
-    <string name="round2">Ronda #2</string>
-    <string name="round3">Ronda #3</string>
-    <string name="round4">Ronda #4</string>
-    <string name="round5">Ronda #5</string>
-    <string name="round6">Ronda #6</string>
     <string name="restart_game">Reiniciar Juego</string>
     <string name="restart_button">Reiniciar</string>
     <string name="resume_game">Continuar Juego</string>
@@ -24,15 +16,12 @@
     <string name="continue_button">Continuar</string>
     <string name="winner_announcement">El Equipo Ganador Es:</string>
     <string name="its_a_tie">Es un Empate!!!</string>
-    <string name="word">Palabra</string>
-    <string name="team">Equipo</string>
     <string name="easy">Fácil</string>
     <string name="medium">Mediano</string>
     <string name="hard">Difícil</string>
     <string name="begin_game">Empezar Juego</string>
     <string name="team1">Equipo 1</string>
     <string name="team2">Equipo 2</string>
-    <string name="large_text">This is some large text</string>
     <string name="english">Inglés</string>
     <string name="spanish">Español</string>
     <string name="dismiss">Cerrar</string>
