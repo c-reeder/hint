@@ -15,4 +15,5 @@
     <dimen name="arc_shape_width">90dp</dimen>
     <dimen name="round_top_margin">8dp</dimen>
     <dimen name="round_number_margin_top">2dp</dimen>
+    <dimen name="turn_margin_bottom">50dp</dimen>
 </resources>
