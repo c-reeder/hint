@@ -12,6 +12,7 @@ build.gradle
 gradle/*
 .externalNativeBuild
 Notes.txt
+Help.txt
 Password_States.png
 serverInfo.properties
 adMobInfo.properties

@@ -1,12 +1,16 @@
 package dev.handcraftedsoftware.hint;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
+
+import com.google.android.material.appbar.CollapsingToolbarLayout;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.res.ResourcesCompat;
 
 import android.view.View;
 
@@ -23,17 +27,16 @@ public class InstructionsActivity extends AppCompatActivity {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+
+        Typeface typeface = ResourcesCompat.getFont(this, R.font.cream_puff_4);
+        CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.toolbar_layout);
+        collapsingToolbarLayout.setTitle("My Title");
+        collapsingToolbarLayout.setCollapsedTitleTypeface(typeface);
+        collapsingToolbarLayout.setExpandedTitleTypeface(typeface);
+
     }
 }

@@ -535,7 +535,6 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
     @Override
     protected void onResume() {
         super.onResume();
-        Log.d(TAG, "onResume");
         DownloadFragment downloadFragment = (DownloadFragment) getSupportFragmentManager().findFragmentByTag(GK.DOWNLOAD_FRAGMENT);
         if (downloadFragment.isComplete()) {
             loadingIcon.setVisibility(View.INVISIBLE);

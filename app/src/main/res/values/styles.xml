@@ -16,9 +16,12 @@
         <item name="android:textAlignment">center</item>
     </style>
 
-    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+    <style name="AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
+        <item name="android:textColorPrimary">@color/beginPrimaryTextColor</item>
+    </style>
 
-    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+    </style>
 
     <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="windowActionBar">false</item>
@@ -47,6 +50,11 @@
     <style name="BeginButtonSecondaryTheme" parent="Widget.MaterialComponents.Button.OutlinedButton">
         <item name="strokeColor">@color/beginSecondaryDarkColor</item>
         <item name="backgroundTint">#00000000</item>
+    </style>
+
+<!--    InstructionsActivity Theme-->
+    <style name="InstructionsTheme" parent="@style/Theme.MaterialComponents.Light.NoActionBar" >
+        <item name="colorPrimary">@color/begin_background_color</item>
     </style>
 
 

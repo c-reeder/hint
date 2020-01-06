@@ -41,7 +41,7 @@
             android:exported="true"
             android:label="@string/title_activity_instructions"
             android:parentActivityName=".BeginActivity"
-            android:theme="@style/Theme.AppCompat.Light.NoActionBar">
+            android:theme="@style/InstructionsTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="dev.handcraftedsoftware.hint.BeginActivity" />
