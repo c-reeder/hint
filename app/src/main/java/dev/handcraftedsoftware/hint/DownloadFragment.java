@@ -22,7 +22,7 @@ import android.util.Log;
  *
  */
 
-class DownloadFragment extends Fragment {
+public class DownloadFragment extends Fragment {
     private static final String TAG = "DownloadFragment";
 
     public interface OnDownloadCompleteListener {
