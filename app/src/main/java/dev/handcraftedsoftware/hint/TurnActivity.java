@@ -47,6 +47,8 @@ import org.json.JSONException;
 import java.util.Arrays;
 import java.util.Locale;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+
 import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE;
 
 
@@ -129,6 +131,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             getWindow().setExitTransition(new Explode());
         }
 
+;
         wordHeight = getResources().getDimensionPixelSize(R.dimen.word_height);
 
         Display display = getWindowManager().getDefaultDisplay();
@@ -142,6 +145,13 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         Log.d(TAG, "dpWidth: " + dpWidth);
 
         setContentView(R.layout.activity_turn);
+
+        boolean firstRun = true;
+        if (firstRun) {
+            showTutorial();
+        }
+
+
         Intent parentIntent = getIntent();
 
         // Setup Display
@@ -1068,5 +1078,18 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         // Simulate a Incorrect Button press
         Button incorrectButton = findViewById(R.id.failureButton);
         guessMade(incorrectButton);
+    }
+    private void showTutorial() {
+        View targetView = findViewById(R.id.ppSpinner);
+        new MaterialShowcaseView.Builder(this)
+                .setTarget(targetView)
+                .setContentText("This is my Connor content!")
+                .setTitleText("Connor Title!")
+                .setDismissText("Connor Done")
+                .setDelay(1000)
+//                .singleUse("showcase1")
+                .show();
+
+
     }
 }
