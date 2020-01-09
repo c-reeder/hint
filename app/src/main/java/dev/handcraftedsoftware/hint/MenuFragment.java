@@ -130,7 +130,7 @@ public class MenuFragment extends DialogFragment {
     private class MenuAdapter extends ArrayAdapter<String> {
 
         MenuAdapter(Context context, String[] menuOptions) {
-            super(Objects.requireNonNull(getActivity()), 0, menuOptions);
+            super(context, 0, menuOptions);
         }
 
         @NonNull

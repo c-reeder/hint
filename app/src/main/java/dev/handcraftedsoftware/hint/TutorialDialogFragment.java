@@ -1,7 +1,9 @@
 package dev.handcraftedsoftware.hint;
 
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,6 +16,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -45,28 +48,41 @@ public class TutorialDialogFragment extends DialogFragment {
 
         Window window = tutorialDialog.getWindow();
         if (window != null) {
-            window.setLayout((int) (width * .8), WindowManager.LayoutParams.WRAP_CONTENT);
+            window.setLayout((int) (width * .9), WindowManager.LayoutParams.WRAP_CONTENT);
         }
 
-        ArrayAdapter<String> tutorialOptionsAdapter = new TutorialAdapter(getActivity(),tutorialOptions);
-        ListView optionsListView = tutorialDialog.findViewById(R.id.optionsList);
-        optionsListView.setAdapter(tutorialOptionsAdapter);
-        optionsListView.setOnItemClickListener(new ListView.OnItemClickListener(){
+        Button noButton = tutorialDialog.findViewById(R.id.noButton);
+        noButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        handler.restartGame();
-                        break;
-                    case 1:
-                        dismiss();
-                        handler.resumeGame();
-                        break;
-                }
+            public void onClick(View view) {
+                dismiss();
             }
         });
-
+        Button yesButton = tutorialDialog.findViewById(R.id.yesButton);
+        yesButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dismiss();
+            }
+        });
+//        ListView optionsListView = tutorialDialog.findViewById(R.id.optionsList);
+//        optionsListView.setOnItemClickListener(new ListView.OnItemClickListener(){
+//            @Override
+//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+//                switch (position) {
+//                    case 0:
+//                        handler.restartGame();
+//                        break;
+//                    case 1:
+//                        dismiss();
+//                        handler.resumeGame();
+//                        break;
+//                }
+//            }
+//        });
         return tutorialDialog;
+
+
     }
 
     @Nullable
