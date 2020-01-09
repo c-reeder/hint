@@ -47,7 +47,9 @@ import org.json.JSONException;
 import java.util.Arrays;
 import java.util.Locale;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE;
 
@@ -1080,16 +1082,26 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         guessMade(incorrectButton);
     }
     private void showTutorial() {
-        View targetView = findViewById(R.id.ppSpinner);
-        new MaterialShowcaseView.Builder(this)
-                .setTarget(targetView)
-                .setContentText("This is my Connor content!")
-                .setTitleText("Connor Title!")
-                .setDismissText("Connor Done")
-                .setDelay(1000)
+        View targetView1 = findViewById(R.id.ppSpinner);
+        View targetView2 = findViewById(R.id.roundText);
+//        new MaterialShowcaseView.Builder(this)
+//                .setTarget(targetView)
+//                .setContentText("This is my Connor content!")
+//                .setTitleText("Connor Title!")
+//                .setDismissText("Connor Done")
+//                .setDelay(1000)
 //                .singleUse("showcase1")
-                .show();
+//                .show();
 
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(500);
+
+        MaterialShowcaseSequence showcaseSequence = new MaterialShowcaseSequence(this);
+        showcaseSequence.setConfig(config);
+
+        showcaseSequence.addSequenceItem(targetView1,"My content","dismis this garbage!");
+        showcaseSequence.addSequenceItem(targetView2,"My content","dismis this garbage!");
+        showcaseSequence.start();
 
     }
 }

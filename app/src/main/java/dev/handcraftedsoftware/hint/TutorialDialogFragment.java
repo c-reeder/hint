@@ -5,12 +5,6 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.annotation.RequiresApi;
-import androidx.fragment.app.DialogFragment;
-import androidx.fragment.app.FragmentActivity;
-
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -23,40 +17,40 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
+import androidx.fragment.app.DialogFragment;
+import androidx.fragment.app.FragmentActivity;
+
 import java.util.Objects;
 
+public class TutorialDialogFragment extends DialogFragment {
+    private static final String TAG = "TutorialDialogFragment";
+    private ActionsHandler handler;
 
-/**
- * Menu that pops up when you pause the game.
- * Gives the option to resume the game or restart it.
- * @author Connor Reeder
- */
-
-public class MenuFragment extends DialogFragment {
-    private static final String TAG = "MenuFragment";
-    private MenuActionsHandler handler;
 
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        String[] menuOptions = {getString(R.string.restart_game), getString(R.string.resume_game)};
-        final MenuDialog menuDialog = new MenuDialog(getActivity());
-        menuDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        menuDialog.setContentView(R.layout.dialog_menu);
+        String[] tutorialOptions = {getString(R.string.restart_game), getString(R.string.resume_game)};
+        final TutorialDialogFragment.TutorialDialog tutorialDialog = new TutorialDialogFragment.TutorialDialog(getActivity());
+        tutorialDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        tutorialDialog.setContentView(R.layout.dialog_tutorial);
         FragmentActivity fragmentActivity = getActivity();
         assert fragmentActivity != null;
         Resources resources = fragmentActivity.getResources();
         DisplayMetrics metrics = resources.getDisplayMetrics();
         int width = metrics.widthPixels;
 
-        Window window = menuDialog.getWindow();
+        Window window = tutorialDialog.getWindow();
         if (window != null) {
             window.setLayout((int) (width * .8), WindowManager.LayoutParams.WRAP_CONTENT);
         }
 
-        ArrayAdapter<String> menuOptionsAdapter = new MenuAdapter(getActivity(),menuOptions);
-        ListView optionsListView = menuDialog.findViewById(R.id.optionsList);
-        optionsListView.setAdapter(menuOptionsAdapter);
+        ArrayAdapter<String> tutorialOptionsAdapter = new TutorialAdapter(getActivity(),tutorialOptions);
+        ListView optionsListView = tutorialDialog.findViewById(R.id.optionsList);
+        optionsListView.setAdapter(tutorialOptionsAdapter);
         optionsListView.setOnItemClickListener(new ListView.OnItemClickListener(){
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
@@ -72,7 +66,7 @@ public class MenuFragment extends DialogFragment {
             }
         });
 
-        return menuDialog;
+        return tutorialDialog;
     }
 
     @Nullable
@@ -92,9 +86,9 @@ public class MenuFragment extends DialogFragment {
         return view;
     }
 
-    private class MenuDialog extends Dialog {
+    private class TutorialDialog extends Dialog {
 
-        MenuDialog(Context context) {
+        TutorialDialog(Context context) {
             super(context);
         }
 
@@ -127,10 +121,10 @@ public class MenuFragment extends DialogFragment {
         }
     }
 
-    private class MenuAdapter extends ArrayAdapter<String> {
+    private class TutorialAdapter extends ArrayAdapter<String> {
 
-        MenuAdapter(Context context, String[] menuOptions) {
-            super(Objects.requireNonNull(getActivity()), 0, menuOptions);
+        TutorialAdapter(Context context, String[] tutorialOptions) {
+            super(context, 0, tutorialOptions);
         }
 
         @NonNull
@@ -148,7 +142,9 @@ public class MenuFragment extends DialogFragment {
             return convertView;
         }
     }
-    interface MenuActionsHandler {
+
+
+    interface ActionsHandler {
         void restartGame();
         void resumeGame();
     }
@@ -157,10 +153,10 @@ public class MenuFragment extends DialogFragment {
     public void onAttach(@NonNull Context context) {
         Log.d(TAG, "onAttach: ");
         super.onAttach(context);
-        try {
-            handler = (MenuActionsHandler) context;
-        } catch (ClassCastException ex) {
-            throw new ClassCastException(context.toString() + " is not a ActionsHandler");
-        }
+//        try {
+//            handler = (TutorialDialogFragment.ActionsHandler) context;
+//        } catch (ClassCastException ex) {
+//            throw new ClassCastException(context.toString() + " is not a ActionsHandler");
+//        }
     }
 }

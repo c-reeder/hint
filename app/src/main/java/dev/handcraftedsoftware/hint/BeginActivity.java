@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
@@ -67,7 +68,13 @@ public class BeginActivity extends AppCompatActivity {
         beginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                begin();
+                boolean firstRun = true;
+                if (firstRun) {
+                    TutorialDialogFragment tutorialDialogFragment = new TutorialDialogFragment();
+                    tutorialDialogFragment.show(getSupportFragmentManager(), "MENU_FRAGMENT");
+                } else {
+                    begin();
+                }
             }
         });
         
