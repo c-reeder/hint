@@ -31,7 +31,7 @@ import java.util.Objects;
  * @author Connor Reeder
  */
 
-class MenuFragment extends DialogFragment {
+public class MenuFragment extends DialogFragment {
     private static final String TAG = "MenuFragment";
     private MenuActionsHandler handler;
 
