@@ -57,7 +57,7 @@ import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRE
  * The display shows the word to be guessed, the current score, and the number of the round.
  * By Connor Reeder
  */
-public class TutorialActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener, MenuFragment.MenuActionsHandler, DownloadFragment.OnDownloadCompleteListener {
+public class TutorialActivity extends AppCompatActivity {
 
     private static final String TAG = "TurnActivity";
     private static final int NUM_ROUNDS = 6;
@@ -131,7 +131,7 @@ public class TutorialActivity extends AppCompatActivity implements OneDirectionV
             getWindow().setExitTransition(new Explode());
         }
 
-;
+        ;
         wordHeight = getResources().getDimensionPixelSize(R.dimen.word_height);
 
         Display display = getWindowManager().getDefaultDisplay();
@@ -162,7 +162,6 @@ public class TutorialActivity extends AppCompatActivity implements OneDirectionV
         partnerLetterView = findViewById(R.id.partnerLetterText);
         teamNameView = findViewById(R.id.teamName);
         viewPager = findViewById(R.id.pager);
-        viewPager.setSwipeController(this);
         acceptWordButton = findViewById(R.id.acceptWordButton);
         continueButton = findViewById(R.id.continueButton);
         messageView = findViewById(R.id.messageView);
@@ -171,287 +170,52 @@ public class TutorialActivity extends AppCompatActivity implements OneDirectionV
         wordCover = findViewById(R.id.wordCover);
         loadingIcon = findViewById(R.id.progressBar);
         layout = findViewById(R.id.activity_turn);
-        viewPager.setOnTouchListener(this);
-
-        coverAlphaAnimator = new ObjectAnimator();
-        layout.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (gameState == GameState.PLAYING || gameState == GameState.TEAM_TRANSITION) {
-                    if (motionEvent.getActionMasked() == MotionEvent.ACTION_DOWN) {
-                        Log.d(TAG, "layout ACTION_DOWN");
-                        isWordHidden = false;
-                        if (coverAlphaAnimator.isRunning()) {
-                            coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",(float)coverAlphaAnimator.getAnimatedValue(),0f);
-                        } else {
-                            coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",1f,0f);
-                        }
-                        coverAlphaAnimator.setDuration(500);
-                        coverAlphaAnimator.start();
-                        return true;
-                    } else if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP) {
-                        Log.d(TAG, "layout ACTION_UP");
-                        isWordHidden = true;
-                        if (coverAlphaAnimator.isRunning()) {
-                            coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",(float)coverAlphaAnimator.getAnimatedValue(),1f);
-                        } else {
-                            coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",0f,1f);
-                        }
-                        coverAlphaAnimator.setDuration(500);
-                        coverAlphaAnimator.start();
-                        return true;
-                    }
-                }
-                return false;
-            }
-        });
-
-        acceptWordButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onAcceptWord();
-            }
-        });
-        continueButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onContinue();
-            }
-        });
-        findViewById(R.id.pauseButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                pauseGame();
-            }
-        });
-        findViewById(R.id.successButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                guessMade(view);
-            }
-        });
-        findViewById(R.id.failureButton).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                guessMade(view);
-            }
-        });
-
-        // If the game is started for the first time
-        DownloadFragment downloadFragment;
-        if (savedInstanceState == null) {
-//            Log.d(TAG, "From scratch");
-            // Init Game Values
-            teamName1 = getString(R.string.team1);
-            teamName2 = getString(R.string.team2);
-            currRound = 1;
-            currPP = 10;
-            isPartnerB = false;
-            isTeam2 = false;
-            totalScore1 = 0;
-            totalScore2 = 0;
-            currSkipCountA = 0;
-            currSkipCountB = 0;
-            gameState = GameState.AWAITING_WORDS;
-            wordIdx = 0;
-            isWordHidden = false;
-
-            // Init Results Variables
-            aWords = new String[NUM_ROUNDS];
-            bWords = new String[NUM_ROUNDS];
-            aScores1 = new int[NUM_ROUNDS];
-            aScores2 = new int[NUM_ROUNDS];
-            bScores1 = new int[NUM_ROUNDS];
-            bScores2 = new int[NUM_ROUNDS];
-
-            // Bundle the information sent to the Download Fragment
-            Bundle fragmentBundle = new Bundle();
-            fragmentBundle.putString(GK.LANGUAGE, language);
-            fragmentBundle.putString(GK.DIFFICULTY, difficulty);
-
-            // Create DownloadFragment and start it.
-            FragmentManager fm = getSupportFragmentManager();
-            downloadFragment = (DownloadFragment) fm.findFragmentByTag(GK.DOWNLOAD_FRAGMENT);
-
-            if (downloadFragment != null) {
-                Log.e(TAG, "Download Fragment already exists!");
-            } else {
-                downloadFragment = new DownloadFragment();
-                downloadFragment.setArguments(fragmentBundle);
-                fm.beginTransaction().add(downloadFragment, GK.DOWNLOAD_FRAGMENT).commit();
-            }
-
-        } else { //if savedInstanceState != null  -----> We are RE-starting our activity
-//            Log.d(TAG, "Restart");
-
-            // Values Constant for the Entirety of one Game
-            teamName1 = savedInstanceState.getString(GK.TEAM_NAME_1);
-            teamName2 = savedInstanceState.getString(GK.TEAM_NAME_2);
-            difficulty = savedInstanceState.getString(GK.DIFFICULTY);
-            language = savedInstanceState.getString(GK.LANGUAGE);
-            wordList = savedInstanceState.getStringArray(GK.WORD_LIST);
-
-            // Ever-Changing "Current" Variables
-            currRound = savedInstanceState.getInt(GK.CURR_ROUND);
-            currPP = savedInstanceState.getInt(GK.CURR_PP);
-            isPartnerB = savedInstanceState.getBoolean(GK.IS_PARTNER_B);
-            isTeam2 = savedInstanceState.getBoolean(GK.IS_TEAM_2);
-            totalScore1 = savedInstanceState.getInt(GK.CURR_SCORE_1);
-            totalScore2 = savedInstanceState.getInt(GK.CURR_SCORE_2);
-            currSkipCountA = savedInstanceState.getInt(GK.CURR_SKIP_COUNT_A);
-            currSkipCountB = savedInstanceState.getInt(GK.CURR_SKIP_COUNT_B);
-            previousCorrect = savedInstanceState.getBoolean(GK.PREVIOUS_CORRECT);
-            gameState = (GameState) savedInstanceState.getSerializable(GK.GAME_STATE);
-            wordIdx = savedInstanceState.getInt(GK.WORD_IDX);
-            countDownTimeRemaining = savedInstanceState.getLong(GK.TIME_REMAINING);
-            isWordHidden = savedInstanceState.getBoolean(GK.WORD_HIDDEN);
-
-            Log.v(TAG, "Game state on restart: " + gameState);
-
-            // Results Variables to be Passed to the Winner Screen
-            aWords = savedInstanceState.getStringArray(GK.A_WORDS);
-            bWords = savedInstanceState.getStringArray(GK.B_WORDS);
-            aScores1 = savedInstanceState.getIntArray(GK.A_SCORES_1);
-            aScores2 = savedInstanceState.getIntArray(GK.A_SCORES_2);
-            bScores1 = savedInstanceState.getIntArray(GK.B_SCORES_1);
-            bScores2 = savedInstanceState.getIntArray(GK.B_SCORES_2);
-
-            // Recover Download Fragment
-            FragmentManager fm = getSupportFragmentManager();
-            downloadFragment = (DownloadFragment) fm.findFragmentByTag(GK.DOWNLOAD_FRAGMENT);
-
-            if (downloadFragment == null) {
-                Log.e(TAG, "Download Fragment doesn't exist!");
-            } else {
-                if (downloadFragment.isComplete()) {
-                    // Hide the loading icon IMMEDIATELY since we are only re-starting the activity and have already obtained our word data
-                    loadingIcon.setVisibility(View.INVISIBLE);
-                    findViewById(R.id.successButton).setVisibility(View.VISIBLE);
-                    findViewById(R.id.failureButton).setVisibility(View.VISIBLE);
-                    initWords();
-                    ppSpinnerView.setSpinner(currPP);
-                    updateDisplay();
-                    if (gameState == GameState.TEAM_TRANSITION) {
-                        promptForContinue(getString(R.string.pass_phone_next));
-
-                        if (isWordHidden)
-                            wordCover.setAlpha(1f);
 
 
-                        wordHolder.setText(wordList[wordIdx]);
-                        viewPager.setVisibility(View.INVISIBLE);
+        // Init Game Values
+        teamName1 = getString(R.string.team1);
+        teamName2 = getString(R.string.team2);
+        currRound = 1;
+        currPP = 10;
+        isPartnerB = false;
+        isTeam2 = false;
+        totalScore1 = 0;
+        totalScore2 = 0;
+        currSkipCountA = 0;
+        currSkipCountB = 0;
+        gameState = GameState.AWAITING_WORDS;
+        wordIdx = 0;
+        isWordHidden = false;
 
+        // Init Results Variables
+        aWords = new String[NUM_ROUNDS];
+        bWords = new String[NUM_ROUNDS];
+        aScores1 = new int[NUM_ROUNDS];
+        aScores2 = new int[NUM_ROUNDS];
+        bScores1 = new int[NUM_ROUNDS];
+        bScores2 = new int[NUM_ROUNDS];
 
-                        // Position wordHolder between the continueButton and the messageView
-                        ConstraintSet newSet = new ConstraintSet();
-                        newSet.clear(R.id.wordHolder);
-                        newSet.constrainHeight(R.id.wordHolder, wordHeight);
-                        newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
-                        newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.messageView, ConstraintSet.BOTTOM,0);
-                        newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
-                        newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
-                        newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.continueButton, ConstraintSet.TOP,0);
-                        TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-                        wordHolder.setGravity(Gravity.CENTER);
-                        newSet.applyTo(layout);
-                    } else if (gameState == GameState.WORD_TRANSITION) {
-                        promptForContinue(getString(R.string.pass_phone_across));
-//                        if (previousCorrect) {
-//                            layout.setBackgroundColor(Color.GREEN);
-//
-//                        } else {
-//                            layout.setBackgroundColor(Color.RED);
-//                        }
-                        Log.v(TAG, "Restarting in Word Transition!");
-                        wordHolder.setText(wordList[wordIdx]);
-                        viewPager.setVisibility(View.INVISIBLE);
+        // Game has been successfully restarted
 
-                        // Position wordHolder between the continueButton and the messageView
-                        ConstraintSet newSet = new ConstraintSet();
-                        newSet.clear(R.id.wordHolder);
-                        newSet.constrainHeight(R.id.wordHolder, wordHeight);
-                        newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
-                        newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.messageView, ConstraintSet.BOTTOM,0);
-                        newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
-                        newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
-                        newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.continueButton, ConstraintSet.TOP,0);
-                        TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-                        wordHolder.setGravity(Gravity.CENTER);
-                        newSet.applyTo(layout);
-                    } else if (gameState == GameState.WORD_APPROVAL) {
-                        acceptWordButton.setVisibility(View.VISIBLE);
-                    } else if (gameState == GameState.PLAYING) {
-
-                        // Initialize the CountDownTimer from where it was before we stopped
-                        countDownTimer = new CountDownTimer(countDownTimeRemaining,1000) {
-                            @SuppressLint("DefaultLocale")
-                            @Override
-                            public void onTick(long millisUntilFinished) {
-                                countDownTimeRemaining = millisUntilFinished;
-                                timerView.setText(String.format("%02d",Math.round(millisUntilFinished / 1000)));
-                            }
-
-                            @Override
-                            public void onFinish() {
-                                onCountDownCompleted();
-                            }
-                        };
-                        countDownTimer.start();
-
-                        if (isWordHidden)
-                            wordCover.setAlpha(1f);
-
-                        // Correctly restore position of the WordHolder vertically between the timerView and the buttonrow
-                        ConstraintSet newSet = new ConstraintSet();
-                        wordHolder.setText(wordList[wordIdx]);
-                        viewPager.setVisibility(View.INVISIBLE);
-                        newSet.clear(R.id.wordHolder);
-                        newSet.constrainHeight(R.id.wordHolder, wordHeight);
-                        newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
-                        newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.timerView, ConstraintSet.BOTTOM,0);
-                        newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
-                        newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
-                        newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
-                        TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-                        wordHolder.setGravity(Gravity.CENTER);
-                        newSet.applyTo(layout);
-                        timerView.setText(String.format(Locale.getDefault(),"%02d",Math.round(countDownTimeRemaining / 1000)));
-                        timerView.setVisibility(View.VISIBLE);
-                    }
-                } else {
-                    Log.d(TAG, "Activity Restarted but words not ready yet!");
-                }
-            }
-            // Game has been successfully restarted
-        }
-
-        // Setup add banner
-        if (BuildConfig.FLAVOR.equals("free")) {
-            FrameLayout frameLayout = findViewById(R.id.adFrame);
-            MobileAds.initialize(this, new OnInitializationCompleteListener() {
-                @Override
-                public void onInitializationComplete(InitializationStatus initializationStatus) {
-                }
-            });
-
-            RequestConfiguration requestConfiguration = MobileAds.getRequestConfiguration().toBuilder()
-                    .setTagForChildDirectedTreatment(TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE)
-                    .build();
-            MobileAds.setRequestConfiguration(requestConfiguration);
-            AdView adView = (AdView) frameLayout.getChildAt(0);
-            Bundle extras = new Bundle(); extras.putString("max_ad_content_rating", "G");
-            AdRequest adRequest = new AdRequest.Builder().addNetworkExtrasBundle(AdMobAdapter.class, extras).build();
-            adView.loadAd(adRequest);
-        } else {
-            Log.d(TAG, "not free");
-        }
+        loadingIcon = findViewById(R.id.progressBar);
+        loadingIcon.setVisibility(View.INVISIBLE);
+        findViewById(R.id.successButton).setVisibility(View.VISIBLE);
+        findViewById(R.id.failureButton).setVisibility(View.VISIBLE);
+        roundView.setText(String.format("%c%s",'#',Integer.toString(currRound)));
+        scoreView.setText(Integer.toString(totalScore1) + ':' + totalScore2);
+        if(!isPartnerB)
+            partnerLetterView.setText("A");
+        else
+            partnerLetterView.setText("B");
+        if(!isTeam2)
+            teamNameView.setText(teamName1);
+        else
+            teamNameView.setText(teamName2);
     }
 
-    // State transition into Approval Mode
-    private void approveNextWord() {
-        gameState = GameState.WORD_APPROVAL;
-        acceptWordButton.setVisibility(View.VISIBLE);
-    }
+
+
+
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
@@ -488,86 +252,6 @@ public class TutorialActivity extends AppCompatActivity implements OneDirectionV
         super.onSaveInstanceState(savedInstanceState);
     }
 
-    /**
-     * Initialize the Word Viewpager (for swiping/skipping through words)
-     * This method sets up the word-slider by creating the adapter for the word list
-     */
-    private void initWords() {
-        adapter = new TextPagerAdapter(this, wordList);
-        viewPager.setAdapter(adapter);
-    }
-
-    /**
-     * Called by DownloadFragment when finished downloading words.
-     */
-    @Override
-    public void onDownloadComplete(String result) {
-        Log.v(TAG, "onDownloadComplete");
-        try {
-            wordList = new String[22];
-            JSONArray response = new JSONArray(result);
-            for (int i = 0; i < response.length(); i++) {
-                wordList[i] = response.getString(i);
-            }
-            if (response.length() != 22) throw new AssertionError("DID NOT GET 22 WORDS!!!");
-            //Hide Loading Icon now that Data has been received
-            loadingIcon = findViewById(R.id.progressBar);
-            loadingIcon.setVisibility(View.INVISIBLE);
-            findViewById(R.id.successButton).setVisibility(View.VISIBLE);
-            findViewById(R.id.failureButton).setVisibility(View.VISIBLE);
-            initWords();
-            updateDisplay();
-            approveNextWord();
-            //Game has now begun
-        } catch (JSONException ex) {
-            ex.printStackTrace();
-            Log.e(TAG, "Contents of Response: ");
-            Log.e(TAG, result);
-            makeSnackBar();
-
-        }
-    }
-
-    private void makeSnackBar() {
-        Snackbar snackbar = Snackbar
-                .make(layout, R.string.download_error, 5000);
-        snackbar.addCallback(new Snackbar.Callback() {
-            @Override
-            public void onDismissed(Snackbar transientBottomBar, int event) {
-                finish();
-            }
-        });
-        View snackbarView = snackbar.getView();
-        int snackbarTextId = com.google.android.material.R.id.snackbar_text;
-        TextView textView = snackbarView.findViewById(snackbarTextId);
-        textView.setTextColor(getResources().getColor(android.R.color.white));
-        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP,20);
-        textView.setMaxLines(4);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M){
-            textView.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-            textView.setGravity(Gravity.CENTER);
-        } else {
-            textView.setGravity(Gravity.CENTER);
-        }
-        snackbar.show();
-    }
-
-    /**
-     * Callback Method implementing the OneDirectionViewPager which is called upon a swipe being performed.
-     * In this case we are using it to update the counts of how many times each set of opposing players has skipped a word
-     * @param newIndex the index of the OneDirectionViewPager after being swiped.
-     */
-    @Override
-    public void onSwiped(int newIndex) {
-        Log.v(TAG, "onSwiped: " + wordIdx + "->" + newIndex);
-        wordIdx = newIndex;
-        if (isPartnerB) {
-            currSkipCountB++;
-        } else {
-            currSkipCountA++;
-        }
-    }
-
     @Override
     protected void onResume() {
         super.onResume();
@@ -592,23 +276,6 @@ public class TutorialActivity extends AppCompatActivity implements OneDirectionV
         getWindow().getDecorView().setSystemUiVisibility(value);
     }
 
-    /**
-     * Helper method that updates the various components of the view with the current values of the
-     * variables that back them.
-     */
-    @SuppressLint("SetTextI18n")
-    private void updateDisplay() {
-        roundView.setText(String.format("%c%s",'#',Integer.toString(currRound)));
-        scoreView.setText(Integer.toString(totalScore1) + ':' + totalScore2);
-        if(!isPartnerB)
-            partnerLetterView.setText("A");
-        else
-            partnerLetterView.setText("B");
-        if(!isTeam2)
-            teamNameView.setText(teamName1);
-        else
-            teamNameView.setText(teamName2);
-    }
 
     // State transition called when the AcceptButton is pressed
     private void onAcceptWord() {
@@ -837,7 +504,6 @@ public class TutorialActivity extends AppCompatActivity implements OneDirectionV
             }
             finish();
         } else { // If not the end of the game
-            updateDisplay();
             if (gameState == GameState.TEAM_TRANSITION) {
                 promptForContinue(getString(R.string.pass_phone_next));
             } else if (gameState == GameState.WORD_TRANSITION) {
@@ -904,8 +570,6 @@ public class TutorialActivity extends AppCompatActivity implements OneDirectionV
                     wH.setVisibility(View.INVISIBLE);
                     viewPager.setVisibility(View.VISIBLE);
 
-                    nextWord();
-                    approveNextWord();
                 }
 
                 @Override
@@ -991,74 +655,6 @@ public class TutorialActivity extends AppCompatActivity implements OneDirectionV
         gameState = GameState.WORD_TRANSITION;
     }
 
-    /**
-     * Advances the word-swiper to the next word
-     */
-    private void nextWord() {
-        Log.v(TAG, "nextWord");
-        viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
-        wordIdx++;
-    }
-
-    /**
-     * Callback method from the OneDirectionViewPager interface
-     * @return whether or not to permit the word-swiper to swipe at the moment
-     */
-    @Override
-    public boolean canSwipe() {
-        boolean inApprovalState = (gameState == GameState.WORD_APPROVAL);
-        Log.v(TAG, "canSwipe: " + inApprovalState);
-        if (!inApprovalState) {
-            return false;
-        }
-        // Returns whether or not the current word can be skipped.
-        if (isPartnerB) {
-            return (currPP == 10) && currSkipCountB < 5;
-        } else {
-            return (currPP == 10) && currSkipCountA < 5;
-        }
-    }
-
-
-    /**
-     * onTouch method used for detecting a tap on the word-swiper
-     * @param view the view that the onTouch event was fired from
-     * @param motionEvent the motion event that occurred on the touched view
-     * @return whether or not the touch was received
-     */
-    @SuppressLint("ClickableViewAccessibility")
-    @Override
-    public boolean onTouch(View view, MotionEvent motionEvent) {
-        return false;
-    }
-
-    /**
-     * Called when the pause button is pressed.
-     * In reality this only gives you the ability to return to the start screen
-     */
-    private void pauseGame() {
-        if (gameState == GameState.AWAITING_WORDS) {
-            Log.v(TAG, "Trying to pause in Awaiting Words Mode");
-            return;
-        }
-
-        MenuFragment menuFragment = new MenuFragment();
-
-        TextView wordText = viewPager.findViewById(R.id.singleTextView);
-        wordText.setVisibility(View.INVISIBLE);
-        menuFragment.show(getSupportFragmentManager(), "MENU_FRAGMENT");
-    }
-
-    @Override
-    public void restartGame() {
-        supportFinishAfterTransition();
-    }
-
-    @Override
-    public void resumeGame() {
-        TextView wordText = viewPager.findViewById(R.id.singleTextView);
-        wordText.setVisibility(View.VISIBLE);
-    }
 
     /**
      *
@@ -1071,6 +667,7 @@ public class TutorialActivity extends AppCompatActivity implements OneDirectionV
         Button incorrectButton = findViewById(R.id.failureButton);
         guessMade(incorrectButton);
     }
+
     private void showTutorial() {
         View targetView1 = findViewById(R.id.ppSpinner);
         View targetView2 = findViewById(R.id.roundText);
