@@ -10,7 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="First Time?"
-        android:textSize="30sp"
+        android:textSize="26sp"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:textAppearance="@style/TextAppearance.AppCompat.Display1"

@@ -56,6 +56,7 @@ public class TutorialDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 dismiss();
+                handler.startGame();
             }
         });
         Button yesButton = tutorialDialog.findViewById(R.id.yesButton);
@@ -63,23 +64,10 @@ public class TutorialDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 dismiss();
+                handler.startTutorial();
             }
         });
-//        ListView optionsListView = tutorialDialog.findViewById(R.id.optionsList);
-//        optionsListView.setOnItemClickListener(new ListView.OnItemClickListener(){
-//            @Override
-//            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
-//                switch (position) {
-//                    case 0:
-//                        handler.restartGame();
-//                        break;
-//                    case 1:
-//                        dismiss();
-//                        handler.resumeGame();
-//                        break;
-//                }
-//            }
-//        });
+
         return tutorialDialog;
 
 
@@ -161,18 +149,18 @@ public class TutorialDialogFragment extends DialogFragment {
 
 
     interface ActionsHandler {
-        void restartGame();
-        void resumeGame();
+        void startTutorial();
+        void startGame();
     }
 
     @Override
     public void onAttach(@NonNull Context context) {
         Log.d(TAG, "onAttach: ");
         super.onAttach(context);
-//        try {
-//            handler = (TutorialDialogFragment.ActionsHandler) context;
-//        } catch (ClassCastException ex) {
-//            throw new ClassCastException(context.toString() + " is not a ActionsHandler");
-//        }
+        try {
+            handler = (TutorialDialogFragment.ActionsHandler) context;
+        } catch (ClassCastException ex) {
+            throw new ClassCastException(context.toString() + " is not a ActionsHandler");
+        }
     }
 }

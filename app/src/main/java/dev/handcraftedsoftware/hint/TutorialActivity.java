@@ -5,19 +5,9 @@ import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
-import android.os.CountDownTimer;
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.widget.TextViewCompat;
-import androidx.fragment.app.FragmentManager;
-import androidx.transition.AutoTransition;
-import androidx.transition.TransitionManager;
-import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.transition.Explode;
-import androidx.transition.Transition;
-
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.util.TypedValue;
@@ -31,6 +21,15 @@ import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.widget.TextViewCompat;
+import androidx.fragment.app.FragmentManager;
+import androidx.transition.AutoTransition;
+import androidx.transition.Transition;
+import androidx.transition.TransitionManager;
 
 import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
@@ -47,6 +46,9 @@ import org.json.JSONException;
 import java.util.Arrays;
 import java.util.Locale;
 
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
+
 import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE;
 
 
@@ -55,7 +57,7 @@ import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRE
  * The display shows the word to be guessed, the current score, and the number of the round.
  * By Connor Reeder
  */
-public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener, MenuFragment.MenuActionsHandler, DownloadFragment.OnDownloadCompleteListener {
+public class TutorialActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener, MenuFragment.MenuActionsHandler, DownloadFragment.OnDownloadCompleteListener {
 
     private static final String TAG = "TurnActivity";
     private static final int NUM_ROUNDS = 6;
@@ -143,6 +145,12 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         Log.d(TAG, "dpWidth: " + dpWidth);
 
         setContentView(R.layout.activity_turn);
+
+        boolean firstRun = true;
+        if (firstRun) {
+            showTutorial();
+        }
+
 
         Intent parentIntent = getIntent();
 
@@ -234,16 +242,8 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         if (savedInstanceState == null) {
 //            Log.d(TAG, "From scratch");
             // Init Game Values
-            teamName1 = parentIntent.getStringExtra(GK.TEAM_NAME_1);
-            teamName2 = parentIntent.getStringExtra(GK.TEAM_NAME_2);
-            if (teamName1.equals("")) {
-                teamName1 = getString(R.string.team1);
-            }
-            if (teamName2.equals("")) {
-                teamName2 = getString(R.string.team2);
-            }
-            difficulty = parentIntent.getStringExtra(GK.DIFFICULTY);
-            language = parentIntent.getStringExtra(GK.LANGUAGE);
+            teamName1 = getString(R.string.team1);
+            teamName2 = getString(R.string.team2);
             currRound = 1;
             currPP = 10;
             isPartnerB = false;
@@ -1070,5 +1070,28 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         // Simulate a Incorrect Button press
         Button incorrectButton = findViewById(R.id.failureButton);
         guessMade(incorrectButton);
+    }
+    private void showTutorial() {
+        View targetView1 = findViewById(R.id.ppSpinner);
+        View targetView2 = findViewById(R.id.roundText);
+//        new MaterialShowcaseView.Builder(this)
+//                .setTarget(targetView)
+//                .setContentText("This is my Connor content!")
+//                .setTitleText("Connor Title!")
+//                .setDismissText("Connor Done")
+//                .setDelay(1000)
+//                .singleUse("showcase1")
+//                .show();
+
+        ShowcaseConfig config = new ShowcaseConfig();
+        config.setDelay(500);
+
+        MaterialShowcaseSequence showcaseSequence = new MaterialShowcaseSequence(this);
+        showcaseSequence.setConfig(config);
+
+        showcaseSequence.addSequenceItem(targetView1,"My content","dismis this garbage!");
+        showcaseSequence.addSequenceItem(targetView2,"My content","dismis this garbage!");
+        showcaseSequence.start();
+
     }
 }

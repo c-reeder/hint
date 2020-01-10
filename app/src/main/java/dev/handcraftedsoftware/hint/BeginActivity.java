@@ -32,7 +32,7 @@ import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRE
  * Allows the user to choose team names and difficulty for the game.
  * @author Connor Reeder
  */
-public class BeginActivity extends AppCompatActivity {
+public class BeginActivity extends AppCompatActivity implements TutorialDialogFragment.ActionsHandler {
 
     private static final String TAG = "BeginActivity";
 
@@ -65,19 +65,7 @@ public class BeginActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-        beginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean firstRun = true;
-                if (firstRun) {
-                    TutorialDialogFragment tutorialDialogFragment = new TutorialDialogFragment();
-                    tutorialDialogFragment.show(getSupportFragmentManager(), "MENU_FRAGMENT");
-                } else {
-                    begin();
-                }
-            }
-        });
-        
+
         nameText1.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View view, boolean b) {
@@ -191,6 +179,18 @@ public class BeginActivity extends AppCompatActivity {
             Log.d(TAG, "not free");
         }
 
+        beginButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean firstRun = true;
+                if (firstRun) {
+                    TutorialDialogFragment tutorialDialogFragment = new TutorialDialogFragment();
+                    tutorialDialogFragment.show(getSupportFragmentManager(), "MENU_FRAGMENT");
+                } else {
+                    startGame();
+                }
+            }
+        });
     }
 
     @Override
@@ -240,7 +240,18 @@ public class BeginActivity extends AppCompatActivity {
     }
 
 
-    private void begin() {
+    @Override
+    public void startTutorial() {
+        Intent intent = new Intent(this, TutorialActivity.class);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
+        } else {
+            startActivity(intent);
+        }
+    }
+
+    @Override
+    public void startGame() {
         Intent intent = new Intent(this, TurnActivity.class);
         intent.putExtra(GK.TEAM_NAME_1, nameText1.getText().toString());
         intent.putExtra(GK.TEAM_NAME_2, nameText2.getText().toString());
