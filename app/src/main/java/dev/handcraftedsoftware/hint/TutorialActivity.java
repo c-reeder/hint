@@ -8,16 +8,11 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.transition.Explode;
-import android.util.DisplayMetrics;
 import android.util.Log;
-import android.util.TypedValue;
-import android.view.Display;
 import android.view.Gravity;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.widget.Button;
-import android.widget.FrameLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -26,22 +21,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.widget.TextViewCompat;
-import androidx.fragment.app.FragmentManager;
 import androidx.transition.AutoTransition;
 import androidx.transition.Transition;
 import androidx.transition.TransitionManager;
-
-import com.google.ads.mediation.admob.AdMobAdapter;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.RequestConfiguration;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
-import com.google.android.material.snackbar.Snackbar;
-
-import org.json.JSONArray;
-import org.json.JSONException;
 
 import java.util.Arrays;
 import java.util.Locale;
@@ -49,7 +31,6 @@ import java.util.Locale;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
-import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE;
 
 
 /**
@@ -86,9 +67,6 @@ public class TutorialActivity extends AppCompatActivity {
     //private boolean inPlay;
     private String teamName1;
     private String teamName2;
-    private String difficulty;
-    private String language;
-    private String[] wordList;
 
     // Ever-Changing "Current" Variables
     private int currRound;
@@ -117,7 +95,6 @@ public class TutorialActivity extends AppCompatActivity {
     private long countDownTimeRemaining;
     private ObjectAnimator coverAlphaAnimator;
 
-    private int wordHeight;
 
 
 
@@ -130,19 +107,6 @@ public class TutorialActivity extends AppCompatActivity {
             getWindow().setEnterTransition(new Explode());
             getWindow().setExitTransition(new Explode());
         }
-
-        ;
-        wordHeight = getResources().getDimensionPixelSize(R.dimen.word_height);
-
-        Display display = getWindowManager().getDefaultDisplay();
-        DisplayMetrics outMetrics = new DisplayMetrics();
-        display.getMetrics(outMetrics);
-
-        float density  = getResources().getDisplayMetrics().density;
-        float dpHeight = outMetrics.heightPixels / density;
-        float dpWidth  = outMetrics.widthPixels / density;
-        Log.d(TAG, "dpHeight: " + dpHeight);
-        Log.d(TAG, "dpWidth: " + dpWidth);
 
         setContentView(R.layout.activity_turn);
 
@@ -195,7 +159,37 @@ public class TutorialActivity extends AppCompatActivity {
         bScores1 = new int[NUM_ROUNDS];
         bScores2 = new int[NUM_ROUNDS];
 
-        // Game has been successfully restarted
+        // Show brief description of what the game is about
+
+        // ------Display overview
+        // Show Round number
+        // Show Score
+        // Show Possible Points to be won
+        // Show word holder
+        // Show word cover and mention touch to reveal
+        // Show player letter
+        // Show Current playing team name
+
+        // ------Individual turn
+        // wordHolder -> this is the word you must guess
+        // wordHolder -> You and your opponent may chose to swype
+        // wordHolder -> only 5 skips per game
+        // acceptButton -> Once you've agreed, click to accept
+        // timerView -> Timer appears, time to give hint and guess
+        // buttonBar -> upon guessing, mark correct or incorrect
+        // timerView -> If you don't finish before the time is up, its automatically wrong!
+
+        // ------If you're wrong
+        // ppSpinner -> Spins/decreases
+        // messageView -> Pass phone to the opponent next to you
+        // that person clicks continue
+
+        // ------If you're right
+        // score -> updates
+        // ppSpinner -> resets
+        // messageView -> Pass phone across to the other 2 players
+
+
 
         loadingIcon = findViewById(R.id.progressBar);
         loadingIcon.setVisibility(View.INVISIBLE);
@@ -211,54 +205,17 @@ public class TutorialActivity extends AppCompatActivity {
             teamNameView.setText(teamName1);
         else
             teamNameView.setText(teamName2);
+
+
+
+        //promptForContinue(getString(R.string.pass_phone_next));
+        //promptForContinue(getString(R.string.pass_phone_across));
     }
 
-
-
-
-
-    @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Values Constant for the Entirety of one Game
-        savedInstanceState.putString(GK.TEAM_NAME_1,teamName1);
-        savedInstanceState.putString(GK.TEAM_NAME_2,teamName2);
-        savedInstanceState.putString(GK.DIFFICULTY,difficulty);
-        savedInstanceState.putString(GK.LANGUAGE,language);
-        savedInstanceState.putStringArray(GK.WORD_LIST,wordList);
-
-        // Ever-Changing "Current" Variables
-        savedInstanceState.putInt(GK.CURR_ROUND,currRound);
-        savedInstanceState.putInt(GK.CURR_PP,currPP);
-        savedInstanceState.putBoolean(GK.IS_PARTNER_B,isPartnerB);
-        savedInstanceState.putBoolean(GK.IS_TEAM_2,isTeam2);
-        savedInstanceState.putInt(GK.CURR_SCORE_1, totalScore1);
-        savedInstanceState.putInt(GK.CURR_SCORE_2, totalScore2);
-        savedInstanceState.putInt(GK.CURR_SKIP_COUNT_A,currSkipCountA);
-        savedInstanceState.putInt(GK.CURR_SKIP_COUNT_B,currSkipCountB);
-        savedInstanceState.putBoolean(GK.PREVIOUS_CORRECT, previousCorrect);
-        savedInstanceState.putSerializable(GK.GAME_STATE, gameState);
-        savedInstanceState.putInt(GK.WORD_IDX, wordIdx);
-        savedInstanceState.putLong(GK.TIME_REMAINING, countDownTimeRemaining);
-        savedInstanceState.putBoolean(GK.WORD_HIDDEN, isWordHidden);
-
-        // Results Variables to be Passed to the Winner Screen
-        savedInstanceState.putStringArray(GK.A_WORDS,aWords);
-        savedInstanceState.putStringArray(GK.B_WORDS,bWords);
-        savedInstanceState.putIntArray(GK.A_SCORES_1,aScores1);
-        savedInstanceState.putIntArray(GK.A_SCORES_2,aScores2);
-        savedInstanceState.putIntArray(GK.B_SCORES_1,bScores1);
-        savedInstanceState.putIntArray(GK.B_SCORES_2,bScores2);
-
-        super.onSaveInstanceState(savedInstanceState);
-    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        DownloadFragment downloadFragment = (DownloadFragment) getSupportFragmentManager().findFragmentByTag(GK.DOWNLOAD_FRAGMENT);
-        if (downloadFragment != null && downloadFragment.isComplete()) {
-            loadingIcon.setVisibility(View.INVISIBLE);
-        }
         setToFullScreen();
     }
 
@@ -277,18 +234,10 @@ public class TutorialActivity extends AppCompatActivity {
     }
 
 
-    // State transition called when the AcceptButton is pressed
-    private void onAcceptWord() {
-        Log.v(TAG, "Word Accepted");
-        acceptWordButton.setVisibility(View.INVISIBLE);
-        startPlaying();
-    }
-
     // State transition to the actual guessing/playing stage
     private void startPlaying() {
         gameState = GameState.PLAYING;
 
-        wordHolder.setText(wordList[viewPager.getCurrentItem()]);
         viewPager.setVisibility(View.INVISIBLE);
         wordHolder.setVisibility(View.VISIBLE);
 
@@ -336,7 +285,7 @@ public class TutorialActivity extends AppCompatActivity {
                 // Animate WordHolder from Center Position to Low Position (beneath the timerView)
                 ConstraintSet newSet = new ConstraintSet();
                 newSet.clear(R.id.wordHolder);
-                newSet.constrainHeight(R.id.wordHolder, wordHeight);
+                newSet.constrainHeight(R.id.wordHolder, getResources().getDimensionPixelSize(R.dimen.word_height));
                 newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
                 newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.timerView, ConstraintSet.BOTTOM,0);
                 newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
@@ -355,181 +304,8 @@ public class TutorialActivity extends AppCompatActivity {
 
         // Initialize the timer clock
         timerView.setVisibility(View.VISIBLE);
-        countDownTimer = new CountDownTimer(31000,1000) {
-            @SuppressLint("DefaultLocale")
-            @Override
-            public void onTick(long millisUntilFinished) {
-                countDownTimeRemaining = millisUntilFinished;
-                timerView.setText(String.format("%02d",Math.round(millisUntilFinished / 1000)));
-            }
-
-            @Override
-            public void onFinish() {
-                onCountDownCompleted();
-            }
-        };
         timerView.setText(String.format(Locale.getDefault(),"%02d",Math.round(countDownTimeRemaining / 1000)));
         countDownTimer.start();
-    }
-
-    /**
-     * The method called when a guess has been made
-     * @param view The button pressed to signal that a guess has been made
-     */
-    private void guessMade(View view) {
-        if (gameState != GameState.PLAYING) {
-            Log.e(TAG, "Guess made while not playing!");
-            return;
-        }
-
-
-        // Get rid of the timer and reset it for next time we use it.
-        timerView.setVisibility(View.INVISIBLE);
-        countDownTimer.cancel();
-
-        // If the guess was correct
-        if (view.getId() == R.id.successButton) {
-            storeResult();
-
-            coverAlphaAnimator.cancel();
-            coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",1f,0f);
-            coverAlphaAnimator.setDuration(500);
-            coverAlphaAnimator.start();
-
-            // Score Addition Logic
-            if (!isTeam2) {
-                totalScore1 += currPP;
-            } else {
-                totalScore2 += currPP;
-            }
-
-            // Next Turn Logic
-            //-------CHANGE WORD HERE----------
-            ppSpinnerView.resetSpinner();
-            transitionToNextWord(true);
-            currPP = 10;
-
-            // Increment the round number if both sets of opposing players has played
-            if (isPartnerB)
-                currRound++;
-            // Alternate which team begins each round
-            isTeam2 = ((currRound % 2) == 0);
-            // Flip back and forth between pairs of opposing players
-            isPartnerB = !isPartnerB;
-
-            // If the guess was incorrect
-        } else if (view.getId() == R.id.failureButton) {
-            storeResult();
-            // Decrement current possible points
-            currPP--;
-
-            // The word was NEVER guessed and there are not more tries left
-            // Next Turn Logic
-            if (currPP < 1) {
-
-
-                coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",1f,0f);
-                coverAlphaAnimator.setDuration(500);
-                coverAlphaAnimator.start();
-
-                // if the word was not guessed AT ALL
-                //-------CHANGE WORD HERE----------
-                ppSpinnerView.resetSpinner();
-                transitionToNextWord(false);
-                currPP = 10;
-
-                // Increment the round number if both sets of opposing players has played
-                if (isPartnerB)
-                    currRound++;
-                // Alternate which team begins each round
-                isTeam2 = ((currRound % 2) == 0);
-                // Flip back and forth between pairs of opposing players
-                isPartnerB = !isPartnerB;
-
-            } else {// The word has not yet been correctly guessed but there are still chances left
-                // Switch teams and decrement possible points
-                isTeam2 = !isTeam2;
-                ppSpinnerView.spinToNext();
-                transitionToNextTeam();
-            }
-        }
-
-        // Check if end of game
-        if (currRound > NUM_ROUNDS) {
-            // Game is Over
-            gameState = GameState.GAME_OVER;
-
-            // Create Winner Screen intent
-            Intent winnerIntent = new Intent(this, WinnerActivity.class);
-
-            // Determine who the winner is based off the final scores
-            if (totalScore1 > totalScore2)
-                winnerIntent.putExtra(GK.WINNER_TEAM_NAME, teamName1);
-            else if (totalScore2 > totalScore1)
-                winnerIntent.putExtra(GK.WINNER_TEAM_NAME, teamName2);
-
-            // Attach the team names and necessary scoring values to the Winner Screen intent
-            winnerIntent.putExtra(GK.A_SCORES_1, aScores1);
-            winnerIntent.putExtra(GK.A_SCORES_2, aScores2);
-            winnerIntent.putExtra(GK.B_SCORES_1, bScores1);
-            winnerIntent.putExtra(GK.B_SCORES_2, bScores2);
-            winnerIntent.putExtra(GK.A_WORDS, aWords);
-            winnerIntent.putExtra(GK.B_WORDS, bWords);
-            winnerIntent.putExtra(GK.TOTAL_SCORE_1, totalScore1);
-            winnerIntent.putExtra(GK.TOTAL_SCORE_2, totalScore2);
-            winnerIntent.putExtra(GK.TEAM_NAME_1, teamName1);
-            winnerIntent.putExtra(GK.TEAM_NAME_2, teamName2);
-            winnerIntent.putExtra(GK.DIFFICULTY, difficulty);
-            winnerIntent.putExtra(GK.LANGUAGE, language);
-
-            // Print Intent Goodies
-            Log.d(TAG, "aScores1: " + Arrays.toString(aScores1));
-            Log.d(TAG, "aScores2: " + Arrays.toString(aScores2));
-            Log.d(TAG, "bScores1: " + Arrays.toString(bScores1));
-            Log.d(TAG, "bScores2: " + Arrays.toString(bScores2));
-            Log.d(TAG, "aWords: " + Arrays.toString(aWords));
-            Log.d(TAG, "bWords: " + Arrays.toString(bWords));
-            Log.d(TAG, "totalScore1: " + totalScore1);
-            Log.d(TAG, "totalScore2 " + totalScore2);
-            Log.d(TAG, "teamName1: " + teamName1);
-            Log.d(TAG, "teamName2: " + teamName2);
-            Log.d(TAG, "difficulty: " + difficulty);
-            Log.d(TAG, "language: " + language);
-
-            //Launch Winner Activity
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                startActivity(winnerIntent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
-            } else {
-                startActivity(winnerIntent);
-            }
-            finish();
-        } else { // If not the end of the game
-            if (gameState == GameState.TEAM_TRANSITION) {
-                promptForContinue(getString(R.string.pass_phone_next));
-            } else if (gameState == GameState.WORD_TRANSITION) {
-                promptForContinue(getString(R.string.pass_phone_across));
-            }
-
-            ConstraintSet newSet = new ConstraintSet();
-            newSet.clear(R.id.wordHolder);
-            newSet.constrainHeight(R.id.wordHolder, wordHeight);
-            newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
-            newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.messageView, ConstraintSet.BOTTOM,0);
-            newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
-            newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
-            newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.continueButton, ConstraintSet.TOP,0);
-
-            TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-
-            TransitionManager.beginDelayedTransition(layout);
-            wordHolder.setGravity(Gravity.CENTER);
-            newSet.applyTo(layout);
-            loadingIcon.setVisibility(View.INVISIBLE);
-        }
-    }
-
-    private void transitionToNextTeam() {
-        gameState = GameState.TEAM_TRANSITION;
     }
 
     private void promptForContinue(String message) {
@@ -591,7 +367,7 @@ public class TutorialActivity extends AppCompatActivity {
             // Animation WordHolder from Low Position to Normal Position
             ConstraintSet newSet = new ConstraintSet();
             newSet.clear(R.id.wordHolder);
-            newSet.constrainHeight(R.id.wordHolder, wordHeight);
+            newSet.constrainHeight(R.id.wordHolder, getResources().getDimensionPixelSize(R.dimen.word_height));
             newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
             newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.topBar, ConstraintSet.BOTTOM,0);
             newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
@@ -608,34 +384,6 @@ public class TutorialActivity extends AppCompatActivity {
 
     }
 
-    /**
-     * Helper method to be called every time is word is completed
-     * Updates the result variables based on who successfully guessed the word and how many points
-     *  they earned.
-     */
-    private void storeResult() {
-        TextView currentView = adapter.getCurrentView().findViewById(R.id.singleTextView);
-        String currWord = currentView.getText().toString();
-        if (isPartnerB) {
-            bWords[currRound - 1] = currWord;
-            if (isTeam2) {
-                bScores1[currRound - 1] = 0;
-                bScores2[currRound - 1] = currPP;
-            } else {
-                bScores1[currRound - 1] = currPP;
-                bScores2[currRound - 1] = 0;
-            }
-        } else {
-            aWords[currRound - 1] = currWord;
-            if (isTeam2) {
-                aScores1[currRound - 1] = 0;
-                aScores2[currRound - 1] = currPP;
-            } else {
-                aScores1[currRound - 1] = currPP;
-                aScores2[currRound - 1] = 0;
-            }
-        }
-    }
 
     /**
      * Puts the game into word-transition mode
@@ -656,17 +404,6 @@ public class TutorialActivity extends AppCompatActivity {
     }
 
 
-    /**
-     *
-     * Called when the CountdownTimer finishes its countdown
-     *
-     */
-    private void onCountDownCompleted() {
-        Log.v(TAG, "Timer Complete!");
-        // Simulate a Incorrect Button press
-        Button incorrectButton = findViewById(R.id.failureButton);
-        guessMade(incorrectButton);
-    }
 
     private void showTutorial() {
         View targetView1 = findViewById(R.id.ppSpinner);
