@@ -243,6 +243,22 @@ public class BeginActivity extends AppCompatActivity implements TutorialDialogFr
     @Override
     public void startTutorial() {
         Intent intent = new Intent(this, TutorialActivity.class);
+        intent.putExtra(GK.TEAM_NAME_1, nameText1.getText().toString());
+        intent.putExtra(GK.TEAM_NAME_2, nameText2.getText().toString());
+        RadioButton selectedDiff = findViewById(diffGroup.getCheckedRadioButtonId());
+        RadioButton selectedLang = findViewById(langGroup.getCheckedRadioButtonId());
+        if (selectedDiff.getId() == R.id.easyButton) {
+            intent.putExtra(GK.DIFFICULTY, GV.EASY);
+        } else if (selectedDiff.getId() == R.id.mediumButton) {
+            intent.putExtra(GK.DIFFICULTY, GV.MEDIUM);
+        } else if (selectedDiff.getId() == R.id.hardButton) {
+            intent.putExtra(GK.DIFFICULTY, GV.HARD);
+        }
+        if (selectedLang.getId() == R.id.englishButton) {
+            intent.putExtra(GK.LANGUAGE, GV.ENGLISH);
+        } else if (selectedLang.getId() == R.id.spanishButton) {
+            intent.putExtra(GK.LANGUAGE, GV.SPANISH);
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
         } else {
