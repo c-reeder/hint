@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <dimen name="timer_font_size">100sp</dimen>
+    <dimen name="timer_font_size">60sp</dimen>
     <dimen name="word_height">60dp</dimen>
     <dimen name="ten_spinner_height">120dp</dimen>
     <dimen name="arc_shape_width">120dp</dimen>

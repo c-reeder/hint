@@ -3,6 +3,7 @@ package dev.handcraftedsoftware.hint;
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -16,8 +17,15 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+
+import androidx.transition.AutoTransition;
+import androidx.transition.TransitionManager;
+import androidx.transition.Transition;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.constraintlayout.widget.ConstraintSet;
+import androidx.core.widget.TextViewCompat;
 
 import uk.co.deanwild.materialshowcaseview.IShowcaseListener;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
@@ -90,6 +98,8 @@ public class TutorialActivity extends AppCompatActivity {
 
     private Bundle extrasToForward;
 
+    private int wordHeight;
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -101,9 +111,13 @@ public class TutorialActivity extends AppCompatActivity {
             getWindow().setExitTransition(new Explode());
         }
 
+        // Force Portrait Orientation mode for tutorial to ensure that all ToolTip elements
+        // fit within the screen
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_turn);
 
 
+        wordHeight = getResources().getDimensionPixelSize(R.dimen.word_height);
 
         Intent parentIntent = getIntent();
         extrasToForward = parentIntent.getExtras();
@@ -200,6 +214,7 @@ public class TutorialActivity extends AppCompatActivity {
 
         loadingIcon = findViewById(R.id.progressBar);
         loadingIcon.setVisibility(View.INVISIBLE);
+        viewPager.setVisibility(View.INVISIBLE);
         findViewById(R.id.successButton).setVisibility(View.VISIBLE);
         findViewById(R.id.failureButton).setVisibility(View.VISIBLE);
         roundView.setText(String.format("%c%s",'#',Integer.toString(currRound)));
@@ -274,6 +289,18 @@ public class TutorialActivity extends AppCompatActivity {
         buttonRow.setVisibility(View.INVISIBLE);
         wordHolder.setVisibility(View.VISIBLE);
         wordHolder.setText(R.string.current_word);
+
+        ConstraintSet newSet = new ConstraintSet();
+        newSet.clear(R.id.wordHolder);
+        newSet.constrainHeight(R.id.wordHolder, getResources().getDimensionPixelSize(R.dimen.word_height));
+        newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
+        newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.topBar, ConstraintSet.BOTTOM,0);
+        newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
+        newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
+        newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.teamNameBar, ConstraintSet.TOP,0);
+        TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+        wordHolder.setGravity(Gravity.CENTER);
+        newSet.applyTo(layout);
 
         MaterialShowcaseView[] introSlides = new MaterialShowcaseView[3];
         MaterialShowcaseView[] overviewSlides = new MaterialShowcaseView[7];
@@ -431,9 +458,27 @@ public class TutorialActivity extends AppCompatActivity {
 
                     @Override
                     public void onShowcaseDismissed(MaterialShowcaseView showcaseView) {
+
+
+                        ConstraintSet newSet = new ConstraintSet();
+                        newSet.clear(R.id.wordHolder);
+                        newSet.constrainHeight(R.id.wordHolder, wordHeight);
+                        newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.timerView, ConstraintSet.BOTTOM,0);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
+
+                        Log.d(TAG, "wordHolder.getHeight()1:" + wordHolder.getHeight());
+                        TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+
+                        Transition transition = new AutoTransition();
+                        TransitionManager.beginDelayedTransition(layout, transition);
+                        wordHolder.setGravity(Gravity.CENTER);
                         timerView.setVisibility(View.VISIBLE);
                         acceptWordButton.setVisibility(View.INVISIBLE);
                         buttonRow.setVisibility(View.VISIBLE);
+                        newSet.applyTo(layout);
                     }
                 })
                 .build();
@@ -470,8 +515,23 @@ public class TutorialActivity extends AppCompatActivity {
 
                     @Override
                     public void onShowcaseDismissed(MaterialShowcaseView showcaseView) {
-                        timerView.setVisibility(View.INVISIBLE);
+                        ConstraintSet newSet = new ConstraintSet();
+                        newSet.clear(R.id.wordHolder);
+                        newSet.constrainHeight(R.id.wordHolder, wordHeight);
+                        newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.messageView, ConstraintSet.BOTTOM,0);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
+                        newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
+
+                        Log.d(TAG, "wordHolder.getHeight()1:" + wordHolder.getHeight());
+                        TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+
+                        Transition transition = new AutoTransition();
+                        TransitionManager.beginDelayedTransition(layout, transition);
                         promptForContinue(getString(R.string.pass_phone_next));
+                        timerView.setVisibility(View.INVISIBLE);
+                        newSet.applyTo(layout);
                     }
                 })
                 .build();
@@ -508,6 +568,8 @@ public class TutorialActivity extends AppCompatActivity {
 
                     @Override
                     public void onShowcaseDismissed(MaterialShowcaseView showcaseView) {
+                        Transition transition = new AutoTransition();
+                        TransitionManager.beginDelayedTransition(layout, transition);
                         promptForContinue(getString(R.string.pass_phone_across));
                     }
                 })
