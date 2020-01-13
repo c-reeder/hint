@@ -4,10 +4,14 @@ import android.app.ActivityOptions;
 import android.content.Intent;
 import android.os.Build;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatRadioButton;
+import androidx.core.content.res.ResourcesCompat;
+
 import android.os.Bundle;
 import android.transition.Explode;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
@@ -23,6 +27,8 @@ import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.ads.RequestConfiguration;
 import com.google.android.gms.ads.initialization.InitializationStatus;
 import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+
+import java.util.Locale;
 
 import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE;
 
@@ -57,6 +63,30 @@ public class BeginActivity extends AppCompatActivity implements TutorialDialogFr
         langGroup = findViewById(R.id.langGroup);
         Button helpButton = findViewById(R.id.helpButton);
         Button beginButton = findViewById(R.id.beginButton);
+
+
+        // Setup Radio buttons in the order corresponding to the system language
+        if (langGroup.getChildCount() == 0) {
+            AppCompatRadioButton englishButton = new AppCompatRadioButton(this);
+            AppCompatRadioButton spanishButton = new AppCompatRadioButton(this);
+            englishButton.setTypeface(ResourcesCompat.getFont(this, R.font.blenda_script));
+            englishButton.setId(R.id.englishButton);
+            englishButton.setText(R.string.english);
+            englishButton.setHighlightColor(getResources().getColor(R.color.beginSecondaryColor));
+            spanishButton.setTypeface(ResourcesCompat.getFont(this, R.font.blenda_script));
+            spanishButton.setId(R.id.spanishButton);
+            spanishButton.setText(R.string.spanish);
+            spanishButton.setHighlightColor(getResources().getColor(R.color.beginSecondaryColor));
+            if (Locale.getDefault().getLanguage().equals("es")) {
+                langGroup.addView(spanishButton,0, new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,1.0f));
+                langGroup.addView(englishButton,1, new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,1.0f));
+                langGroup.check(R.id.spanishButton);
+            } else {
+                langGroup.addView(englishButton,0, new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,1.0f));
+                langGroup.addView(spanishButton,1, new RadioGroup.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT,1.0f));
+                langGroup.check(R.id.englishButton);
+            }
+        }
 
         helpButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,6 +126,7 @@ public class BeginActivity extends AppCompatActivity implements TutorialDialogFr
         });
 
         if (savedInstanceState == null) {
+
             if (parentIntent.getStringExtra(GK.TEAM_NAME_1) != null) {
                 nameText1.setText(parentIntent.getStringExtra(GK.TEAM_NAME_1));
             } else {

@@ -52,10 +52,13 @@
         <item name="android:layout_marginLeft">8dp</item>
     </style>
 
-    <style name="InstructionsAppBarTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
-        <item name="android:textSize">30sp</item>
+    <style name="InstructionsAppBarTextAppearanceCollapsed" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">20sp</item>
     </style>
 
+    <style name="InstructionsAppBarTextAppearanceExpanded" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textSize">30sp</item>
+    </style>
 
     <!--    TurnActivity Themes-->
     <style name="TurnTheme" parent="@style/Theme.MaterialComponents.Light.NoActionBar">

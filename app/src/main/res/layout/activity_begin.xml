@@ -80,24 +80,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/team2NameBox">
 
-        <RadioButton
-            android:id="@+id/englishButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_weight="1"
-            android:checked="true"
-            android:text="@string/english"
-            android:textAlignment="viewStart" />
+<!--        <RadioButton-->
+<!--            android:id="@+id/englishButton"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="start"-->
+<!--            android:layout_weight="1"-->
+<!--            android:checked="true"-->
+<!--            android:text="@string/english"-->
+<!--            android:textAlignment="viewStart" />-->
 
-        <RadioButton
-            android:id="@+id/spanishButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="start"
-            android:layout_weight="1"
-            android:text="@string/spanish"
-            android:textAlignment="viewStart" />
+<!--        <RadioButton-->
+<!--            android:id="@+id/spanishButton"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_gravity="start"-->
+<!--            android:layout_weight="1"-->
+<!--            android:text="@string/spanish"-->
+<!--            android:textAlignment="viewStart" />-->
     </RadioGroup>
 
     <RadioGroup

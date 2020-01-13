@@ -31,9 +31,10 @@ public class InstructionsActivity extends AppCompatActivity {
         Typeface blendaTypeface = ResourcesCompat.getFont(this, R.font.blenda_script);
         CollapsingToolbarLayout collapsingToolbarLayout = findViewById(R.id.toolbar_layout);
         collapsingToolbarLayout.setTitle(getString(R.string.game_instructions));
+        collapsingToolbarLayout.setCollapsedTitleTextAppearance(R.style.InstructionsAppBarTextAppearanceCollapsed);
         collapsingToolbarLayout.setCollapsedTitleTypeface(blendaTypeface);
 
-        collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.InstructionsAppBarTextAppearance);
+        collapsingToolbarLayout.setExpandedTitleTextAppearance(R.style.InstructionsAppBarTextAppearanceExpanded);
         collapsingToolbarLayout.setExpandedTitleTypeface(blendaTypeface);
 
     }
