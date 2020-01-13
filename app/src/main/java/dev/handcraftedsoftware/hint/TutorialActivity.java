@@ -2,10 +2,7 @@ package dev.handcraftedsoftware.hint;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
-import android.app.ActivityOptions;
-import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -13,36 +10,19 @@ import android.transition.Explode;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.content.res.AppCompatResources;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.constraintlayout.widget.ConstraintSet;
-import androidx.core.content.ContextCompat;
-import androidx.core.content.res.ResourcesCompat;
-import androidx.core.graphics.drawable.DrawableCompat;
-import androidx.core.widget.TextViewCompat;
-import androidx.transition.AutoTransition;
-import androidx.transition.Transition;
-import androidx.transition.TransitionManager;
-
-import org.w3c.dom.Text;
-
-import java.util.Arrays;
-import java.util.Locale;
 
 import uk.co.deanwild.materialshowcaseview.IShowcaseListener;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
-import uk.co.deanwild.materialshowcaseview.target.Target;
 
 
 /**
@@ -262,81 +242,6 @@ public class TutorialActivity extends AppCompatActivity {
         getWindow().getDecorView().setSystemUiVisibility(value);
     }
 
-
-    // State transition to the actual guessing/playing stage
-    private void startPlaying() {
-        gameState = GameState.PLAYING;
-
-        viewPager.setVisibility(View.INVISIBLE);
-        wordHolder.setVisibility(View.VISIBLE);
-
-        layout.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
-
-                layout.removeOnLayoutChangeListener(this);
-
-
-
-                Transition transition = new AutoTransition();
-                transition.addListener(new Transition.TransitionListener() {
-                    @Override
-                    public void onTransitionStart(@NonNull Transition transition) {
-                        isWordHidden = true;
-                    }
-
-                    @Override
-                    public void onTransitionEnd(@NonNull Transition transition) {
-                        if (wordCover.getAlpha() != 1f) {
-                            coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",0f,1f);
-                            coverAlphaAnimator.setDuration(500);
-                            coverAlphaAnimator.setStartDelay(1000);
-                            coverAlphaAnimator.start();
-                        }
-                    }
-
-                    @Override
-                    public void onTransitionCancel(@NonNull Transition transition) {
-
-                    }
-
-                    @Override
-                    public void onTransitionPause(@NonNull Transition transition) {
-
-                    }
-
-                    @Override
-                    public void onTransitionResume(@NonNull Transition transition) {
-
-                    }
-                });
-
-                // Animate WordHolder from Center Position to Low Position (beneath the timerView)
-                ConstraintSet newSet = new ConstraintSet();
-                newSet.clear(R.id.wordHolder);
-                newSet.constrainHeight(R.id.wordHolder, getResources().getDimensionPixelSize(R.dimen.word_height));
-                newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
-                newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.timerView, ConstraintSet.BOTTOM,0);
-                newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
-                newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
-                newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
-
-                Log.d(TAG, "wordHolder.getHeight()1:" + wordHolder.getHeight());
-                TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-
-                TransitionManager.beginDelayedTransition(layout, transition);
-                wordHolder.setGravity(Gravity.CENTER);
-                newSet.applyTo(layout);
-                Log.d(TAG, "wordHolder.getHeight()2:" + wordHolder.getHeight());
-            }
-        });
-
-        // Initialize the timer clock
-        timerView.setVisibility(View.VISIBLE);
-        timerView.setText(String.format(Locale.getDefault(),"%02d",Math.round(countDownTimeRemaining / 1000)));
-        countDownTimer.start();
-    }
-
     private void promptForContinue(String message) {
         Log.v(TAG, "Here is where we would prompt for continue!");
         messageView.setText(message);
@@ -344,105 +249,14 @@ public class TutorialActivity extends AppCompatActivity {
         continueButton.setVisibility(View.VISIBLE);
     }
 
-    //
 
-    /**
-     * Called upon pressing the continue button.
-     */
-    private void onContinue() {
-        Log.v(TAG, "We have continued in this state: " + gameState);
-        messageView.setVisibility(View.INVISIBLE);
-        continueButton.setVisibility(View.INVISIBLE);
-
-        if (gameState == GameState.TEAM_TRANSITION) {
-            // Next Team guesses
-            startPlaying();
-        } else if (gameState == GameState.WORD_TRANSITION) {
-            // The other two players now start giving hints and a new word is approved
-
-//            layout.setBackgroundColor(Color.WHITE);
-
-            Transition transition = new AutoTransition();
-            transition.addListener(new Transition.TransitionListener() {
-                @Override
-                public void onTransitionStart(@NonNull Transition transition) {
-
-                }
-
-                @Override
-                public void onTransitionEnd(@NonNull Transition transition) {
-                    TextView wH = findViewById(R.id.wordHolder);
-                    wH.setVisibility(View.INVISIBLE);
-                    viewPager.setVisibility(View.VISIBLE);
-
-                }
-
-                @Override
-                public void onTransitionCancel(@NonNull Transition transition) {
-
-                }
-
-                @Override
-                public void onTransitionPause(@NonNull Transition transition) {
-
-                }
-
-                @Override
-                public void onTransitionResume(@NonNull Transition transition) {
-
-                }
-            });
-
-            // Animation WordHolder from Low Position to Normal Position
-            ConstraintSet newSet = new ConstraintSet();
-            newSet.clear(R.id.wordHolder);
-            newSet.constrainHeight(R.id.wordHolder, getResources().getDimensionPixelSize(R.dimen.word_height));
-            newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
-            newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.topBar, ConstraintSet.BOTTOM,0);
-            newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
-            newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
-            newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
-
-            TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-
-            TransitionManager.beginDelayedTransition(layout, transition);
-            wordHolder.setGravity(Gravity.CENTER);
-            newSet.applyTo(layout);
-            loadingIcon.setVisibility(View.INVISIBLE);
-        }
-
-    }
-
-
-    /**
-     * Puts the game into word-transition mode
-     * Once the game is in this mode, the background color of the word-swiper indicates whether the word was successfully guessed or not
-     * and the screen must be tapped for the game to advance.
-     * This mode is used when handing the phone to the other set of opposing players
-     * @param success Whether or not the guess made was correct.
-     */
-    private void transitionToNextWord(boolean success) {
-        previousCorrect = success;
-//        if (success) {
-//            layout.setBackgroundColor(Color.GREEN);
-//
-//        } else {
-//            layout.setBackgroundColor(Color.RED);
-//        }
-        gameState = GameState.WORD_TRANSITION;
-    }
-
-//    int contentColor = Color.parseColor("#e7e7e7");
-    int contentColor = Color.parseColor("#FFFFFF");
     private MaterialShowcaseView centerSCV(MaterialShowcaseView showcaseView) {
         TextView title = showcaseView.findViewById(R.id.tv_title);
         TextView content = showcaseView.findViewById(R.id.tv_content);
         TextView dismiss = showcaseView.findViewById(R.id.tv_dismiss);
         showcaseView.setGravity(Gravity.CENTER);
         title.setGravity(Gravity.CENTER);
-        content.setGravity(Gravity.CENTER);
         content.setAlpha(1f);
-        content.setTextColor(contentColor);
         dismiss.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT,LinearLayout.LayoutParams.WRAP_CONTENT));
         dismiss.setGravity(Gravity.CENTER);
         return showcaseView;
@@ -450,7 +264,6 @@ public class TutorialActivity extends AppCompatActivity {
     private MaterialShowcaseView regularSCV(MaterialShowcaseView showcaseView) {
         TextView content = showcaseView.findViewById(R.id.tv_content);
         content.setAlpha(1f);
-        content.setTextColor(contentColor);
         return showcaseView;
     }
 
@@ -469,60 +282,60 @@ public class TutorialActivity extends AppCompatActivity {
         // Intro Information Slides
         introSlides[0] = new MaterialShowcaseView.Builder(this)
                 .setTarget(new View(this))
-                .setContentText("The object of the game is to manage to get your partner to guess an assigned word using only a single word Hint!   You may not converse with your partner about the word. You may only say your single word HINT. You can say it with special voice inflection if you want to, but that is all.")
-                .setTitleText("Objective (1/3)")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setContentText(R.string.objective_1_of_3_cont)
+                .setTitleText(R.string.objective_1_of_3_title)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .build();
 
         introSlides[1] = new MaterialShowcaseView.Builder(this)
                 .setTarget(new View(this))
-                .setTitleText("Objective (2/3)")
-                .setContentText("There are 2 teams of two people. Each team has a person A and a person B. The 2 A's sit side by side, facing their B partners.")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.objective_2_of_3_title)
+                .setContentText(R.string.objective_2_of_3_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .build();
 
         introSlides[2] = new MaterialShowcaseView.Builder(this)
                 .setTarget(new View(this))
-                .setTitleText("Objective (3/3)")
-                .setContentText("You and the same-lettered opponent next to you will alternate trying to get your partners to guess the same word. The one who acheives it gets the points!")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.objective_3_of_3_title)
+                .setContentText(R.string.objective_3_of_3_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .build();
 
         // General breakdown of the screen
         overviewSlides[0] = new MaterialShowcaseView.Builder(this)
                 .setTarget(roundView)
-                .setTitleText("Round number")
-                .setContentText("Here you can see what round you are currently in. There are 6 total. In each round the A's have a chance to give Hints and the B's as well!")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.round_number)
+                .setContentText(R.string.round_number_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .build();
 
         overviewSlides[1] = new MaterialShowcaseView.Builder(this)
                 .setTarget(scoreView)
-                .setTitleText("Current Score")
-                .setContentText("Here you can see what the current score is!")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.current_score)
+                .setContentText(R.string.current_score_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .build();
 
         overviewSlides[2] = new MaterialShowcaseView.Builder(this)
                 .setTarget(ppSpinnerView)
-                .setTitleText("Point Spinner")
-                .setContentText("This spinner tells you how many points your team will get if your partner guesses the word. With each attempt (of either opponent), the spinner decreases in value!")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.point_spinner_title)
+                .setContentText(R.string.point_spinner_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .build();
 
         overviewSlides[3] = new MaterialShowcaseView.Builder(this)
                 .setTarget(wordHolder)
                 .withRectangleShape()
-                .setTitleText("Word to Guess")
-                .setContentText("This is the word your partner must guess.")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.word_to_guess)
+                .setContentText(R.string.word_to_guess_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .setListener(new IShowcaseListener() {
                     @Override
                     public void onShowcaseDisplayed(MaterialShowcaseView showcaseView) {
@@ -539,27 +352,27 @@ public class TutorialActivity extends AppCompatActivity {
 
         overviewSlides[4] = new MaterialShowcaseView.Builder(this)
                 .setTarget(wordCover)
-                .setTitleText("Word Cover")
-                .setContentText("Only you and the opponent sitting next to you may see the word. So this cover appears to hide he word. Simply press and hold to reveal the word.")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.word_cover_title)
+                .setContentText(R.string.word_cover_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .withRectangleShape()
                 .build();
 
         overviewSlides[5] = new MaterialShowcaseView.Builder(this)
                 .setTarget(partnerLetterView)
-                .setTitleText("Current Players")
-                .setContentText("Which 2 are currently giving hints to get their partners to guess the word. (the A's or the B's).")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.current_players)
+                .setContentText(R.string.current_players_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .build();
 
         overviewSlides[6] = new MaterialShowcaseView.Builder(this)
                 .setTarget(teamNameView)
-                .setTitleText("Who's turn is it?")
-                .setContentText("The team trying to get the points at the moment.")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.whos_turn_title)
+                .setContentText(R.string.whos_turn_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .setListener(new IShowcaseListener() {
                     @Override
                     public void onShowcaseDisplayed(MaterialShowcaseView showcaseView) {
@@ -578,38 +391,38 @@ public class TutorialActivity extends AppCompatActivity {
 
         turnSlides[0] = new MaterialShowcaseView.Builder(this)
                 .setTarget(wordHolder)
-                .setTitleText("Is it even guessable??")
-                .setContentText("Occasionally an impossible word may pop up. Before beginning the round, you and the opponent next to you must silently agree that the word is guessable.")
+                .setTitleText(R.string.is_it_guessable)
+                .setContentText(R.string.is_it_guessable_cont)
                 .withRectangleShape()
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .build();
 
         turnSlides[1] = new MaterialShowcaseView.Builder(this)
                 .setTarget(wordHolder)
-                .setTitleText("Not guessable!")
-                .setContentText("If you and your opponent decide the word is not guessable simply swipe it to the left.")
+                .setTitleText(R.string.not_guessable)
+                .setContentText(R.string.not_guessable_cont)
                 .withRectangleShape()
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .build();
 
         turnSlides[2] = new MaterialShowcaseView.Builder(this)
                 .setTarget(wordHolder)
-                .setTitleText("Swipe Limit")
-                .setContentText("Feel free to swipe, but be aware that you and your opponent only have 5 skips per game!")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.swipe_limit_title)
+                .setContentText(R.string.swipe_limit_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .withRectangleShape()
                 .build();
 
         turnSlides[3] = new MaterialShowcaseView.Builder(this)
                 .setTarget(acceptWordButton)
                 .withRectangleShape()
-                .setTitleText("Accept Button")
-                .setContentText("Once the two of you decide the word is guessable, you begin the round by clicking here!")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.accept_button_title)
+                .setContentText(R.string.accept_button_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .setListener(new IShowcaseListener() {
                     @Override
                     public void onShowcaseDisplayed(MaterialShowcaseView showcaseView) {
@@ -628,27 +441,27 @@ public class TutorialActivity extends AppCompatActivity {
 
         turnSlides[4] = new MaterialShowcaseView.Builder(this)
                 .setTarget(timerView)
-                .setTitleText("Timer")
-                .setContentText("You have 30 seconds in total to give your one word hint and for your partner to guess.")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.timer_title)
+                .setContentText(R.string.timer_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .build();
 
         turnSlides[5] = new MaterialShowcaseView.Builder(this)
                 .setTarget(buttonRow)
                 .withRectangleShape()
-                .setTitleText("Mark Your Answer")
-                .setContentText("Once your partner has guessed, immediately mark here whether the answer was correct or not.")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.mark_answer_title)
+                .setContentText(R.string.mark_answer_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .build();
 
         turnSlides[6] = new MaterialShowcaseView.Builder(this)
                 .setTarget(timerView)
-                .setTitleText("Time Limit")
-                .setContentText("If you don't finish before time is up, it's automatically wrong!")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.time_limit_title)
+                .setContentText(R.string.time_limit_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .setListener(new IShowcaseListener() {
                     @Override
                     public void onShowcaseDisplayed(MaterialShowcaseView showcaseView) {
@@ -665,28 +478,28 @@ public class TutorialActivity extends AppCompatActivity {
 
         turnSlides[7] = new MaterialShowcaseView.Builder(this)
                 .setTarget(ppSpinnerView)
-                .setTitleText("If you're wrong...(1/3)")
-                .setContentText("The possible points to be won decreases")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.if_wrong_1_of_3_title)
+                .setContentText(R.string.if_wrong_1_of_3_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .build();
 
         turnSlides[8] = new MaterialShowcaseView.Builder(this)
                 .setTarget(messageView)
                 .withRectangleShape()
-                .setTitleText("If you're wrong...(2/3)")
-                .setContentText("Now pass the phone to the other person (next to you)")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.if_wrong_2_of_3_title)
+                .setContentText(R.string.if_wrong_2_of_3_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .build();
 
         turnSlides[9] = new MaterialShowcaseView.Builder(this)
                 .setTarget(continueButton)
                 .withRectangleShape()
-                .setTitleText("If you're wrong...(3/3)")
-                .setContentText("That person clicks continue and takes his/her turn.")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.if_wrong_3_of_3_title)
+                .setContentText(R.string.if_wrong_3_of_3_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .setListener(new IShowcaseListener() {
                     @Override
                     public void onShowcaseDisplayed(MaterialShowcaseView showcaseView) {
@@ -702,43 +515,43 @@ public class TutorialActivity extends AppCompatActivity {
 
         turnSlides[10] = new MaterialShowcaseView.Builder(this)
                 .setTarget(scoreView)
-                .setTitleText("If you're right...(1/4)")
-                .setContentText("Your team receives the current value of the winnable points spinner")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.if_right_1_of_4_title)
+                .setContentText(R.string.if_right_1_of_4_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .build();
 
         turnSlides[11] = new MaterialShowcaseView.Builder(this)
                 .setTarget(ppSpinnerView)
-                .setTitleText("If you're right...(2/4)")
-                .setContentText("The winnable points reset for the next turn.")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.if_right_2_of_4_title)
+                .setContentText(R.string.if_right_2_of_4_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .build();
 
         turnSlides[12] = new MaterialShowcaseView.Builder(this)
                 .setTarget(messageView)
                 .withRectangleShape()
-                .setTitleText("If you're right...(3/4)")
-                .setContentText("Now the other two people give hints (from the A's to the B's or vice versa). ")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.if_right_3_of_4_title)
+                .setContentText(R.string.if_right_3_of_4_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .build();
 
         turnSlides[13] = new MaterialShowcaseView.Builder(this)
                 .setTarget(continueButton)
                 .withRectangleShape()
-                .setTitleText("If you're right...(4/4)")
-                .setContentText("The other side clicks continue and starts the next round")
-                .setDismissText("Next")
-                .setSkipText("Skip Tutorial")
+                .setTitleText(R.string.if_right_4_of_4_title)
+                .setContentText(R.string.if_right_4_of_4_cont)
+                .setDismissText(R.string.next)
+                .setSkipText(R.string.skip_tutorial)
                 .build();
 
         MaterialShowcaseView finalSlide = new MaterialShowcaseView.Builder(this)
                 .setTarget(new View(this))
-                .setTitleText("Tutorial Complete")
-                .setContentText("You are ready to play the game!")
-                .setDismissText("Begin Game!!!")
+                .setTitleText(R.string.tutorial_complete_title)
+                .setContentText(R.string.tutorial_complete_cont)
+                .setDismissText(R.string.begin_game_dismiss)
                 .setListener(new IShowcaseListener() {
                     @Override
                     public void onShowcaseDisplayed(MaterialShowcaseView showcaseView) {
@@ -758,7 +571,6 @@ public class TutorialActivity extends AppCompatActivity {
         ShowcaseConfig config = new ShowcaseConfig();
         config.setDelay(500);
         config.setRenderOverNavigationBar(true);
-//        config.setContentTextColor(R.color.white);
 
         MaterialShowcaseSequence showcaseSequence = new MaterialShowcaseSequence(this);
         showcaseSequence.setConfig(config);

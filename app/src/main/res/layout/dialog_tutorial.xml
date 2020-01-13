@@ -9,7 +9,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="First Time?"
+        android:text="@string/first_time"
         android:textSize="26sp"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
@@ -20,7 +20,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Would you like to see the tutorial?"
+        android:text="@string/would_you_like_to_see_the_tutorial"
         android:layout_gravity="center_vertical"
         android:layout_weight="1"
         android:textAlignment="center"
@@ -41,7 +41,7 @@
             android:layout_height="match_parent"
             android:textColor="#e3a300"
             android:textSize="20sp"
-            android:text="No"
+            android:text="@string/no"
             android:layout_weight="1"
             />
         <Button
@@ -51,7 +51,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:textColor="@color/beginPrimaryTextColor"
-            android:text="Yes!"
+            android:text="@string/emphatic_yes"
             android:textSize="20sp"
             android:layout_weight="1"
             />
