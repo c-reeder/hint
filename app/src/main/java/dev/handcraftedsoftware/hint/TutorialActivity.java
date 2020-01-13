@@ -18,6 +18,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 
+import androidx.core.widget.NestedScrollView;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 import androidx.transition.Transition;
@@ -314,6 +315,11 @@ public class TutorialActivity extends AppCompatActivity {
                 .setDismissText(R.string.next)
                 .setSkipText(R.string.skip_tutorial)
                 .build();
+        // Add some extra padding to the top (For smaller devices)
+        NestedScrollView view = introSlides[0].findViewById(R.id.content_box);
+        int padding = getResources().getDimensionPixelSize(R.dimen.showcase_view_padding);
+        int extraPadding = getResources().getDimensionPixelSize(R.dimen.showcase_view_extra_padding);
+        view.setPadding(padding,extraPadding,padding,padding);
 
         introSlides[1] = new MaterialShowcaseView.Builder(this)
                 .setTarget(new View(this))
@@ -393,6 +399,9 @@ public class TutorialActivity extends AppCompatActivity {
                 .setDismissText(R.string.next)
                 .setSkipText(R.string.skip_tutorial)
                 .build();
+        // Add some extra padding to the top (For smaller devices)
+        view = overviewSlides[5].findViewById(R.id.content_box);
+        view.setPadding(padding,extraPadding,padding,padding);
 
         overviewSlides[6] = new MaterialShowcaseView.Builder(this)
                 .setTarget(teamNameView)
@@ -413,6 +422,9 @@ public class TutorialActivity extends AppCompatActivity {
                     }
                 })
                 .build();
+        // Add some extra padding to the top (For smaller devices)
+        view = overviewSlides[6].findViewById(R.id.content_box);
+        view.setPadding(padding,extraPadding,padding,padding);
 
 
 
@@ -482,6 +494,9 @@ public class TutorialActivity extends AppCompatActivity {
                     }
                 })
                 .build();
+        // Add some extra padding to the top (For smaller devices)
+        view = turnSlides[3].findViewById(R.id.content_box);
+        view.setPadding(padding,extraPadding,padding,padding);
 
 
         turnSlides[4] = new MaterialShowcaseView.Builder(this)
@@ -500,6 +515,9 @@ public class TutorialActivity extends AppCompatActivity {
                 .setDismissText(R.string.next)
                 .setSkipText(R.string.skip_tutorial)
                 .build();
+        // Add some extra padding to the top (For smaller devices)
+        view = turnSlides[5].findViewById(R.id.content_box);
+        view.setPadding(padding,extraPadding,padding,padding);
 
         turnSlides[6] = new MaterialShowcaseView.Builder(this)
                 .setTarget(timerView)
@@ -574,6 +592,9 @@ public class TutorialActivity extends AppCompatActivity {
                     }
                 })
                 .build();
+        // Add some extra padding to the top (For smaller devices)
+        view = turnSlides[9].findViewById(R.id.content_box);
+        view.setPadding(padding,extraPadding,padding,padding);
 
         turnSlides[10] = new MaterialShowcaseView.Builder(this)
                 .setTarget(scoreView)
@@ -608,6 +629,10 @@ public class TutorialActivity extends AppCompatActivity {
                 .setDismissText(R.string.next)
                 .setSkipText(R.string.skip_tutorial)
                 .build();
+        // Add some extra padding to the top (For smaller devices)
+        view = turnSlides[13].findViewById(R.id.content_box);
+        view.setPadding(padding,extraPadding,padding,padding);
+
 
         MaterialShowcaseView finalSlide = new MaterialShowcaseView.Builder(this)
                 .setTarget(new View(this))

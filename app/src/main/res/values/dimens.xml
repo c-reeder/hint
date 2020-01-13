@@ -13,4 +13,6 @@
     <dimen name="turn_margin_bottom">50dp</dimen>
     <dimen name="word_cover_padding">50dp</dimen>
     <dimen name="word_holder_padding">20dp</dimen>
+    <dimen name="showcase_view_padding">16dp</dimen>
+    <dimen name="showcase_view_extra_padding">40dp</dimen>
 </resources>
