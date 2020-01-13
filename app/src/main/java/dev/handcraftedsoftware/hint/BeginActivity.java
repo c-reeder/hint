@@ -277,6 +277,7 @@ public class BeginActivity extends AppCompatActivity implements TutorialDialogFr
         Intent intent = new Intent(this, TutorialActivity.class);
         intent.putExtra(GK.TEAM_NAME_1, nameText1.getText().toString());
         intent.putExtra(GK.TEAM_NAME_2, nameText2.getText().toString());
+        intent.putExtra("FIRST_RUN", true);
         RadioButton selectedDiff = findViewById(diffGroup.getCheckedRadioButtonId());
         RadioButton selectedLang = findViewById(langGroup.getCheckedRadioButtonId());
         if (selectedDiff.getId() == R.id.easyButton) {

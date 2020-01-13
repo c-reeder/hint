@@ -101,4 +101,6 @@
     <string name="no">No</string>
     <string name="emphatic_yes">Yes!</string>
     <string name="game_instructions">Game Instructions</string>
+    <string name="see_tutorial_again">See Tutorial Again</string>
+    <string name="done">Done</string>
 </resources>

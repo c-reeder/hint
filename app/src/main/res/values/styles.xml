@@ -25,6 +25,7 @@
         <item name="android:buttonStyle">@style/BeginButtonTheme</item>
     </style>
     <style name="BeginButtonTheme" parent="Widget.MaterialComponents.Button">
+        <item name="fontFamily">@font/blenda_script</item>
         <item name="android:textColor">#000000</item>
     </style>
     <style name="BeginButtonSecondaryTheme" parent="Widget.MaterialComponents.Button.OutlinedButton">
@@ -38,9 +39,18 @@
 <!--    InstructionsActivity Theme-->
     <style name="InstructionsTheme" parent="@style/Theme.MaterialComponents.Light.NoActionBar" >
         <item name="colorPrimary">@color/begin_background_color</item>
+        <item name="colorAccent">#ffe78f</item>
         <item name="android:windowBackground">@color/beginPrimaryLightColor</item>
+        <item name="android:buttonStyle">@style/InstructionsButtonTheme</item>
+        <item name="buttonStyle">@style/InstructionsButtonTheme</item>
     </style>
-    
+
+    <style name="InstructionsButtonTheme" parent="Widget.MaterialComponents.Button">
+        <item name="fontFamily">@font/blenda_script</item>
+        <item name="android:textColor">#000000</item>
+        <item name="android:layout_margin">16dp</item>
+    </style>
+
     <style name="InstructionsTitleStyle" parent="TextAppearance.MaterialComponents.Headline5">
         <item name="android:layout_margin">16dp</item>
         <item name="fontFamily">@font/blenda_script</item>

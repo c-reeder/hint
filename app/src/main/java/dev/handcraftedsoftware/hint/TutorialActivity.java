@@ -2,6 +2,7 @@ package dev.handcraftedsoftware.hint;
 
 import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Build;
@@ -101,6 +102,8 @@ public class TutorialActivity extends AppCompatActivity {
 
     private int wordHeight;
 
+    private boolean firstRun;
+
 
     @SuppressLint("ClickableViewAccessibility")
     @Override
@@ -117,6 +120,7 @@ public class TutorialActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_turn);
 
+        firstRun = getIntent().getBooleanExtra("FIRST_RUN", false);
 
         wordHeight = getResources().getDimensionPixelSize(R.dimen.word_height);
 
@@ -634,11 +638,20 @@ public class TutorialActivity extends AppCompatActivity {
         view.setPadding(padding,extraPadding,padding,padding);
 
 
+        int finalDismissMsg;
+        if (isFirstTime()) {
+            // First time tutorial
+            finalDismissMsg = R.string.begin_game_dismiss;
+        } else {
+            // Re-watching the tutorial
+            finalDismissMsg = R.string.done;
+        }
+
         MaterialShowcaseView finalSlide = new MaterialShowcaseView.Builder(this)
                 .setTarget(new View(this))
                 .setTitleText(R.string.tutorial_complete_title)
                 .setContentText(R.string.tutorial_complete_cont)
-                .setDismissText(R.string.begin_game_dismiss)
+                .setDismissText(finalDismissMsg)
                 .setListener(new IShowcaseListener() {
                     @Override
                     public void onShowcaseDisplayed(MaterialShowcaseView showcaseView) {
@@ -647,10 +660,14 @@ public class TutorialActivity extends AppCompatActivity {
 
                     @Override
                     public void onShowcaseDismissed(MaterialShowcaseView showcaseView) {
-                        Intent intent = new Intent(getApplicationContext(), TurnActivity.class);
-                        intent.putExtras(extrasToForward);
-                        startActivity(intent);
-                        finish();
+                        if (isFirstTime()) {
+                            Intent intent = new Intent(getApplicationContext(), TurnActivity.class);
+                            intent.putExtras(extrasToForward);
+                            startActivity(intent);
+                            finish();
+                        } else {
+                           finish();
+                        }
                     }
                 })
                 .build();
@@ -659,7 +676,7 @@ public class TutorialActivity extends AppCompatActivity {
         config.setDelay(500);
         config.setRenderOverNavigationBar(true);
 
-        MaterialShowcaseSequence showcaseSequence = new MaterialShowcaseSequence(this);
+        MaterialShowcaseSequence showcaseSequence = new CustomShowcaseSequence(this);
         showcaseSequence.setConfig(config);
 
         for (int i = 0; i < 3; i++) {
@@ -674,5 +691,47 @@ public class TutorialActivity extends AppCompatActivity {
         showcaseSequence.addSequenceItem(centerSCV(finalSlide));
         showcaseSequence.start();
 
+    }
+
+    /**
+     * Checks to see if this tutorial instance is the first-run tutorial
+     * E.g. if this was initiated from the BeginActivity and should
+     * forward to the TurnActivity to start the game when it completes.
+     * @return whether or not this is the first-time tutorial
+     */
+    private boolean isFirstTime() {
+        return getParent() instanceof BeginActivity;
+    }
+
+    /**
+     * Subclass of the MaterialShowcaseSequence in order to add in the onSkipped functionality
+     * This is necessary in order to finish() the TutorialActivity when it is cancelled
+     * part-way through the slides
+     */
+    private class CustomShowcaseSequence extends MaterialShowcaseSequence {
+        public CustomShowcaseSequence(Activity activity) {
+            super(activity);
+        }
+
+        public CustomShowcaseSequence(Activity activity, String sequenceID) {
+            super(activity, sequenceID);
+        }
+
+        @Override
+        public void onShowcaseDetached(MaterialShowcaseView showcaseView, boolean wasDismissed, boolean wasSkipped) {
+            super.onShowcaseDetached(showcaseView, wasDismissed, wasSkipped);
+            if (wasSkipped) {
+                // If its the first-time tutorial...continue on to the actual game
+                if (firstRun) {
+                    Intent intent = new Intent(getApplicationContext(), TurnActivity.class);
+                    intent.putExtras(extrasToForward);
+                    startActivity(intent);
+                    finish();
+                } else {
+                    // Otherwise just close the TutorialActivity to return to where it was started from
+                    finish();
+                }
+            }
+        }
     }
 }

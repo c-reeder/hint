@@ -97,4 +97,6 @@
     <string name="no">No</string>
     <string name="would_you_like_to_see_the_tutorial">¿Te gustaría ver el tutorial?</string>
     <string name="game_instructions">Reglas del Juego</string>
+    <string name="done">Listo</string>
+    <string name="see_tutorial_again">Ver Tutorial Otra Vez</string>
 </resources>
