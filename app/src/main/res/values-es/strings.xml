@@ -96,4 +96,5 @@
     <string name="first_time">¿Primera Vez?</string>
     <string name="no">No</string>
     <string name="would_you_like_to_see_the_tutorial">¿Te gustaría ver el tutorial?</string>
+    <string name="game_instructions">Reglas del Juego</string>
 </resources>

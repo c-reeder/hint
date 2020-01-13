@@ -100,4 +100,5 @@
     <string name="would_you_like_to_see_the_tutorial">Would you like to see the tutorial?</string>
     <string name="no">No</string>
     <string name="emphatic_yes">Yes!</string>
+    <string name="game_instructions">Game Instructions</string>
 </resources>
