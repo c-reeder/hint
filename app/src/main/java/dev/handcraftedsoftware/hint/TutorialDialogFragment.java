@@ -1,5 +1,6 @@
 package dev.handcraftedsoftware.hint;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.Context;
@@ -27,6 +28,8 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.FragmentActivity;
 
 import java.util.Objects;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class TutorialDialogFragment extends DialogFragment {
     private static final String TAG = "TutorialDialogFragment";
@@ -56,6 +59,10 @@ public class TutorialDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 dismiss();
+                Activity activity = getActivity();
+                if (activity != null) {
+                    activity.getPreferences(MODE_PRIVATE).edit().putBoolean(BeginActivity.FIRST_RUN_KEY, false).apply();
+                }
                 handler.startGame();
             }
         });
@@ -64,6 +71,10 @@ public class TutorialDialogFragment extends DialogFragment {
             @Override
             public void onClick(View view) {
                 dismiss();
+                Activity activity = getActivity();
+                if (activity != null) {
+                    activity.getPreferences(MODE_PRIVATE).edit().putBoolean(BeginActivity.FIRST_RUN_KEY, false).apply();
+                }
                 handler.startTutorial();
             }
         });

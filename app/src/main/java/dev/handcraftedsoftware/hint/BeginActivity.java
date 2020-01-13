@@ -41,6 +41,7 @@ import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRE
 public class BeginActivity extends AppCompatActivity implements TutorialDialogFragment.ActionsHandler {
 
     private static final String TAG = "BeginActivity";
+    static final String FIRST_RUN_KEY = "FIRST_RUN";
 
     private EditText nameText1;
     private EditText nameText2;
@@ -213,7 +214,7 @@ public class BeginActivity extends AppCompatActivity implements TutorialDialogFr
         beginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean firstRun = true;
+                boolean firstRun = getPreferences(MODE_PRIVATE).getBoolean(FIRST_RUN_KEY,true);
                 if (firstRun) {
                     TutorialDialogFragment tutorialDialogFragment = new TutorialDialogFragment();
                     tutorialDialogFragment.show(getSupportFragmentManager(), "MENU_FRAGMENT");
