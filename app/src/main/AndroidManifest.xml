@@ -22,6 +22,10 @@
         <activity android:name=".TurnActivity"
             android:theme="@style/TurnTheme"
         />
+        <activity android:name=".TutorialActivity"
+            android:theme="@style/TurnTheme"
+            android:exported="true"
+            />
         <activity
             android:name=".BeginActivity"
             android:windowSoftInputMode="adjustResize|stateHidden"

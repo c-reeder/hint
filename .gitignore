@@ -15,5 +15,5 @@ Notes.txt
 Help.txt
 Password_States.png
 serverInfo.properties
-adMobInfo.properties
-
+adMobInfo_Debug.properties
+adMobInfo_Release.properties

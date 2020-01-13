@@ -1,11 +1,14 @@
 apply plugin: 'com.android.application'
 
 def serverInfoPropertiesFile = rootProject.file("serverInfo.properties")
-def adMobPropertiesFile = rootProject.file("adMobInfo.properties")
+def adMobPropertiesFileDebug = rootProject.file("adMobInfo_Debug.properties")
+def adMobPropertiesFileRelease = rootProject.file("adMobInfo_Release.properties")
 def serverInfoProperties = new Properties()
-def adMobInfoProperties = new Properties()
+def adMobInfoPropertiesDebug = new Properties()
+def adMobInfoPropertiesRelease = new Properties()
 serverInfoProperties.load(new FileInputStream(serverInfoPropertiesFile))
-adMobInfoProperties.load(new FileInputStream((adMobPropertiesFile)))
+adMobInfoPropertiesDebug.load(new FileInputStream((adMobPropertiesFileDebug)))
+adMobInfoPropertiesRelease.load(new FileInputStream((adMobPropertiesFileRelease)))
 
 android {
     compileSdkVersion 28
@@ -13,21 +16,29 @@ android {
         applicationId "dev.handcraftedsoftware.hint"
         minSdkVersion 14
         targetSdkVersion 28
-        versionCode 3
-        versionName "3.0"
+        versionCode 31
+        versionName "3.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables.useSupportLibrary = true
         //Server strings
         buildConfigField("String", "url", serverInfoProperties['url'])
         //AdMob strings
-        resValue("string", "begin_banner_unit_id",adMobInfoProperties['begin_banner_unit_id'])
-        resValue("string", "turn_banner_unit_id",adMobInfoProperties['turn_banner_unit_id'])
-        resValue("string", "adMobAppId", adMobInfoProperties['appId'])
+        resValue("string", "begin_banner_unit_id",adMobInfoPropertiesDebug['begin_banner_unit_id'])
+        resValue("string", "turn_banner_unit_id",adMobInfoPropertiesDebug['turn_banner_unit_id'])
+        resValue("string", "adMobAppId", adMobInfoPropertiesDebug['appId'])
     }
     buildTypes {
+        debug {
+            pseudoLocalesEnabled true
+        }
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            // Release AdMob values
+            resValue("string", "begin_banner_unit_id",adMobInfoPropertiesRelease['begin_banner_unit_id'])
+            resValue("string", "turn_banner_unit_id",adMobInfoPropertiesRelease['turn_banner_unit_id'])
+            resValue("string", "adMobAppId", adMobInfoPropertiesRelease['appId'])
         }
     }
     flavorDimensions "version"
@@ -55,6 +66,7 @@ dependencies {
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     implementation 'com.google.android.material:material:1.0.0'
     implementation 'com.google.android.gms:play-services-ads:18.3.0'
+    implementation 'com.github.deano2390:MaterialShowcaseView:1.3.4'
     testImplementation 'junit:junit:4.12'
     testImplementation 'androidx.test.ext:junit:1.1.1'
 }

@@ -4,6 +4,8 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Configuration;
 import android.os.Build;
 import android.os.CountDownTimer;
 import androidx.annotation.NonNull;
@@ -13,10 +15,10 @@ import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.FragmentManager;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
+import androidx.transition.Transition;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.transition.Explode;
-import androidx.transition.Transition;
 
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -129,6 +131,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             getWindow().setExitTransition(new Explode());
         }
 
+;
         wordHeight = getResources().getDimensionPixelSize(R.dimen.word_height);
 
         Display display = getWindowManager().getDefaultDisplay();
@@ -141,7 +144,14 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
         Log.d(TAG, "dpHeight: " + dpHeight);
         Log.d(TAG, "dpWidth: " + dpWidth);
 
+        // Set portrait only on small devices
+        Configuration config = getResources().getConfiguration();
+        if (config.smallestScreenWidthDp < 350) {
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        }
+
         setContentView(R.layout.activity_turn);
+
         Intent parentIntent = getIntent();
 
         // Setup Display

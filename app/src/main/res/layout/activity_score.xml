@@ -36,15 +36,17 @@
                 android:id="@+id/scoreTable"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="10dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="32dp"
-                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
                 android:layout_marginBottom="100dp"
                 android:stretchColumns="*"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView13">
+<!--                app:layout_constraintRight_toRightOf="parent"-->
+<!--                app:layout_constraintLeft_toLeftOf="parent"-->
 
                 <TableRow
                     android:id="@+id/titleRow"
@@ -59,6 +61,7 @@
                         android:background="@drawable/border"
                         android:text="@string/team1"
                         android:textAlignment="center"
+                        android:gravity="center"
                         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                         android:textSize="28sp" />
 
@@ -70,6 +73,7 @@
                         android:background="@drawable/border"
                         android:text="@string/team2"
                         android:textAlignment="center"
+                        android:gravity="center"
                         android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                         android:textSize="28sp" />
                 </TableRow>
@@ -221,6 +225,7 @@
                         android:background="@drawable/border"
                         android:padding="10dp"
                         android:textAlignment="center"
+                        android:gravity="center"
                         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
                         android:textSize="30sp" />
 
@@ -232,6 +237,7 @@
                         android:background="@drawable/border"
                         android:padding="10dp"
                         android:textAlignment="center"
+                        android:gravity="center"
                         android:textAppearance="@style/TextAppearance.AppCompat.Display2"
                         android:textSize="30sp" />
 
