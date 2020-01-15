@@ -70,21 +70,21 @@
         <item name="android:textSize">30sp</item>
     </style>
 
-    <!--    TurnActivity Themes-->
-    <style name="TurnTheme" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
-        <item name="android:windowBackground">@color/turn_background_color</item>
-        <item name="colorPrimary">@color/turnPrimaryColor</item>
-        <item name="colorPrimaryDark">@color/turnPrimaryDarkColor</item>
-        <item name="colorSecondary">@color/turnSecondaryColor</item>
-        <item name="android:textColor">@color/turnPrimaryTextColor</item>
-        <item name="android:textColorSecondary">@color/turnSecondaryTextColor</item>
-        <item name="android:buttonStyle">@style/TurnButtonTheme</item>
-        <item name="buttonStyle">@style/TurnButtonTheme</item>
+    <!--    GameActivity Themes-->
+    <style name="GameTheme" parent="@style/Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:windowBackground">@color/game_background_color</item>
+        <item name="colorPrimary">@color/gamePrimaryColor</item>
+        <item name="colorPrimaryDark">@color/gamePrimaryDarkColor</item>
+        <item name="colorSecondary">@color/gameSecondaryColor</item>
+        <item name="android:textColor">@color/gamePrimaryTextColor</item>
+        <item name="android:textColorSecondary">@color/gameSecondaryTextColor</item>
+        <item name="android:buttonStyle">@style/GameButtonTheme</item>
+        <item name="buttonStyle">@style/GameButtonTheme</item>
         <item name="fontFamily">@font/blenda_script</item>
         <item name="android:textAllCaps">false</item>
     </style>
-    <style name="TurnButtonTheme" parent="Widget.MaterialComponents.Button">
-        <item name="backgroundTint">@color/turnSecondaryDarkColor</item>
+    <style name="GameButtonTheme" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/gameSecondaryDarkColor</item>
         <item name="android:textSize">20sp</item>
     </style>
 
@@ -94,7 +94,7 @@
         <item name="colorPrimaryDark">@color/winnerPrimaryDarkColor</item>
         <item name="colorAccent">@color/winnerSecondaryColor</item>
         <item name="android:textColor">@color/winnerPrimaryColor</item>
-        <item name="android:textColorSecondary">@color/turnSecondaryTextColor</item>
+        <item name="android:textColorSecondary">@color/gameSecondaryTextColor</item>
         <item name="fontFamily">@font/blenda_script</item>
         <item name="android:textAllCaps">false</item>
     </style>
@@ -107,7 +107,7 @@
         <item name="colorPrimaryDark">@color/scorePrimaryDarkColor</item>
         <item name="colorAccent">@color/scoreSecondaryColor</item>
         <item name="android:textColor">@color/scorePrimaryDarkColor</item>
-        <item name="android:textColorSecondary">@color/turnSecondaryTextColor</item>
+        <item name="android:textColorSecondary">@color/gameSecondaryTextColor</item>
         <item name="fontFamily">@font/blenda_script</item>
         <item name="android:textAllCaps">false</item>
         <item name="buttonStyle">@style/ScoreButtonTheme</item>

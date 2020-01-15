@@ -57,9 +57,9 @@ import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRE
  * The display shows the word to be guessed, the current score, and the number of the round.
  * By Connor Reeder
  */
-public class TurnActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener, MenuFragment.MenuActionsHandler, DownloadFragment.OnDownloadCompleteListener {
+public class GameActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener, MenuFragment.MenuActionsHandler, DownloadFragment.OnDownloadCompleteListener {
 
-    private static final String TAG = "TurnActivity";
+    private static final String TAG = "GameActivity";
     private static final int NUM_ROUNDS = 6;
 
 
@@ -150,7 +150,7 @@ public class TurnActivity extends AppCompatActivity implements OneDirectionViewP
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         }
 
-        setContentView(R.layout.activity_turn);
+        setContentView(R.layout.activity_game);
 
         Intent parentIntent = getIntent();
 

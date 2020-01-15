@@ -19,11 +19,11 @@
         <activity
             android:name=".ScoreActivity"
             android:theme="@style/ScoreTheme"/>
-        <activity android:name=".TurnActivity"
-            android:theme="@style/TurnTheme"
+        <activity android:name=".GameActivity"
+            android:theme="@style/GameTheme"
         />
         <activity android:name=".TutorialActivity"
-            android:theme="@style/TurnTheme"
+            android:theme="@style/GameTheme"
             android:exported="true"
             />
         <activity

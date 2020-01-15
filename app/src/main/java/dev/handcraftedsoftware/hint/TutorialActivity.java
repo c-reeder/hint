@@ -42,7 +42,7 @@ import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
  */
 public class TutorialActivity extends AppCompatActivity {
 
-    private static final String TAG = "TurnActivity";
+    private static final String TAG = "GameActivity";
     private static final int NUM_ROUNDS = 6;
 
 
@@ -118,7 +118,7 @@ public class TutorialActivity extends AppCompatActivity {
         // Force Portrait Orientation mode for tutorial to ensure that all ToolTip elements
         // fit within the screen
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-        setContentView(R.layout.activity_turn);
+        setContentView(R.layout.activity_game);
 
         firstRun = getIntent().getBooleanExtra("FIRST_RUN", false);
 
@@ -661,7 +661,7 @@ public class TutorialActivity extends AppCompatActivity {
                     @Override
                     public void onShowcaseDismissed(MaterialShowcaseView showcaseView) {
                         if (isFirstTime()) {
-                            Intent intent = new Intent(getApplicationContext(), TurnActivity.class);
+                            Intent intent = new Intent(getApplicationContext(), GameActivity.class);
                             intent.putExtras(extrasToForward);
                             startActivity(intent);
                             finish();
@@ -696,7 +696,7 @@ public class TutorialActivity extends AppCompatActivity {
     /**
      * Checks to see if this tutorial instance is the first-run tutorial
      * E.g. if this was initiated from the BeginActivity and should
-     * forward to the TurnActivity to start the game when it completes.
+     * forward to the GameActivity to start the game when it completes.
      * @return whether or not this is the first-time tutorial
      */
     private boolean isFirstTime() {
@@ -723,7 +723,7 @@ public class TutorialActivity extends AppCompatActivity {
             if (wasSkipped) {
                 // If its the first-time tutorial...continue on to the actual game
                 if (firstRun) {
-                    Intent intent = new Intent(getApplicationContext(), TurnActivity.class);
+                    Intent intent = new Intent(getApplicationContext(), GameActivity.class);
                     intent.putExtras(extrasToForward);
                     startActivity(intent);
                     finish();

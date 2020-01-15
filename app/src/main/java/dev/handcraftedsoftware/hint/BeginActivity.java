@@ -18,7 +18,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
@@ -301,7 +300,7 @@ public class BeginActivity extends AppCompatActivity implements TutorialDialogFr
 
     @Override
     public void startGame() {
-        Intent intent = new Intent(this, TurnActivity.class);
+        Intent intent = new Intent(this, GameActivity.class);
         intent.putExtra(GK.TEAM_NAME_1, nameText1.getText().toString());
         intent.putExtra(GK.TEAM_NAME_2, nameText2.getText().toString());
         RadioButton selectedDiff = findViewById(diffGroup.getCheckedRadioButtonId());
