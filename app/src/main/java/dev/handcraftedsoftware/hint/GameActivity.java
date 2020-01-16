@@ -4,6 +4,7 @@ import android.animation.ObjectAnimator;
 import android.annotation.SuppressLint;
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Build;
@@ -18,6 +19,7 @@ import androidx.transition.TransitionManager;
 import androidx.transition.Transition;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.transition.Explode;
 
 import android.util.DisplayMetrics;
@@ -152,7 +154,7 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
 
         setContentView(R.layout.activity_game);
 
-        Intent parentIntent = getIntent();
+//        Intent parentIntent = getIntent();
 
         // Setup Display
         roundView = findViewById(R.id.roundText);
@@ -242,16 +244,21 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
         if (savedInstanceState == null) {
 //            Log.d(TAG, "From scratch");
             // Init Game Values
-            teamName1 = parentIntent.getStringExtra(GK.TEAM_NAME_1);
-            teamName2 = parentIntent.getStringExtra(GK.TEAM_NAME_2);
-            if (teamName1.equals("")) {
-                teamName1 = getString(R.string.team1);
-            }
-            if (teamName2.equals("")) {
-                teamName2 = getString(R.string.team2);
-            }
-            difficulty = parentIntent.getStringExtra(GK.DIFFICULTY);
-            language = parentIntent.getStringExtra(GK.LANGUAGE);
+            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+            teamName1 = sharedPreferences.getString(GK.TEAM_NAME_1, getString(R.string.team1));
+            teamName2 = sharedPreferences.getString(GK.TEAM_NAME_2, getString(R.string.team2));
+//            teamName1 = parentIntent.getStringExtra(GK.TEAM_NAME_1);
+//            teamName2 = parentIntent.getStringExtra(GK.TEAM_NAME_2);
+//            if (teamName1.equals("")) {
+//                teamName1 = getString(R.string.team1);
+//            }
+//            if (teamName2.equals("")) {
+//                teamName2 = getString(R.string.team2);
+//            }
+//            difficulty = parentIntent.getStringExtra(GK.DIFFICULTY);
+            difficulty = sharedPreferences.getString(GK.DIFFICULTY, GV.EASY);
+//            language = parentIntent.getStringExtra(GK.LANGUAGE);
+            language = sharedPreferences.getString(GK.LANGUAGE, GV.ENGLISH);
             currRound = 1;
             currPP = 10;
             isPartnerB = false;

@@ -61,7 +61,7 @@ public class TutorialDialogFragment extends DialogFragment {
                 dismiss();
                 Activity activity = getActivity();
                 if (activity != null) {
-                    activity.getPreferences(MODE_PRIVATE).edit().putBoolean(BeginActivity.FIRST_RUN_KEY, false).apply();
+                    activity.getPreferences(MODE_PRIVATE).edit().putBoolean(GK.FIRST_RUN, false).apply();
                 }
                 handler.startGame();
             }
@@ -73,7 +73,7 @@ public class TutorialDialogFragment extends DialogFragment {
                 dismiss();
                 Activity activity = getActivity();
                 if (activity != null) {
-                    activity.getPreferences(MODE_PRIVATE).edit().putBoolean(BeginActivity.FIRST_RUN_KEY, false).apply();
+                    activity.getPreferences(MODE_PRIVATE).edit().putBoolean(GK.FIRST_RUN, false).apply();
                 }
                 handler.startTutorial();
             }

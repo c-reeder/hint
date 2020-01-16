@@ -102,7 +102,6 @@ public class TutorialActivity extends AppCompatActivity {
 
     private int wordHeight;
 
-    private boolean firstRun;
 
 
     @SuppressLint("ClickableViewAccessibility")
@@ -120,7 +119,6 @@ public class TutorialActivity extends AppCompatActivity {
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_game);
 
-        firstRun = getIntent().getBooleanExtra("FIRST_RUN", false);
 
         wordHeight = getResources().getDimensionPixelSize(R.dimen.word_height);
 
@@ -233,10 +231,7 @@ public class TutorialActivity extends AppCompatActivity {
         else
             teamNameView.setText(teamName2);
 
-        boolean firstRun = true;
-        if (firstRun) {
-            showTutorial();
-        }
+        showTutorial();
 
 
     }
@@ -722,7 +717,7 @@ public class TutorialActivity extends AppCompatActivity {
             super.onShowcaseDetached(showcaseView, wasDismissed, wasSkipped);
             if (wasSkipped) {
                 // If its the first-time tutorial...continue on to the actual game
-                if (firstRun) {
+                if (isFirstTime()) {
                     Intent intent = new Intent(getApplicationContext(), GameActivity.class);
                     intent.putExtras(extrasToForward);
                     startActivity(intent);

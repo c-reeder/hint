@@ -35,4 +35,5 @@ class GK {
     static final String WINNER_TEAM_NAME = "WINNER_TEAM_NAME";
     static final String GAME_STATE = "GAME_STATE";
     static final String DOWNLOAD_FRAGMENT = "DOWNLOAD_FRAGMENT";
+    static final String FIRST_RUN = "FIRST_RUN";
 }
