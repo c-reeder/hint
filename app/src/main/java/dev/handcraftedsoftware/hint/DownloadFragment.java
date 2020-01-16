@@ -2,6 +2,7 @@ package dev.handcraftedsoftware.hint;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -12,6 +13,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
@@ -41,10 +43,14 @@ public class DownloadFragment extends Fragment {
         super.onCreate(savedInstanceState);
         setRetainInstance(true);
 
-        Bundle arguments = getArguments();
-        assert arguments != null;
-        String language = arguments.getString(GK.LANGUAGE);
-        String difficulty = arguments.getString(GK.DIFFICULTY);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+
+//        Bundle arguments = getArguments();
+//        assert arguments != null;
+        String language = sharedPreferences.getString(GK.LANGUAGE,GV.ENGLISH);
+        String difficulty = sharedPreferences.getString(GK.DIFFICULTY, GV.EASY);
+//        String language = arguments.getString(GK.LANGUAGE);
+//        String difficulty = arguments.getString(GK.DIFFICULTY);
 
         // Check Network Status and if connected perform GET request to acquire word list from server
         // There should be 22 words. 2 Words * 6 Rounds + 5 Word-Skips * 2 Teams = 22 Words
@@ -62,7 +68,7 @@ public class DownloadFragment extends Fragment {
             };
             String requestURL = dev.handcraftedsoftware.hint.BuildConfig.url + "/words/" + language + "/" + difficulty;
             task.execute(requestURL);
-//            Log.v(TAG,requestURL);
+            Log.v(TAG,"request URL: " + requestURL);
         } else {
             Log.e(TAG, "Not connected to network");
         }

@@ -14,6 +14,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.core.widget.TextViewCompat;
 import androidx.fragment.app.FragmentManager;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.transition.AutoTransition;
 import androidx.transition.TransitionManager;
 import androidx.transition.Transition;
@@ -62,7 +63,7 @@ import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRE
 public class GameActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener, MenuFragment.MenuActionsHandler, DownloadFragment.OnDownloadCompleteListener {
 
     private static final String TAG = "GameActivity";
-    private static final int NUM_ROUNDS = 6;
+    public static final int NUM_ROUNDS = 6;
 
 
     // Components of the Display
@@ -84,35 +85,8 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
     private TextPagerAdapter adapter;
     private ProgressBar loadingIcon;
 
-    // Values Constant for the Entirety of one Game
-    //private boolean inPlay;
-    private String teamName1;
-    private String teamName2;
-    private String difficulty;
-    private String language;
-    private String[] wordList;
-
-    // Ever-Changing "Current" Variables
-    private int currRound;
-    private int currPP;
-    private boolean isPartnerB;
-    private boolean isTeam2;
-    private int totalScore1;
-    private int totalScore2;
-    private int currSkipCountA;
-    private int currSkipCountB;
-    private boolean previousCorrect;
-    private GameState gameState;
-    private int wordIdx;
-    private boolean isWordHidden;
-
-    // Results Variables to be Passed to the Winner Screen
-    private String[] aWords;
-    private String[] bWords;
-    private int[] aScores1;
-    private int[] aScores2;
-    private int[] bScores1;
-    private int[] bScores2;
+    // Game variables removed here --> See GameModelView
+    private GameModelView gameModelView;
 
     // CountDown used for the game timer
     private CountDownTimer countDownTimer;
@@ -133,7 +107,8 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
             getWindow().setExitTransition(new Explode());
         }
 
-;
+        gameModelView = ViewModelProviders.of(this).get(GameModelView.class);
+
         wordHeight = getResources().getDimensionPixelSize(R.dimen.word_height);
 
         Display display = getWindowManager().getDefaultDisplay();
@@ -179,10 +154,11 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
         layout.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
-                if (gameState == GameState.PLAYING || gameState == GameState.TEAM_TRANSITION) {
+                if (gameModelView.getGameState().getValue() == GameState.PLAYING || gameModelView.getGameState().getValue() == GameState.TEAM_TRANSITION) {
                     if (motionEvent.getActionMasked() == MotionEvent.ACTION_DOWN) {
                         Log.d(TAG, "layout ACTION_DOWN");
-                        isWordHidden = false;
+                        gameModelView.getIsWordHidden().setValue(false);
+//                        isWordHidden = false;
                         if (coverAlphaAnimator.isRunning()) {
                             coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",(float)coverAlphaAnimator.getAnimatedValue(),0f);
                         } else {
@@ -193,7 +169,8 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
                         return true;
                     } else if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP) {
                         Log.d(TAG, "layout ACTION_UP");
-                        isWordHidden = true;
+                        gameModelView.getIsWordHidden().setValue(false);
+//                        isWordHidden = true;
                         if (coverAlphaAnimator.isRunning()) {
                             coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",(float)coverAlphaAnimator.getAnimatedValue(),1f);
                         } else {
@@ -244,9 +221,9 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
         if (savedInstanceState == null) {
 //            Log.d(TAG, "From scratch");
             // Init Game Values
-            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-            teamName1 = sharedPreferences.getString(GK.TEAM_NAME_1, getString(R.string.team1));
-            teamName2 = sharedPreferences.getString(GK.TEAM_NAME_2, getString(R.string.team2));
+//            SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+//            teamName1 = sharedPreferences.getString(GK.TEAM_NAME_1, getString(R.string.team1));
+//            teamName2 = sharedPreferences.getString(GK.TEAM_NAME_2, getString(R.string.team2));
 //            teamName1 = parentIntent.getStringExtra(GK.TEAM_NAME_1);
 //            teamName2 = parentIntent.getStringExtra(GK.TEAM_NAME_2);
 //            if (teamName1.equals("")) {
@@ -256,33 +233,33 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
 //                teamName2 = getString(R.string.team2);
 //            }
 //            difficulty = parentIntent.getStringExtra(GK.DIFFICULTY);
-            difficulty = sharedPreferences.getString(GK.DIFFICULTY, GV.EASY);
+//            difficulty = sharedPreferences.getString(GK.DIFFICULTY, GV.EASY);
 //            language = parentIntent.getStringExtra(GK.LANGUAGE);
-            language = sharedPreferences.getString(GK.LANGUAGE, GV.ENGLISH);
-            currRound = 1;
-            currPP = 10;
-            isPartnerB = false;
-            isTeam2 = false;
-            totalScore1 = 0;
-            totalScore2 = 0;
-            currSkipCountA = 0;
-            currSkipCountB = 0;
-            gameState = GameState.AWAITING_WORDS;
-            wordIdx = 0;
-            isWordHidden = false;
+//            language = sharedPreferences.getString(GK.LANGUAGE, GV.ENGLISH);
+//            currRound = 1;
+//            currPP = 10;
+//            isPartnerB = false;
+//            isTeam2 = false;
+//            totalScore1 = 0;
+//            totalScore2 = 0;
+//            currSkipCountA = 0;
+//            currSkipCountB = 0;
+//            gameState = GameState.AWAITING_WORDS;
+//            wordIdx = 0;
+//            isWordHidden = false;
 
             // Init Results Variables
-            aWords = new String[NUM_ROUNDS];
-            bWords = new String[NUM_ROUNDS];
-            aScores1 = new int[NUM_ROUNDS];
-            aScores2 = new int[NUM_ROUNDS];
-            bScores1 = new int[NUM_ROUNDS];
-            bScores2 = new int[NUM_ROUNDS];
+//            aWords = new String[NUM_ROUNDS];
+//            bWords = new String[NUM_ROUNDS];
+//            aScores1 = new int[NUM_ROUNDS];
+//            aScores2 = new int[NUM_ROUNDS];
+//            bScores1 = new int[NUM_ROUNDS];
+//            bScores2 = new int[NUM_ROUNDS];
 
             // Bundle the information sent to the Download Fragment
-            Bundle fragmentBundle = new Bundle();
-            fragmentBundle.putString(GK.LANGUAGE, language);
-            fragmentBundle.putString(GK.DIFFICULTY, difficulty);
+//            Bundle fragmentBundle = new Bundle();
+//            fragmentBundle.putString(GK.LANGUAGE, language);
+//            fragmentBundle.putString(GK.DIFFICULTY, difficulty);
 
             // Create DownloadFragment and start it.
             FragmentManager fm = getSupportFragmentManager();
@@ -292,7 +269,7 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
                 Log.e(TAG, "Download Fragment already exists!");
             } else {
                 downloadFragment = new DownloadFragment();
-                downloadFragment.setArguments(fragmentBundle);
+//                downloadFragment.setArguments(fragmentBundle);
                 fm.beginTransaction().add(downloadFragment, GK.DOWNLOAD_FRAGMENT).commit();
             }
 
@@ -300,36 +277,36 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
 //            Log.d(TAG, "Restart");
 
             // Values Constant for the Entirety of one Game
-            teamName1 = savedInstanceState.getString(GK.TEAM_NAME_1);
-            teamName2 = savedInstanceState.getString(GK.TEAM_NAME_2);
-            difficulty = savedInstanceState.getString(GK.DIFFICULTY);
-            language = savedInstanceState.getString(GK.LANGUAGE);
-            wordList = savedInstanceState.getStringArray(GK.WORD_LIST);
+//            teamName1 = savedInstanceState.getString(GK.TEAM_NAME_1);
+//            teamName2 = savedInstanceState.getString(GK.TEAM_NAME_2);
+//            difficulty = savedInstanceState.getString(GK.DIFFICULTY);
+//            language = savedInstanceState.getString(GK.LANGUAGE);
+//            wordList = savedInstanceState.getStringArray(GK.WORD_LIST);
 
             // Ever-Changing "Current" Variables
-            currRound = savedInstanceState.getInt(GK.CURR_ROUND);
-            currPP = savedInstanceState.getInt(GK.CURR_PP);
-            isPartnerB = savedInstanceState.getBoolean(GK.IS_PARTNER_B);
-            isTeam2 = savedInstanceState.getBoolean(GK.IS_TEAM_2);
-            totalScore1 = savedInstanceState.getInt(GK.CURR_SCORE_1);
-            totalScore2 = savedInstanceState.getInt(GK.CURR_SCORE_2);
-            currSkipCountA = savedInstanceState.getInt(GK.CURR_SKIP_COUNT_A);
-            currSkipCountB = savedInstanceState.getInt(GK.CURR_SKIP_COUNT_B);
-            previousCorrect = savedInstanceState.getBoolean(GK.PREVIOUS_CORRECT);
-            gameState = (GameState) savedInstanceState.getSerializable(GK.GAME_STATE);
-            wordIdx = savedInstanceState.getInt(GK.WORD_IDX);
+//            currRound = savedInstanceState.getInt(GK.CURR_ROUND);
+//            currPP = savedInstanceState.getInt(GK.CURR_PP);
+//            isPartnerB = savedInstanceState.getBoolean(GK.IS_PARTNER_B);
+//            isTeam2 = savedInstanceState.getBoolean(GK.IS_TEAM_2);
+//            totalScore1 = savedInstanceState.getInt(GK.CURR_SCORE_1);
+//            totalScore2 = savedInstanceState.getInt(GK.CURR_SCORE_2);
+//            currSkipCountA = savedInstanceState.getInt(GK.CURR_SKIP_COUNT_A);
+//            currSkipCountB = savedInstanceState.getInt(GK.CURR_SKIP_COUNT_B);
+//            previousCorrect = savedInstanceState.getBoolean(GK.PREVIOUS_CORRECT);
+//            gameState = (GameState) savedInstanceState.getSerializable(GK.GAME_STATE);
+//            wordIdx = savedInstanceState.getInt(GK.WORD_IDX);
             countDownTimeRemaining = savedInstanceState.getLong(GK.TIME_REMAINING);
-            isWordHidden = savedInstanceState.getBoolean(GK.WORD_HIDDEN);
+//            isWordHidden = savedInstanceState.getBoolean(GK.WORD_HIDDEN);
 
-            Log.v(TAG, "Game state on restart: " + gameState);
+            Log.v(TAG, "Game state on restart: " + gameModelView.getGameState().getValue());
 
             // Results Variables to be Passed to the Winner Screen
-            aWords = savedInstanceState.getStringArray(GK.A_WORDS);
-            bWords = savedInstanceState.getStringArray(GK.B_WORDS);
-            aScores1 = savedInstanceState.getIntArray(GK.A_SCORES_1);
-            aScores2 = savedInstanceState.getIntArray(GK.A_SCORES_2);
-            bScores1 = savedInstanceState.getIntArray(GK.B_SCORES_1);
-            bScores2 = savedInstanceState.getIntArray(GK.B_SCORES_2);
+//            aWords = savedInstanceState.getStringArray(GK.A_WORDS);
+//            bWords = savedInstanceState.getStringArray(GK.B_WORDS);
+//            aScores1 = savedInstanceState.getIntArray(GK.A_SCORES_1);
+//            aScores2 = savedInstanceState.getIntArray(GK.A_SCORES_2);
+//            bScores1 = savedInstanceState.getIntArray(GK.B_SCORES_1);
+//            bScores2 = savedInstanceState.getIntArray(GK.B_SCORES_2);
 
             // Recover Download Fragment
             FragmentManager fm = getSupportFragmentManager();
@@ -344,16 +321,16 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
                     findViewById(R.id.successButton).setVisibility(View.VISIBLE);
                     findViewById(R.id.failureButton).setVisibility(View.VISIBLE);
                     initWords();
-                    ppSpinnerView.setSpinner(currPP);
+                    ppSpinnerView.setSpinner(gameModelView.getCurrPP().getValue());
                     updateDisplay();
-                    if (gameState == GameState.TEAM_TRANSITION) {
+                    if (gameModelView.getGameState().getValue() == GameState.TEAM_TRANSITION) {
                         promptForContinue(getString(R.string.pass_phone_next));
 
-                        if (isWordHidden)
+                        if (gameModelView.getIsWordHidden().getValue())
                             wordCover.setAlpha(1f);
 
 
-                        wordHolder.setText(wordList[wordIdx]);
+                        wordHolder.setText(gameModelView.getWordList().getValue()[gameModelView.getWordIdx().getValue()]);
                         viewPager.setVisibility(View.INVISIBLE);
 
 
@@ -369,16 +346,11 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
                         TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
                         wordHolder.setGravity(Gravity.CENTER);
                         newSet.applyTo(layout);
-                    } else if (gameState == GameState.WORD_TRANSITION) {
+                    } else if (gameModelView.getGameState().getValue() == GameState.WORD_TRANSITION) {
                         promptForContinue(getString(R.string.pass_phone_across));
-//                        if (previousCorrect) {
-//                            layout.setBackgroundColor(Color.GREEN);
-//
-//                        } else {
-//                            layout.setBackgroundColor(Color.RED);
-//                        }
+
                         Log.v(TAG, "Restarting in Word Transition!");
-                        wordHolder.setText(wordList[wordIdx]);
+                        wordHolder.setText(gameModelView.getWordList().getValue()[gameModelView.getWordIdx().getValue()]);
                         viewPager.setVisibility(View.INVISIBLE);
 
                         // Position wordHolder between the continueButton and the messageView
@@ -393,9 +365,9 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
                         TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
                         wordHolder.setGravity(Gravity.CENTER);
                         newSet.applyTo(layout);
-                    } else if (gameState == GameState.WORD_APPROVAL) {
+                    } else if (gameModelView.getGameState().getValue() == GameState.WORD_APPROVAL) {
                         acceptWordButton.setVisibility(View.VISIBLE);
-                    } else if (gameState == GameState.PLAYING) {
+                    } else if (gameModelView.getGameState().getValue() == GameState.PLAYING) {
 
                         // Initialize the CountDownTimer from where it was before we stopped
                         countDownTimer = new CountDownTimer(countDownTimeRemaining,1000) {
@@ -413,12 +385,12 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
                         };
                         countDownTimer.start();
 
-                        if (isWordHidden)
+                        if (gameModelView.getIsWordHidden().getValue())
                             wordCover.setAlpha(1f);
 
                         // Correctly restore position of the WordHolder vertically between the timerView and the buttonrow
                         ConstraintSet newSet = new ConstraintSet();
-                        wordHolder.setText(wordList[wordIdx]);
+                        wordHolder.setText(gameModelView.getWordList().getValue()[gameModelView.getWordIdx().getValue()]);
                         viewPager.setVisibility(View.INVISIBLE);
                         newSet.clear(R.id.wordHolder);
                         newSet.constrainHeight(R.id.wordHolder, wordHeight);
@@ -464,41 +436,42 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
 
     // State transition into Approval Mode
     private void approveNextWord() {
-        gameState = GameState.WORD_APPROVAL;
+        gameModelView.getGameState().setValue(GameState.WORD_APPROVAL);
+//        gameState = GameState.WORD_APPROVAL;
         acceptWordButton.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Values Constant for the Entirety of one Game
-        savedInstanceState.putString(GK.TEAM_NAME_1,teamName1);
-        savedInstanceState.putString(GK.TEAM_NAME_2,teamName2);
-        savedInstanceState.putString(GK.DIFFICULTY,difficulty);
-        savedInstanceState.putString(GK.LANGUAGE,language);
-        savedInstanceState.putStringArray(GK.WORD_LIST,wordList);
+//        // Values Constant for the Entirety of one Game
+//        savedInstanceState.putString(GK.TEAM_NAME_1,teamName1);
+//        savedInstanceState.putString(GK.TEAM_NAME_2,teamName2);
+//        savedInstanceState.putString(GK.DIFFICULTY,difficulty);
+//        savedInstanceState.putString(GK.LANGUAGE,language);
+//        savedInstanceState.putStringArray(GK.WORD_LIST,wordList);
 
-        // Ever-Changing "Current" Variables
-        savedInstanceState.putInt(GK.CURR_ROUND,currRound);
-        savedInstanceState.putInt(GK.CURR_PP,currPP);
-        savedInstanceState.putBoolean(GK.IS_PARTNER_B,isPartnerB);
-        savedInstanceState.putBoolean(GK.IS_TEAM_2,isTeam2);
-        savedInstanceState.putInt(GK.CURR_SCORE_1, totalScore1);
-        savedInstanceState.putInt(GK.CURR_SCORE_2, totalScore2);
-        savedInstanceState.putInt(GK.CURR_SKIP_COUNT_A,currSkipCountA);
-        savedInstanceState.putInt(GK.CURR_SKIP_COUNT_B,currSkipCountB);
-        savedInstanceState.putBoolean(GK.PREVIOUS_CORRECT, previousCorrect);
-        savedInstanceState.putSerializable(GK.GAME_STATE, gameState);
-        savedInstanceState.putInt(GK.WORD_IDX, wordIdx);
+//        // Ever-Changing "Current" Variables
+//        savedInstanceState.putInt(GK.CURR_ROUND,currRound);
+//        savedInstanceState.putInt(GK.CURR_PP,currPP);
+//        savedInstanceState.putBoolean(GK.IS_PARTNER_B,isPartnerB);
+//        savedInstanceState.putBoolean(GK.IS_TEAM_2,isTeam2);
+//        savedInstanceState.putInt(GK.CURR_SCORE_1, totalScore1);
+//        savedInstanceState.putInt(GK.CURR_SCORE_2, totalScore2);
+//        savedInstanceState.putInt(GK.CURR_SKIP_COUNT_A,currSkipCountA);
+//        savedInstanceState.putInt(GK.CURR_SKIP_COUNT_B,currSkipCountB);
+//        savedInstanceState.putBoolean(GK.PREVIOUS_CORRECT, previousCorrect);
+//        savedInstanceState.putSerializable(GK.GAME_STATE, gameState);
+//        savedInstanceState.putInt(GK.WORD_IDX, wordIdx);
         savedInstanceState.putLong(GK.TIME_REMAINING, countDownTimeRemaining);
-        savedInstanceState.putBoolean(GK.WORD_HIDDEN, isWordHidden);
-
-        // Results Variables to be Passed to the Winner Screen
-        savedInstanceState.putStringArray(GK.A_WORDS,aWords);
-        savedInstanceState.putStringArray(GK.B_WORDS,bWords);
-        savedInstanceState.putIntArray(GK.A_SCORES_1,aScores1);
-        savedInstanceState.putIntArray(GK.A_SCORES_2,aScores2);
-        savedInstanceState.putIntArray(GK.B_SCORES_1,bScores1);
-        savedInstanceState.putIntArray(GK.B_SCORES_2,bScores2);
+//        savedInstanceState.putBoolean(GK.WORD_HIDDEN, isWordHidden);
+//
+//        // Results Variables to be Passed to the Winner Screen
+//        savedInstanceState.putStringArray(GK.A_WORDS,aWords);
+//        savedInstanceState.putStringArray(GK.B_WORDS,bWords);
+//        savedInstanceState.putIntArray(GK.A_SCORES_1,aScores1);
+//        savedInstanceState.putIntArray(GK.A_SCORES_2,aScores2);
+//        savedInstanceState.putIntArray(GK.B_SCORES_1,bScores1);
+//        savedInstanceState.putIntArray(GK.B_SCORES_2,bScores2);
 
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -508,7 +481,7 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
      * This method sets up the word-slider by creating the adapter for the word list
      */
     private void initWords() {
-        adapter = new TextPagerAdapter(this, wordList);
+        adapter = new TextPagerAdapter(this, gameModelView.getWordList().getValue());
         viewPager.setAdapter(adapter);
     }
 
@@ -519,11 +492,13 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
     public void onDownloadComplete(String result) {
         Log.v(TAG, "onDownloadComplete");
         try {
-            wordList = new String[22];
+//            wordList = new String[22];
+            String[] newList = new String[22];
             JSONArray response = new JSONArray(result);
             for (int i = 0; i < response.length(); i++) {
-                wordList[i] = response.getString(i);
+                newList[i] = response.getString(i);
             }
+            gameModelView.getWordList().setValue(newList);
             if (response.length() != 22) throw new AssertionError("DID NOT GET 22 WORDS!!!");
             //Hide Loading Icon now that Data has been received
             loadingIcon = findViewById(R.id.progressBar);
@@ -574,12 +549,14 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
      */
     @Override
     public void onSwiped(int newIndex) {
-        Log.v(TAG, "onSwiped: " + wordIdx + "->" + newIndex);
-        wordIdx = newIndex;
-        if (isPartnerB) {
-            currSkipCountB++;
+        Log.v(TAG, "onSwiped: " + gameModelView.getWordIdx().getValue() + "->" + newIndex);
+        gameModelView.getWordIdx().setValue(newIndex);
+        if (gameModelView.getIsPartnerB().getValue()) {
+            gameModelView.incCurrSkipCountB();
+//            currSkipCountB++;
         } else {
-            currSkipCountA++;
+            gameModelView.incCurrSkipCountA();
+//            currSkipCountA++;
         }
     }
 
@@ -613,16 +590,16 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
      */
     @SuppressLint("SetTextI18n")
     private void updateDisplay() {
-        roundView.setText(String.format("%c%s",'#',Integer.toString(currRound)));
-        scoreView.setText(Integer.toString(totalScore1) + ':' + totalScore2);
-        if(!isPartnerB)
+        roundView.setText(String.format("%c%s",'#',Integer.toString(gameModelView.getCurrRound().getValue())));
+        scoreView.setText(Integer.toString(gameModelView.getTotalScore1().getValue()) + ':' + gameModelView.getTotalScore2().getValue());
+        if(!gameModelView.getIsPartnerB().getValue())
             partnerLetterView.setText("A");
         else
             partnerLetterView.setText("B");
-        if(!isTeam2)
-            teamNameView.setText(teamName1);
+        if(!gameModelView.getIsTeam2().getValue())
+            teamNameView.setText(gameModelView.getTeamName1().getValue());
         else
-            teamNameView.setText(teamName2);
+            teamNameView.setText(gameModelView.getTeamName2().getValue());
     }
 
     // State transition called when the AcceptButton is pressed
@@ -634,9 +611,10 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
 
     // State transition to the actual guessing/playing stage
     private void startPlaying() {
-        gameState = GameState.PLAYING;
+        gameModelView.getGameState().setValue(GameState.PLAYING);
+//        gameState = GameState.PLAYING;
 
-        wordHolder.setText(wordList[viewPager.getCurrentItem()]);
+        wordHolder.setText(gameModelView.getWordList().getValue()[viewPager.getCurrentItem()]);
         viewPager.setVisibility(View.INVISIBLE);
         wordHolder.setVisibility(View.VISIBLE);
 
@@ -652,7 +630,8 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
                 transition.addListener(new Transition.TransitionListener() {
                     @Override
                     public void onTransitionStart(@NonNull Transition transition) {
-                        isWordHidden = true;
+                        gameModelView.getIsWordHidden().setValue(true);
+//                        isWordHidden = true;
                     }
 
                     @Override
@@ -725,7 +704,7 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
      * @param view The button pressed to signal that a guess has been made
      */
     private void guessMade(View view) {
-        if (gameState != GameState.PLAYING) {
+        if (gameModelView.getGameState().getValue() != GameState.PLAYING) {
             Log.e(TAG, "Guess made while not playing!");
             return;
         }
@@ -745,35 +724,48 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
             coverAlphaAnimator.start();
 
             // Score Addition Logic
-            if (!isTeam2) {
-                totalScore1 += currPP;
+            if (!gameModelView.getIsTeam2().getValue()) {
+                gameModelView.getTotalScore1().setValue(
+                        gameModelView.getTotalScore1().getValue() +
+                                gameModelView.getCurrPP().getValue()
+                );
+//                totalScore1 += currPP;
             } else {
-                totalScore2 += currPP;
+                gameModelView.getTotalScore2().setValue(
+                        gameModelView.getTotalScore2().getValue() +
+                                gameModelView.getCurrPP().getValue()
+                );
+//                totalScore2 += currPP;
             }
 
             // Next Turn Logic
             //-------CHANGE WORD HERE----------
             ppSpinnerView.resetSpinner();
             transitionToNextWord(true);
-            currPP = 10;
+//            currPP = 10;
+            gameModelView.getCurrPP().setValue(10);
 
             // Increment the round number if both sets of opposing players has played
-            if (isPartnerB)
-                currRound++;
+            if (gameModelView.getIsPartnerB().getValue())
+                gameModelView.incCurrRound();
+//                currRound++;
             // Alternate which team begins each round
-            isTeam2 = ((currRound % 2) == 0);
+            gameModelView.getIsTeam2().setValue((gameModelView.getCurrRound().getValue() % 2) == 0);
+//            isTeam2 = ((currRound % 2) == 0);
             // Flip back and forth between pairs of opposing players
-            isPartnerB = !isPartnerB;
+            gameModelView.getIsPartnerB().setValue(!gameModelView.getIsPartnerB().getValue());
+//            isPartnerB = !isPartnerB;
 
             // If the guess was incorrect
         } else if (view.getId() == R.id.failureButton) {
             storeResult();
             // Decrement current possible points
-            currPP--;
+//            currPP--;
+            gameModelView.decCurrPP();
 
             // The word was NEVER guessed and there are not more tries left
             // Next Turn Logic
-            if (currPP < 1) {
+            if (gameModelView.getCurrPP().getValue() < 1) {
 
 
                 coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",1f,0f);
@@ -784,65 +776,71 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
                 //-------CHANGE WORD HERE----------
                 ppSpinnerView.resetSpinner();
                 transitionToNextWord(false);
-                currPP = 10;
+//                currPP = 10;
+                gameModelView.getCurrPP().setValue(10);
 
                 // Increment the round number if both sets of opposing players has played
-                if (isPartnerB)
-                    currRound++;
+                if (gameModelView.getIsPartnerB().getValue())
+                    gameModelView.incCurrRound();
+//                    currRound++;
                 // Alternate which team begins each round
-                isTeam2 = ((currRound % 2) == 0);
+//                isTeam2 = ((currRound % 2) == 0);
+                gameModelView.getIsTeam2().setValue((gameModelView.getCurrRound().getValue() % 2) == 0);
                 // Flip back and forth between pairs of opposing players
-                isPartnerB = !isPartnerB;
+//                isPartnerB = !isPartnerB;
+                gameModelView.getIsPartnerB().setValue(!gameModelView.getIsPartnerB().getValue());
 
             } else {// The word has not yet been correctly guessed but there are still chances left
                 // Switch teams and decrement possible points
-                isTeam2 = !isTeam2;
+//                isTeam2 = !isTeam2;
+                gameModelView.getIsTeam2().setValue(!gameModelView.getIsTeam2().getValue());
                 ppSpinnerView.spinToNext();
                 transitionToNextTeam();
             }
         }
 
         // Check if end of game
-        if (currRound > NUM_ROUNDS) {
+        if (gameModelView.getCurrRound().getValue() > NUM_ROUNDS) {
             // Game is Over
-            gameState = GameState.GAME_OVER;
+//            gameState = GameState.GAME_OVER;
+            gameModelView.getGameState().setValue(GameState.GAME_OVER);
 
             // Create Winner Screen intent
             Intent winnerIntent = new Intent(this, WinnerActivity.class);
 
             // Determine who the winner is based off the final scores
-            if (totalScore1 > totalScore2)
-                winnerIntent.putExtra(GK.WINNER_TEAM_NAME, teamName1);
-            else if (totalScore2 > totalScore1)
-                winnerIntent.putExtra(GK.WINNER_TEAM_NAME, teamName2);
+            if (gameModelView.getTotalScore1().getValue() > gameModelView.getTotalScore2().getValue())
+                winnerIntent.putExtra(GK.WINNER_TEAM_NAME, gameModelView.getTeamName1().getValue());
+            else if (gameModelView.getTotalScore2().getValue() > gameModelView.getTotalScore1().getValue())
+                winnerIntent.putExtra(GK.WINNER_TEAM_NAME, gameModelView.getTeamName2().getValue());
 
             // Attach the team names and necessary scoring values to the Winner Screen intent
-            winnerIntent.putExtra(GK.A_SCORES_1, aScores1);
-            winnerIntent.putExtra(GK.A_SCORES_2, aScores2);
-            winnerIntent.putExtra(GK.B_SCORES_1, bScores1);
-            winnerIntent.putExtra(GK.B_SCORES_2, bScores2);
-            winnerIntent.putExtra(GK.A_WORDS, aWords);
-            winnerIntent.putExtra(GK.B_WORDS, bWords);
-            winnerIntent.putExtra(GK.TOTAL_SCORE_1, totalScore1);
-            winnerIntent.putExtra(GK.TOTAL_SCORE_2, totalScore2);
-            winnerIntent.putExtra(GK.TEAM_NAME_1, teamName1);
-            winnerIntent.putExtra(GK.TEAM_NAME_2, teamName2);
-            winnerIntent.putExtra(GK.DIFFICULTY, difficulty);
-            winnerIntent.putExtra(GK.LANGUAGE, language);
+            winnerIntent.putExtra(GK.A_SCORES_1, gameModelView.getaScores1().getValue());
+            winnerIntent.putExtra(GK.A_SCORES_2, gameModelView.getaScores2().getValue());
+            winnerIntent.putExtra(GK.B_SCORES_1, gameModelView.getbScores1().getValue());
+            winnerIntent.putExtra(GK.B_SCORES_2, gameModelView.getbScores2().getValue());
+            winnerIntent.putExtra(GK.A_WORDS, gameModelView.getaWords().getValue());
+            winnerIntent.putExtra(GK.B_WORDS, gameModelView.getbWords().getValue());
+            winnerIntent.putExtra(GK.TOTAL_SCORE_1, gameModelView.getTotalScore1().getValue());
+            winnerIntent.putExtra(GK.TOTAL_SCORE_2, gameModelView.getTotalScore2().getValue());
+            winnerIntent.putExtra(GK.TEAM_NAME_1, gameModelView.getTeamName1().getValue());
+            winnerIntent.putExtra(GK.TEAM_NAME_2, gameModelView.getTeamName2().getValue());
+            winnerIntent.putExtra(GK.DIFFICULTY, gameModelView.getDifficulty().getValue());
+            winnerIntent.putExtra(GK.LANGUAGE, gameModelView.getLanguage().getValue());
 
             // Print Intent Goodies
-            Log.d(TAG, "aScores1: " + Arrays.toString(aScores1));
-            Log.d(TAG, "aScores2: " + Arrays.toString(aScores2));
-            Log.d(TAG, "bScores1: " + Arrays.toString(bScores1));
-            Log.d(TAG, "bScores2: " + Arrays.toString(bScores2));
-            Log.d(TAG, "aWords: " + Arrays.toString(aWords));
-            Log.d(TAG, "bWords: " + Arrays.toString(bWords));
-            Log.d(TAG, "totalScore1: " + totalScore1);
-            Log.d(TAG, "totalScore2 " + totalScore2);
-            Log.d(TAG, "teamName1: " + teamName1);
-            Log.d(TAG, "teamName2: " + teamName2);
-            Log.d(TAG, "difficulty: " + difficulty);
-            Log.d(TAG, "language: " + language);
+            Log.d(TAG, "aScores1: " + Arrays.toString(gameModelView.getaScores1().getValue()));
+            Log.d(TAG, "aScores2: " + Arrays.toString(gameModelView.getaScores2().getValue()));
+            Log.d(TAG, "bScores1: " + Arrays.toString(gameModelView.getbScores1().getValue()));
+            Log.d(TAG, "bScores2: " + Arrays.toString(gameModelView.getbScores2().getValue()));
+            Log.d(TAG, "aWords: " + Arrays.toString(gameModelView.getaWords().getValue()));
+            Log.d(TAG, "bWords: " + Arrays.toString(gameModelView.getbWords().getValue()));
+            Log.d(TAG, "totalScore1: " + gameModelView.getTotalScore1().getValue());
+            Log.d(TAG, "totalScore2 " + gameModelView.getTotalScore2().getValue());
+            Log.d(TAG, "teamName1: " + gameModelView.getTeamName1().getValue());
+            Log.d(TAG, "teamName2: " + gameModelView.getTeamName2().getValue());
+            Log.d(TAG, "difficulty: " + gameModelView.getDifficulty().getValue());
+            Log.d(TAG, "language: " + gameModelView.getLanguage().getValue());
 
             //Launch Winner Activity
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -853,9 +851,9 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
             finish();
         } else { // If not the end of the game
             updateDisplay();
-            if (gameState == GameState.TEAM_TRANSITION) {
+            if (gameModelView.getGameState().getValue() == GameState.TEAM_TRANSITION) {
                 promptForContinue(getString(R.string.pass_phone_next));
-            } else if (gameState == GameState.WORD_TRANSITION) {
+            } else if (gameModelView.getGameState().getValue() == GameState.WORD_TRANSITION) {
                 promptForContinue(getString(R.string.pass_phone_across));
             }
 
@@ -878,7 +876,7 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
     }
 
     private void transitionToNextTeam() {
-        gameState = GameState.TEAM_TRANSITION;
+        gameModelView.getGameState().setValue(GameState.TEAM_TRANSITION);
     }
 
     private void promptForContinue(String message) {
@@ -894,14 +892,14 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
      * Called upon pressing the continue button.
      */
     private void onContinue() {
-        Log.v(TAG, "We have continued in this state: " + gameState);
+        Log.v(TAG, "We have continued in this state: " + gameModelView.getGameState().getValue());
         messageView.setVisibility(View.INVISIBLE);
         continueButton.setVisibility(View.INVISIBLE);
 
-        if (gameState == GameState.TEAM_TRANSITION) {
+        if (gameModelView.getGameState().getValue() == GameState.TEAM_TRANSITION) {
             // Next Team guesses
             startPlaying();
-        } else if (gameState == GameState.WORD_TRANSITION) {
+        } else if (gameModelView.getGameState().getValue() == GameState.WORD_TRANSITION) {
             // The other two players now start giving hints and a new word is approved
 
 //            layout.setBackgroundColor(Color.WHITE);
@@ -967,23 +965,32 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
     private void storeResult() {
         TextView currentView = adapter.getCurrentView().findViewById(R.id.singleTextView);
         String currWord = currentView.getText().toString();
-        if (isPartnerB) {
-            bWords[currRound - 1] = currWord;
-            if (isTeam2) {
-                bScores1[currRound - 1] = 0;
-                bScores2[currRound - 1] = currPP;
+        if (gameModelView.getIsPartnerB().getValue()) {
+            gameModelView.setbWordsElem(gameModelView.getCurrRound().getValue() - 1, currWord);
+            if (gameModelView.getIsTeam2().getValue()) {
+//                bScores1[currRound - 1] = 0;
+//                bScores2[currRound - 1] = currPP;
+                gameModelView.setbScores1Elem(gameModelView.getCurrRound().getValue() - 1,0);
+                gameModelView.setbScores2Elem(gameModelView.getCurrRound().getValue() - 1, gameModelView.getCurrPP().getValue());
             } else {
-                bScores1[currRound - 1] = currPP;
-                bScores2[currRound - 1] = 0;
+//                bScores1[currRound - 1] = currPP;
+//                bScores2[currRound - 1] = 0;
+                gameModelView.setbScores1Elem(gameModelView.getCurrRound().getValue() - 1,gameModelView.getCurrPP().getValue());
+                gameModelView.setbScores2Elem(gameModelView.getCurrRound().getValue() - 1, 0);
             }
         } else {
-            aWords[currRound - 1] = currWord;
-            if (isTeam2) {
-                aScores1[currRound - 1] = 0;
-                aScores2[currRound - 1] = currPP;
+//            aWords[currRound - 1] = currWord;
+            gameModelView.setaWordsElem(gameModelView.getCurrRound().getValue() - 1, currWord);
+            if (gameModelView.getIsTeam2().getValue()) {
+//                aScores1[currRound - 1] = 0;
+//                aScores2[currRound - 1] = currPP;
+                gameModelView.setaScores1Elem(gameModelView.getCurrRound().getValue() - 1, 0);
+                gameModelView.setaScores2Elem(gameModelView.getCurrRound().getValue() - 1, gameModelView.getCurrPP().getValue());
             } else {
-                aScores1[currRound - 1] = currPP;
-                aScores2[currRound - 1] = 0;
+//                aScores1[currRound - 1] = currPP;
+//                aScores2[currRound - 1] = 0;
+                gameModelView.setaScores1Elem(gameModelView.getCurrRound().getValue() - 1, gameModelView.getCurrPP().getValue());
+                gameModelView.setaScores2Elem(gameModelView.getCurrRound().getValue() - 1, 0);
             }
         }
     }
@@ -996,14 +1003,16 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
      * @param success Whether or not the guess made was correct.
      */
     private void transitionToNextWord(boolean success) {
-        previousCorrect = success;
+//        previousCorrect = success;
+        gameModelView.getPreviousCorrect().setValue(success);
 //        if (success) {
 //            layout.setBackgroundColor(Color.GREEN);
 //
 //        } else {
 //            layout.setBackgroundColor(Color.RED);
 //        }
-        gameState = GameState.WORD_TRANSITION;
+//        gameState = GameState.WORD_TRANSITION;
+        gameModelView.getGameState().setValue(GameState.WORD_TRANSITION);
     }
 
     /**
@@ -1012,7 +1021,8 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
     private void nextWord() {
         Log.v(TAG, "nextWord");
         viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
-        wordIdx++;
+//        wordIdx++;
+        gameModelView.incWordIdx();
     }
 
     /**
@@ -1021,16 +1031,16 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
      */
     @Override
     public boolean canSwipe() {
-        boolean inApprovalState = (gameState == GameState.WORD_APPROVAL);
+        boolean inApprovalState = (gameModelView.getGameState().getValue() == GameState.WORD_APPROVAL);
         Log.v(TAG, "canSwipe: " + inApprovalState);
         if (!inApprovalState) {
             return false;
         }
         // Returns whether or not the current word can be skipped.
-        if (isPartnerB) {
-            return (currPP == 10) && currSkipCountB < 5;
+        if (gameModelView.getIsPartnerB().getValue()) {
+            return (gameModelView.getCurrPP().getValue() == 10) && gameModelView.getCurrSkipCountB().getValue() < 5;
         } else {
-            return (currPP == 10) && currSkipCountA < 5;
+            return (gameModelView.getCurrPP().getValue() == 10) && gameModelView.getCurrSkipCountA().getValue() < 5;
         }
     }
 
@@ -1052,7 +1062,7 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
      * In reality this only gives you the ability to return to the start screen
      */
     private void pauseGame() {
-        if (gameState == GameState.AWAITING_WORDS) {
+        if (gameModelView.getGameState().getValue() == GameState.AWAITING_WORDS) {
             Log.v(TAG, "Trying to pause in Awaiting Words Mode");
             return;
         }
