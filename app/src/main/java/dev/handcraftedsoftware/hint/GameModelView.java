@@ -1,13 +1,24 @@
 package dev.handcraftedsoftware.hint;
 
+import android.annotation.SuppressLint;
 import android.app.Application;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.preference.PreferenceManager;
+import android.util.Log;
+import android.view.View;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 import static dev.handcraftedsoftware.hint.GameActivity.NUM_ROUNDS;
 
@@ -26,8 +37,7 @@ public class GameModelView extends AndroidViewModel {
     private MutableLiveData<Integer> currPP;
     private MutableLiveData<Boolean> isPartnerB;
     private MutableLiveData<Boolean> isTeam2;
-    private MutableLiveData<Integer> totalScore1;
-    private MutableLiveData<Integer> totalScore2;
+    private MutableLiveData<Integer[]> totalScores;
     private MutableLiveData<Integer> currSkipCountA;
     private MutableLiveData<Integer> currSkipCountB;
     private MutableLiveData<Boolean> previousCorrect;
@@ -43,11 +53,68 @@ public class GameModelView extends AndroidViewModel {
     private MutableLiveData<Integer[]> bScores1;
     private MutableLiveData<Integer[]> bScores2;
 
+    private MutableLiveData<Long> countDownTimeRemaining;
+
     SharedPreferences sharedPreferences;
+    JSONTask jsonTask;
+
+    private final static String TAG = "GameModelView";
 
     public GameModelView(@NonNull Application application) {
         super(application);
         sharedPreferences = PreferenceManager.getDefaultSharedPreferences(application);
+        language = new MutableLiveData<String>(sharedPreferences.getString(GK.LANGUAGE, GV.ENGLISH));
+        difficulty = new MutableLiveData<String>(sharedPreferences.getString(GK.DIFFICULTY,GV.EASY));
+        aWords = new MutableLiveData<String[]>(new String[NUM_ROUNDS]);
+        bWords = new MutableLiveData<String[]>(new String[NUM_ROUNDS]);
+        aScores1 = new MutableLiveData<Integer[]>(new Integer[NUM_ROUNDS]);
+        aScores2 = new MutableLiveData<Integer[]>(new Integer[NUM_ROUNDS]);
+        bScores1 = new MutableLiveData<Integer[]>(new Integer[NUM_ROUNDS]);
+        bScores2 = new MutableLiveData<Integer[]>(new Integer[NUM_ROUNDS]);
+        previousCorrect = new MutableLiveData<Boolean>();
+        init();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private void init() {
+
+        ConnectivityManager cm = (ConnectivityManager) getApplication().getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnected()) {
+            //Define behavior to occur upon receiving the JSON word data
+            jsonTask = new JSONTask() {
+                @Override
+                protected void onPostExecute(String result) {
+                    onDownloadComplete(result);
+                }
+            };
+            String requestURL = dev.handcraftedsoftware.hint.BuildConfig.url + "/words/" + language.getValue() + "/" + difficulty.getValue();
+            jsonTask.execute(requestURL);
+            Log.v(TAG,"request URL: " + requestURL);
+        } else {
+            Log.e(TAG, "Not connected to network");
+        }
+    }
+
+    private void onDownloadComplete(String result) {
+        Log.v(TAG, "onDownloadComplete");
+        try {
+            String[] newList = new String[22];
+            JSONArray response = new JSONArray(result);
+            for (int i = 0; i < response.length(); i++) {
+                newList[i] = response.getString(i);
+            }
+            wordList.setValue(newList);
+            if (response.length() != 22) throw new AssertionError("DID NOT GET 22 WORDS!!!");
+            gameState.setValue(GameState.WORD_APPROVAL);
+            //Game has now begun
+        } catch (JSONException ex) {
+            ex.printStackTrace();
+            Log.e(TAG, "Contents of Response: ");
+            Log.e(TAG, result);
+            gameState.setValue(GameState.DOWNLOAD_ERROR);
+
+        }
     }
 
     public MutableLiveData<String> getTeamName1() {
@@ -65,16 +132,10 @@ public class GameModelView extends AndroidViewModel {
     }
 
     public MutableLiveData<String> getDifficulty() {
-        if (difficulty == null) {
-            difficulty = new MutableLiveData<String>(sharedPreferences.getString(GK.DIFFICULTY,GV.EASY));
-        }
         return difficulty;
     }
 
     public MutableLiveData<String> getLanguage() {
-        if (language == null) {
-            language = new MutableLiveData<String>(sharedPreferences.getString(GK.LANGUAGE, GV.ENGLISH));
-        }
         return language;
     }
 
@@ -121,18 +182,11 @@ public class GameModelView extends AndroidViewModel {
         return isTeam2;
     }
 
-    public MutableLiveData<Integer> getTotalScore1() {
-        if (totalScore1 == null) {
-            totalScore1 = new MutableLiveData<Integer>(0);
+    public MutableLiveData<Integer[]> getTotalScores() {
+        if (totalScores == null) {
+            totalScores = new MutableLiveData<Integer[]>(new Integer[]{0,0});
         }
-        return totalScore1;
-    }
-
-    public MutableLiveData<Integer> getTotalScore2() {
-        if (totalScore2 == null) {
-            totalScore2 = new MutableLiveData<Integer>(0);
-        }
-        return totalScore2;
+        return totalScores;
     }
 
     public MutableLiveData<Integer> getCurrSkipCountA() {
@@ -156,9 +210,6 @@ public class GameModelView extends AndroidViewModel {
     }
 
     public MutableLiveData<Boolean> getPreviousCorrect() {
-        if (previousCorrect == null) {
-            previousCorrect = new MutableLiveData<Boolean>();
-        }
         return previousCorrect;
     }
 
@@ -188,9 +239,6 @@ public class GameModelView extends AndroidViewModel {
     }
 
     public MutableLiveData<String[]> getaWords() {
-        if (aWords == null) {
-            aWords = new MutableLiveData<String[]>(new String[NUM_ROUNDS]);
-        }
         return aWords;
     }
     public void setaWordsElem(int pos, String val) {
@@ -199,9 +247,6 @@ public class GameModelView extends AndroidViewModel {
     }
 
     public MutableLiveData<String[]> getbWords() {
-        if (bWords == null) {
-            bWords = new MutableLiveData<String[]>(new String[NUM_ROUNDS]);
-        }
         return bWords;
     }
 
@@ -211,49 +256,115 @@ public class GameModelView extends AndroidViewModel {
     }
 
     public MutableLiveData<Integer[]> getaScores1() {
-        if (aScores1 == null) {
-            aScores1 = new MutableLiveData<Integer[]>(new Integer[NUM_ROUNDS]);
-        }
         return aScores1;
-    }
-    public void setaScores1Elem(int pos, int val) {
-        aScores1.getValue()[pos] = val;
-        aScores1.setValue(aScores1.getValue());
     }
 
     public MutableLiveData<Integer[]> getaScores2() {
-        if (aScores2 == null) {
-            aScores2 = new MutableLiveData<Integer[]>(new Integer[NUM_ROUNDS]);
-        }
         return aScores2;
     }
 
-    public void setaScores2Elem(int pos, int val) {
-        aScores2.getValue()[pos] = val;
-        aScores2.setValue(aScores2.getValue());
-    }
-
     public MutableLiveData<Integer[]> getbScores1() {
-        if (bScores1 == null) {
-            bScores1 = new MutableLiveData<Integer[]>(new Integer[NUM_ROUNDS]);
-        }
         return bScores1;
     }
 
-    public void setbScores1Elem(int pos, int val) {
-        bScores1.getValue()[pos] = val;
-        bScores1.setValue(bScores1.getValue());
-    }
 
     public MutableLiveData<Integer[]> getbScores2() {
-        if (bScores2 == null) {
-            bScores2 = new MutableLiveData<Integer[]>(new Integer[NUM_ROUNDS]);
-        }
         return bScores2;
     }
 
-    public void setbScores2Elem(int pos, int val) {
-        bScores2.getValue()[pos] = val;
-        bScores2.setValue(bScores2.getValue());
+    public MutableLiveData<Long> getCountDownTimeRemaining() {
+        if (countDownTimeRemaining == null) {
+            countDownTimeRemaining = new MutableLiveData<Long>(31000L);
+        }
+        return countDownTimeRemaining;
+    }
+
+    public void resetCountDownTimeRemaining() {
+        countDownTimeRemaining.setValue(31000L);
+    }
+
+    public void scoreCorrectAnswer() {
+        // Score Addition Logic
+        if (!isTeam2.getValue()) {
+            totalScores.getValue()[0] += currPP.getValue();
+            totalScores.setValue(totalScores.getValue());
+        } else {
+            totalScores.getValue()[1] += currPP.getValue();
+            totalScores.setValue(totalScores.getValue());
+        }
+
+        previousCorrect.setValue(true);
+        gameState.setValue(GameState.WORD_TRANSITION);
+        currPP.setValue(10);
+
+        // Increment the round number if both sets of opposing players has played
+        if (isPartnerB.getValue())
+            incCurrRound();
+
+        // Alternate which team begins each round
+        isTeam2.setValue((currRound.getValue() % 2) == 0);
+        // Flip back and forth between pairs of opposing players
+        isPartnerB.setValue(!isPartnerB.getValue());
+    }
+
+    public void scoreIncorrectAnswer() {
+        currPP.setValue(10);
+
+    }
+
+
+    /**
+     * Called every time is word is completed
+     * Updates the result variables based on who successfully guessed the word and how many points
+     *  they earned.
+     */
+    public void storeResult(String completedWord) {
+        if (isPartnerB.getValue()) {
+            bWords.getValue()[currRound.getValue() - 1] = completedWord;
+            bWords.setValue(bWords.getValue());
+            if (isTeam2.getValue()) {
+                bScores1.getValue()[currRound.getValue() - 1] = 0;
+                bScores2.getValue()[currRound.getValue() - 1] = currPP.getValue();
+            } else {
+                bScores1.getValue()[currRound.getValue() - 1] = currPP.getValue();
+                bScores2.getValue()[currRound.getValue() - 1] = 0;
+            }
+            bScores1.setValue(bScores1.getValue());
+            bScores2.setValue(bScores2.getValue());
+        } else {
+            aWords.getValue()[currRound.getValue() - 1] = completedWord;
+            aWords.setValue(aWords.getValue());
+            if (isTeam2.getValue()) {
+                aScores1.getValue()[currRound.getValue() - 1] = 0;
+                aScores2.getValue()[currRound.getValue() - 1] = currPP.getValue();
+            } else {
+                aScores1.getValue()[currRound.getValue() - 1] = currPP.getValue();
+                aScores2.getValue()[currRound.getValue() - 1] = 0;
+            }
+            aScores1.setValue(aScores1.getValue());
+            aScores2.setValue(aScores2.getValue());
+        }
+    }
+
+    /**
+     * Flip back and forth between pairs of opposing players
+     */
+    public void flipPartnerLetter() {
+        isPartnerB.setValue(!isPartnerB.getValue());
+    }
+
+    public void switchTeams() {
+        if (gameState.getValue() == GameState.PLAYING) {
+            isTeam2.setValue(!isTeam2.getValue());
+            gameState.setValue(GameState.TEAM_TRANSITION);
+        }
+    }
+
+    public boolean isTeam1ScoreGreater() {
+        return totalScores.getValue()[0] > totalScores.getValue()[1];
+    }
+
+    public boolean isTeam2ScoreGreater() {
+        return totalScores.getValue()[1] > totalScores.getValue()[0];
     }
 }

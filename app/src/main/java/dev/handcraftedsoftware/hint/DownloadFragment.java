@@ -54,24 +54,7 @@ public class DownloadFragment extends Fragment {
 
         // Check Network Status and if connected perform GET request to acquire word list from server
         // There should be 22 words. 2 Words * 6 Rounds + 5 Word-Skips * 2 Teams = 22 Words
-        FragmentActivity fragmentActivity = getActivity();
-        assert fragmentActivity != null;
-        ConnectivityManager cm = (ConnectivityManager) fragmentActivity.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnected()) {
-             //Define behavior to occur upon receiving the JSON word data
-            task = new JSONTask() {
-                @Override
-                protected void onPostExecute(String result) {
-                    listenerActivity.onDownloadComplete(result);
-                }
-            };
-            String requestURL = dev.handcraftedsoftware.hint.BuildConfig.url + "/words/" + language + "/" + difficulty;
-            task.execute(requestURL);
-            Log.v(TAG,"request URL: " + requestURL);
-        } else {
-            Log.e(TAG, "Not connected to network");
-        }
+
         // For testing purposes
 //        listenerActivity.onDownloadComplete("[\"Pond\",\"uncomfortable\",\"dude\",\"mascot\",\"cargo\",\"telephone booth\",\"albatross\",\"wheat\",\"paper clips\",\"photograph\",\"car dealership\",\"wipe\",\"snatch\",\"winter\",\"ratchet\",\"passport\",\"tiptoe\",\"lemon\",\"seat\",\"disc jockey\",\"succeed\",\"treatment\"]");
 //        TESTING_STATUS = AsyncTask.Status.FINISHED;

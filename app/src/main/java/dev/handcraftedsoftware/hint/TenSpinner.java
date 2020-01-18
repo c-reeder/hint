@@ -248,7 +248,9 @@ public class TenSpinner extends View {
     public void setSpinner(int value) {
 
         if (valueAnimator != null) {
-            valueAnimator.cancel();
+            // Simply skip if we're already animating
+            // This method should only be used upon initializing the view
+            return;
         }
 
         int index = 10 - (value % 10);
