@@ -85,8 +85,6 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
     // Game variables removed here --> See GameModelView
     private GameModelView gameModelView;
 
-    // CountDown used for the game timer
-    private CountDownTimer countDownTimer;
     private ObjectAnimator coverAlphaAnimator;
 
     private int wordHeight;
@@ -186,7 +184,7 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
         acceptWordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startPlaying();
+                gameModelView.setGameState(GameState.PLAYING);
             }
         });
         continueButton.setOnClickListener(new View.OnClickListener() {
@@ -237,31 +235,47 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
                     loadingIcon.setVisibility(View.INVISIBLE);
                     successButton.setVisibility(View.VISIBLE);
                     failureButton.setVisibility(View.VISIBLE);
+                    acceptWordButton.setVisibility(View.INVISIBLE);
+                    viewPager.setVisibility(View.INVISIBLE);
+                    wordHolder.setVisibility(View.VISIBLE);
 
-                    countDownTimer = new CountDownTimer(gameModelView.getCountDownTimeRemaining().getValue(),1000) {
-                        @SuppressLint("DefaultLocale")
+                    wordHolder.setText(gameModelView.getWordList().getValue()[viewPager.getCurrentItem()]);
+
+                    Transition transition = new AutoTransition();
+                    transition.addListener(new Transition.TransitionListener() {
                         @Override
-                        public void onTick(long millisUntilFinished) {
-                            if (gameModelView.getGameState().getValue() == GameState.PLAYING) {
-                                gameModelView.setCountDownTimeRemaining(millisUntilFinished);
-                                timerView.setText(String.format("%02d",Math.round(millisUntilFinished / 1000)));
+                        public void onTransitionStart(@NonNull Transition transition) {
+                            gameModelView.setIsWordHidden(true);
+                        }
+
+                        @Override
+                        public void onTransitionEnd(@NonNull Transition transition) {
+                            if (wordCover.getAlpha() != 1f) {
+                                coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",0f,1f);
+                                coverAlphaAnimator.setDuration(500);
+                                coverAlphaAnimator.setStartDelay(1000);
+                                coverAlphaAnimator.start();
                             }
                         }
 
                         @Override
-                        public void onFinish() {
-                            onCountDownCompleted();
+                        public void onTransitionCancel(@NonNull Transition transition) {
+
                         }
-                    };
-                    countDownTimer.start();
 
-                    if (gameModelView.getIsWordHidden().getValue())
-                        wordCover.setAlpha(1f);
+                        @Override
+                        public void onTransitionPause(@NonNull Transition transition) {
 
-                    // Correctly restore position of the WordHolder vertically between the timerView and the buttonrow
+                        }
+
+                        @Override
+                        public void onTransitionResume(@NonNull Transition transition) {
+
+                        }
+                    });
+
+                    // Animate WordHolder from Center Position to Low Position (beneath the timerView)
                     ConstraintSet newSet = new ConstraintSet();
-                    wordHolder.setText(gameModelView.getWordList().getValue()[gameModelView.getWordIdx().getValue()]);
-                    viewPager.setVisibility(View.INVISIBLE);
                     newSet.clear(R.id.wordHolder);
                     newSet.constrainHeight(R.id.wordHolder, wordHeight);
                     newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
@@ -269,11 +283,36 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
                     newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
                     newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
                     newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
+
+                    Log.d(TAG, "wordHolder.getHeight()1:" + wordHolder.getHeight());
                     TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+
+                    TransitionManager.beginDelayedTransition(layout, transition);
                     wordHolder.setGravity(Gravity.CENTER);
                     newSet.applyTo(layout);
-                    timerView.setText(String.format(Locale.getDefault(),"%02d",Math.round(gameModelView.getCountDownTimeRemaining().getValue() / 1000)));
-                    timerView.setVisibility(View.VISIBLE);
+                    Log.d(TAG, "wordHolder.getHeight()2:" + wordHolder.getHeight());
+
+
+
+                    if (gameModelView.getIsWordHidden().getValue())
+                        wordCover.setAlpha(1f);
+
+//                    // Correctly restore position of the WordHolder vertically between the timerView and the buttonrow
+//                    ConstraintSet newSet = new ConstraintSet();
+//                    wordHolder.setText(gameModelView.getWordList().getValue()[gameModelView.getWordIdx().getValue()]);
+//                    viewPager.setVisibility(View.INVISIBLE);
+//                    newSet.clear(R.id.wordHolder);
+//                    newSet.constrainHeight(R.id.wordHolder, wordHeight);
+//                    newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
+//                    newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.timerView, ConstraintSet.BOTTOM,0);
+//                    newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
+//                    newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
+//                    newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
+//                    TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
+//                    wordHolder.setGravity(Gravity.CENTER);
+//                    newSet.applyTo(layout);
+//                    timerView.setText(String.format(Locale.getDefault(),"%02d",Math.round(gameModelView.getCountDownTimeRemaining().getValue() / 1000)));
+//                    timerView.setVisibility(View.VISIBLE);
                 } else if (newGameState == GameState.TEAM_TRANSITION) {
 
                     timerView.setVisibility(View.INVISIBLE);
@@ -383,7 +422,16 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
                 if (newPP == 10) {
                     ppSpinnerView.resetSpinner();
                 }
-
+            }
+        });
+        gameModelView.getTicker().observe(this, new Observer<Long>() {
+            @Override
+            public void onChanged(Long millis) {
+                if (millis < 0) {
+                    onCountDownCompleted();
+                } else {
+                    timerView.setText(String.format("%02d",Math.round(millis / 1000)));
+                }
             }
         });
 
@@ -465,65 +513,7 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
 
     // State transition to the actual guessing/playing stage
     private void startPlaying() {
-        gameModelView.setGameState(GameState.PLAYING);
 
-        acceptWordButton.setVisibility(View.INVISIBLE);
-        wordHolder.setText(gameModelView.getWordList().getValue()[viewPager.getCurrentItem()]);
-        viewPager.setVisibility(View.INVISIBLE);
-        wordHolder.setVisibility(View.VISIBLE);
-
-        Transition transition = new AutoTransition();
-        transition.addListener(new Transition.TransitionListener() {
-            @Override
-            public void onTransitionStart(@NonNull Transition transition) {
-                gameModelView.setIsWordHidden(true);
-            }
-
-            @Override
-            public void onTransitionEnd(@NonNull Transition transition) {
-                if (wordCover.getAlpha() != 1f) {
-                    coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",0f,1f);
-                    coverAlphaAnimator.setDuration(500);
-                    coverAlphaAnimator.setStartDelay(1000);
-                    coverAlphaAnimator.start();
-                }
-            }
-
-            @Override
-            public void onTransitionCancel(@NonNull Transition transition) {
-
-            }
-
-            @Override
-            public void onTransitionPause(@NonNull Transition transition) {
-
-            }
-
-            @Override
-            public void onTransitionResume(@NonNull Transition transition) {
-
-            }
-        });
-
-        // Animate WordHolder from Center Position to Low Position (beneath the timerView)
-        ConstraintSet newSet = new ConstraintSet();
-        newSet.clear(R.id.wordHolder);
-        newSet.constrainHeight(R.id.wordHolder, wordHeight);
-        newSet.constrainWidth(R.id.wordHolder, ConstraintLayout.LayoutParams.MATCH_PARENT);
-        newSet.connect(R.id.wordHolder, ConstraintSet.TOP,R.id.timerView, ConstraintSet.BOTTOM,0);
-        newSet.connect(R.id.wordHolder, ConstraintSet.LEFT,ConstraintSet.PARENT_ID, ConstraintSet.LEFT,0);
-        newSet.connect(R.id.wordHolder, ConstraintSet.RIGHT,ConstraintSet.PARENT_ID, ConstraintSet.RIGHT,0);
-        newSet.connect(R.id.wordHolder, ConstraintSet.BOTTOM,R.id.buttonRow, ConstraintSet.TOP,0);
-
-        Log.d(TAG, "wordHolder.getHeight()1:" + wordHolder.getHeight());
-        TextViewCompat.setAutoSizeTextTypeWithDefaults(wordHolder, TextViewCompat.AUTO_SIZE_TEXT_TYPE_UNIFORM);
-
-        TransitionManager.beginDelayedTransition(layout, transition);
-        wordHolder.setGravity(Gravity.CENTER);
-        newSet.applyTo(layout);
-        Log.d(TAG, "wordHolder.getHeight()2:" + wordHolder.getHeight());
-
-//        timerView.setText(String.format(Locale.getDefault(),"%02d",Math.round(gameModelView.getCountDownTimeRemaining().getValue() / 1000)));
     }
 
     /**
@@ -538,8 +528,7 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
 
 
         // Reset the timer for next time we use it.
-        countDownTimer.cancel();
-        gameModelView.resetCountDownTimeRemaining();
+        gameModelView.resetCountDownTimer();
 
         TextView currentView = adapter.getCurrentView().findViewById(R.id.singleTextView);
         String currWord = currentView.getText().toString();
@@ -684,7 +673,7 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
 
         if (gameModelView.getGameState().getValue() == GameState.TEAM_TRANSITION) {
             // Next Team guesses
-            startPlaying();
+            gameModelView.setGameState(GameState.PLAYING);
         } else if (gameModelView.getGameState().getValue() == GameState.WORD_TRANSITION) {
             // The other two players now start giving hints and a new word is approved
 

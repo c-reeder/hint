@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.os.CountDownTimer;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -53,10 +54,14 @@ public class GameModelView extends AndroidViewModel implements OneDirectionViewP
     private MutableLiveData<Integer[]> bScores1;
     private MutableLiveData<Integer[]> bScores2;
 
+    // CountDown used for the game timer
+    private CountDownTimer countDownTimer;
     private MutableLiveData<Long> countDownTimeRemaining;
 
     SharedPreferences sharedPreferences;
     JSONTask jsonTask;
+
+    private MutableLiveData<Long> ticker;
 
     private final static String TAG = "GameModelView";
 
@@ -72,6 +77,8 @@ public class GameModelView extends AndroidViewModel implements OneDirectionViewP
         bScores1 = new MutableLiveData<Integer[]>(new Integer[NUM_ROUNDS]);
         bScores2 = new MutableLiveData<Integer[]>(new Integer[NUM_ROUNDS]);
         previousCorrect = new MutableLiveData<Boolean>();
+        ticker = new MutableLiveData<Long>();
+        countDownTimeRemaining = new MutableLiveData<Long>(31000L);
         init();
     }
 
@@ -225,8 +232,28 @@ public class GameModelView extends AndroidViewModel implements OneDirectionViewP
     }
 
     public void setGameState(GameState newGameState) {
+        if (newGameState == GameState.PLAYING) {
+            countDownTimer = new CountDownTimer(countDownTimeRemaining.getValue(),1000) {
+                @SuppressLint("DefaultLocale")
+                @Override
+                public void onTick(long millisUntilFinished) {
+                    if (gameState.getValue() == GameState.PLAYING) {
+                        countDownTimeRemaining.setValue(millisUntilFinished);
+                        ticker.setValue(millisUntilFinished);
+                    }
+                }
+
+                @Override
+                public void onFinish() {
+//                    onCountDownCompleted();
+                    ticker.setValue((long) -1);
+                }
+            };
+            countDownTimer.start();
+        }
         gameState.setValue(newGameState);
     }
+
 
     public MutableLiveData<Integer> getWordIdx() {
         if (wordIdx == null) {
@@ -289,9 +316,6 @@ public class GameModelView extends AndroidViewModel implements OneDirectionViewP
     }
 
     public MutableLiveData<Long> getCountDownTimeRemaining() {
-        if (countDownTimeRemaining == null) {
-            countDownTimeRemaining = new MutableLiveData<Long>(31000L);
-        }
         return countDownTimeRemaining;
     }
     public void setCountDownTimeRemaining(long millis) {
@@ -299,7 +323,8 @@ public class GameModelView extends AndroidViewModel implements OneDirectionViewP
 
     }
 
-    public void resetCountDownTimeRemaining() {
+    public void resetCountDownTimer() {
+        countDownTimer.cancel();
         countDownTimeRemaining.setValue(31000L);
     }
 
@@ -421,5 +446,9 @@ public class GameModelView extends AndroidViewModel implements OneDirectionViewP
         } else {
             incCurrSkipCountA();
         }
+    }
+
+    public MutableLiveData<Long> getTicker() {
+        return ticker;
     }
 }
