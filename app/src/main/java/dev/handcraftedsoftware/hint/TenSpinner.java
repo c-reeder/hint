@@ -229,19 +229,7 @@ public class TenSpinner extends View {
 
 
     }
-//    public void spinToNext() {
-//        if (valueAnimator != null) {
-//            valueAnimator.cancel();
-//            offsetGoal += 36;
-//        } else {
-//            offsetGoal = spinOffset + 36;
-//        }
-//        valueAnimator = ValueAnimator.ofInt(spinOffset,offsetGoal);
-//        valueAnimator.setDuration(1000);
-//        valueAnimator.addUpdateListener(updateListener);
-//        valueAnimator.addListener(animatorListener);
-//        valueAnimator.start();
-//    }
+
     public void resetSpinner() {
         if (valueAnimator != null) {
             valueAnimator.cancel();
@@ -252,7 +240,12 @@ public class TenSpinner extends View {
         valueAnimator.addListener(animatorListener);
         valueAnimator.start();
     }
-    public void setSpinner(int value) {
+
+    public int getSpinnerIdx() {
+        return posIdx;
+    }
+
+    public void setSpinnerIdx(int value) {
 
         // Check for invalid argument
         if (value < 1 || value > 10) {

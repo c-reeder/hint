@@ -7,7 +7,7 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.os.Build;
-import android.os.CountDownTimer;
+
 import androidx.annotation.NonNull;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.ConstraintSet;
@@ -45,7 +45,6 @@ import com.google.android.gms.ads.initialization.OnInitializationCompleteListene
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.Arrays;
-import java.util.Locale;
 
 import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRECTED_TREATMENT_TRUE;
 
@@ -416,12 +415,7 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
         gameModelView.getCurrPP().observe(this, new Observer<Integer>() {
             @Override
             public void onChanged(Integer newPP) {
-
-
-                ppSpinnerView.setSpinner(newPP);
-//                if (newPP == 10) {
-//                    ppSpinnerView.resetSpinner();
-//                }
+                ppSpinnerView.setSpinnerIdx(newPP);
             }
         });
         gameModelView.getTicker().observe(this, new Observer<Long>() {
