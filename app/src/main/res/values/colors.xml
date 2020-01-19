@@ -15,19 +15,19 @@
     <color name="beginSecondaryTextColor">#000000</color>
 
 
-    // TurnActivity Colors
-    <color name="turn_background_color">#bbdefb</color>
-    <color name="turnPrimaryColor">#bbdefb</color>
-    <color name="turnPrimaryDarkColor">#8aacc8</color>
-    <color name="turnSecondaryColor">#42a5f5</color>
-    <color name="turnSecondaryLightColor">#80d6ff</color>
-    <color name="turnSecondaryDarkColor">#0077c2</color>
-    <color name="turnPrimaryTextColor">#000000</color>
-    <color name="turnSecondaryTextColor">#cbe8fb</color>
+    // GameActivity Colors
+    <color name="game_background_color">#bbdefb</color>
+    <color name="gamePrimaryColor">#bbdefb</color>
+    <color name="gamePrimaryDarkColor">#8aacc8</color>
+    <color name="gameSecondaryColor">#42a5f5</color>
+    <color name="gameSecondaryLightColor">#80d6ff</color>
+    <color name="gameSecondaryDarkColor">#0077c2</color>
+    <color name="gamePrimaryTextColor">#000000</color>
+    <color name="gameSecondaryTextColor">#cbe8fb</color>
     <color name="spinnerOutline">#303F9F</color>
-    <color name="spinnerFill">@color/turnSecondaryDarkColor</color>
-    <color name="spinnerTextColor1">@color/turnPrimaryTextColor</color>
-    <color name="spinnerTextColor2">@color/turnSecondaryTextColor</color>
+    <color name="spinnerFill">@color/gameSecondaryDarkColor</color>
+    <color name="spinnerTextColor1">@color/gamePrimaryTextColor</color>
+    <color name="spinnerTextColor2">@color/gameSecondaryTextColor</color>
 
 
     //WinnerActivity Colors

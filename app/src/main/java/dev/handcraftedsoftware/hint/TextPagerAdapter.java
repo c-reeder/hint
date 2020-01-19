@@ -15,7 +15,7 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Adaptor that is used to display a swipeable word in the ViewPager of the TurnActivity.
+ * Adaptor that is used to display a swipeable word in the ViewPager of the GameActivity.
  * @author Connor Reeder
  */
 

@@ -10,5 +10,6 @@ public enum GameState {
     PLAYING,
     TEAM_TRANSITION,
     WORD_TRANSITION,
-    GAME_OVER
+    GAME_OVER,
+    DOWNLOAD_ERROR
 }

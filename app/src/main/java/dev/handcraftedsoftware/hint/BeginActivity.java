@@ -2,12 +2,14 @@ package dev.handcraftedsoftware.hint;
 
 import android.app.ActivityOptions;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatRadioButton;
 import androidx.core.content.res.ResourcesCompat;
 
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.transition.Explode;
 import android.util.Log;
 import android.view.View;
@@ -18,7 +20,6 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
-import android.widget.TextView;
 
 import com.google.ads.mediation.admob.AdMobAdapter;
 import com.google.android.gms.ads.AdRequest;
@@ -41,7 +42,6 @@ import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRE
 public class BeginActivity extends AppCompatActivity implements TutorialDialogFragment.ActionsHandler {
 
     private static final String TAG = "BeginActivity";
-    static final String FIRST_RUN_KEY = "FIRST_RUN";
 
     private EditText nameText1;
     private EditText nameText2;
@@ -64,6 +64,12 @@ public class BeginActivity extends AppCompatActivity implements TutorialDialogFr
         langGroup = findViewById(R.id.langGroup);
         Button helpButton = findViewById(R.id.helpButton);
         Button beginButton = findViewById(R.id.beginButton);
+
+
+        // Fill in last used team names
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        nameText1.setText(sharedPreferences.getString(GK.TEAM_NAME_1, ""));
+        nameText2.setText(sharedPreferences.getString(GK.TEAM_NAME_2, ""));
 
 
         // Setup Radio buttons in the order corresponding to the system language
@@ -214,7 +220,7 @@ public class BeginActivity extends AppCompatActivity implements TutorialDialogFr
         beginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean firstRun = getPreferences(MODE_PRIVATE).getBoolean(FIRST_RUN_KEY,true);
+                boolean firstRun = getPreferences(MODE_PRIVATE).getBoolean(GK.FIRST_RUN,true);
                 if (firstRun) {
                     TutorialDialogFragment tutorialDialogFragment = new TutorialDialogFragment();
                     tutorialDialogFragment.show(getSupportFragmentManager(), "MENU_FRAGMENT");
@@ -274,23 +280,32 @@ public class BeginActivity extends AppCompatActivity implements TutorialDialogFr
 
     @Override
     public void startTutorial() {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(GK.TEAM_NAME_1, nameText1.getText().toString());
+        editor.putString(GK.TEAM_NAME_2, nameText2.getText().toString());
+        editor.apply();
+
+
         Intent intent = new Intent(this, TutorialActivity.class);
-        intent.putExtra(GK.TEAM_NAME_1, nameText1.getText().toString());
-        intent.putExtra(GK.TEAM_NAME_2, nameText2.getText().toString());
-        intent.putExtra("FIRST_RUN", true);
         RadioButton selectedDiff = findViewById(diffGroup.getCheckedRadioButtonId());
         RadioButton selectedLang = findViewById(langGroup.getCheckedRadioButtonId());
         if (selectedDiff.getId() == R.id.easyButton) {
-            intent.putExtra(GK.DIFFICULTY, GV.EASY);
+//            intent.putExtra(GK.DIFFICULTY, GV.EASY);
+            editor.putString(GK.DIFFICULTY, GV.EASY);
         } else if (selectedDiff.getId() == R.id.mediumButton) {
-            intent.putExtra(GK.DIFFICULTY, GV.MEDIUM);
+//            intent.putExtra(GK.DIFFICULTY, GV.MEDIUM);
+            editor.putString(GK.DIFFICULTY, GV.MEDIUM);
         } else if (selectedDiff.getId() == R.id.hardButton) {
-            intent.putExtra(GK.DIFFICULTY, GV.HARD);
+//            intent.putExtra(GK.DIFFICULTY, GV.HARD);
+            editor.putString(GK.DIFFICULTY, GV.HARD);
         }
         if (selectedLang.getId() == R.id.englishButton) {
-            intent.putExtra(GK.LANGUAGE, GV.ENGLISH);
+//            intent.putExtra(GK.LANGUAGE, GV.ENGLISH);
+            editor.putString(GK.LANGUAGE, GV.ENGLISH);
         } else if (selectedLang.getId() == R.id.spanishButton) {
-            intent.putExtra(GK.LANGUAGE, GV.SPANISH);
+//            intent.putExtra(GK.LANGUAGE, GV.SPANISH);
+            editor.putString(GK.LANGUAGE, GV.SPANISH);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
@@ -301,22 +316,31 @@ public class BeginActivity extends AppCompatActivity implements TutorialDialogFr
 
     @Override
     public void startGame() {
-        Intent intent = new Intent(this, TurnActivity.class);
-        intent.putExtra(GK.TEAM_NAME_1, nameText1.getText().toString());
-        intent.putExtra(GK.TEAM_NAME_2, nameText2.getText().toString());
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(GK.TEAM_NAME_1, nameText1.getText().toString());
+        editor.putString(GK.TEAM_NAME_2, nameText2.getText().toString());
+        editor.apply();
+
+        Intent intent = new Intent(this, GameActivity.class);
         RadioButton selectedDiff = findViewById(diffGroup.getCheckedRadioButtonId());
         RadioButton selectedLang = findViewById(langGroup.getCheckedRadioButtonId());
         if (selectedDiff.getId() == R.id.easyButton) {
-            intent.putExtra(GK.DIFFICULTY, GV.EASY);
+//            intent.putExtra(GK.DIFFICULTY, GV.EASY);
+            editor.putString(GK.DIFFICULTY, GV.EASY);
         } else if (selectedDiff.getId() == R.id.mediumButton) {
-            intent.putExtra(GK.DIFFICULTY, GV.MEDIUM);
+//            intent.putExtra(GK.DIFFICULTY, GV.MEDIUM);
+            editor.putString(GK.DIFFICULTY, GV.MEDIUM);
         } else if (selectedDiff.getId() == R.id.hardButton) {
-            intent.putExtra(GK.DIFFICULTY, GV.HARD);
+//            intent.putExtra(GK.DIFFICULTY, GV.HARD);
+            editor.putString(GK.DIFFICULTY, GV.HARD);
         }
         if (selectedLang.getId() == R.id.englishButton) {
-            intent.putExtra(GK.LANGUAGE, GV.ENGLISH);
+//            intent.putExtra(GK.LANGUAGE, GV.ENGLISH);
+            editor.putString(GK.LANGUAGE, GV.ENGLISH);
         } else if (selectedLang.getId() == R.id.spanishButton) {
-            intent.putExtra(GK.LANGUAGE, GV.SPANISH);
+//            intent.putExtra(GK.LANGUAGE, GV.SPANISH);
+            editor.putString(GK.LANGUAGE, GV.SPANISH);
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             startActivity(intent, ActivityOptions.makeSceneTransitionAnimation(this).toBundle());
