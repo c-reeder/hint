@@ -22,7 +22,7 @@ import org.json.JSONException;
 
 import static dev.handcraftedsoftware.hint.GameActivity.NUM_ROUNDS;
 
-public class GameModelView extends AndroidViewModel {
+public class GameModelView extends AndroidViewModel implements OneDirectionViewPager.SwipeController {
 
     // Values Constant for the Entirety of one Game
     //private boolean inPlay;
@@ -182,6 +182,10 @@ public class GameModelView extends AndroidViewModel {
         return isTeam2;
     }
 
+    public void setIsTeam2(boolean isNowTeam2) {
+        isTeam2.setValue(isNowTeam2);
+    }
+
     public MutableLiveData<Integer[]> getTotalScores() {
         if (totalScores == null) {
             totalScores = new MutableLiveData<Integer[]>(new Integer[]{0,0});
@@ -220,11 +224,19 @@ public class GameModelView extends AndroidViewModel {
         return gameState;
     }
 
+    public void setGameState(GameState newGameState) {
+        gameState.setValue(newGameState);
+    }
+
     public MutableLiveData<Integer> getWordIdx() {
         if (wordIdx == null) {
             wordIdx = new MutableLiveData<Integer>(0);
         }
         return wordIdx;
+    }
+
+    public void setWordIdx(int newWordIdx) {
+        wordIdx.setValue(newWordIdx);
     }
 
     public void incWordIdx() {
@@ -236,6 +248,10 @@ public class GameModelView extends AndroidViewModel {
             isWordHidden = new MutableLiveData<Boolean>(false);
         }
         return isWordHidden;
+    }
+
+    public void setIsWordHidden(boolean isNowHidden) {
+        isWordHidden.setValue(isNowHidden);
     }
 
     public MutableLiveData<String[]> getaWords() {
@@ -277,6 +293,10 @@ public class GameModelView extends AndroidViewModel {
             countDownTimeRemaining = new MutableLiveData<Long>(31000L);
         }
         return countDownTimeRemaining;
+    }
+    public void setCountDownTimeRemaining(long millis) {
+        countDownTimeRemaining.setValue(millis);
+
     }
 
     public void resetCountDownTimeRemaining() {
@@ -366,5 +386,40 @@ public class GameModelView extends AndroidViewModel {
 
     public boolean isTeam2ScoreGreater() {
         return totalScores.getValue()[1] > totalScores.getValue()[0];
+    }
+
+
+    /**
+     * Callback method from the OneDirectionViewPager interface
+     * @return whether or not to permit the word-swiper to swipe at the moment
+     */
+    @Override
+    public boolean canSwipe() {
+        if (gameState.getValue() != GameState.WORD_APPROVAL) {
+            return false;
+        }
+        // Returns whether or not the current word can be skipped.
+        if (isPartnerB.getValue()) {
+            return (currPP.getValue() == 10) && currSkipCountB.getValue() < 5;
+        } else {
+            return (currPP.getValue() == 10) && currSkipCountA.getValue() < 5;
+        }
+    }
+
+
+    /**
+     * Callback Method implementing the OneDirectionViewPager which is called upon a swipe being performed.
+     * In this case we are using it to update the counts of how many times each set of opposing players has skipped a word
+     * @param newIndex the index of the OneDirectionViewPager after being swiped.
+     */
+    @Override
+    public void onSwiped(int newIndex) {
+        Log.v(TAG, "onSwiped: " + wordIdx.getValue() + "->" + newIndex);
+        wordIdx.setValue(newIndex);
+        if (isPartnerB.getValue()) {
+            incCurrSkipCountB();
+        } else {
+            incCurrSkipCountA();
+        }
     }
 }

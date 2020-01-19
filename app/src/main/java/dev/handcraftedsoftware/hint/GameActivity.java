@@ -55,7 +55,7 @@ import static com.google.android.gms.ads.RequestConfiguration.TAG_FOR_CHILD_DIRE
  * The display shows the word to be guessed, the current score, and the number of the round.
  * By Connor Reeder
  */
-public class GameActivity extends AppCompatActivity implements OneDirectionViewPager.SwipeController, View.OnTouchListener, MenuFragment.MenuActionsHandler {
+public class GameActivity extends AppCompatActivity implements View.OnTouchListener, MenuFragment.MenuActionsHandler {
 
     private static final String TAG = "GameActivity";
     public static final int NUM_ROUNDS = 6;
@@ -135,7 +135,7 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
         partnerLetterView = findViewById(R.id.partnerLetterText);
         teamNameView = findViewById(R.id.teamName);
         viewPager = findViewById(R.id.pager);
-        viewPager.setSwipeController(this);
+        viewPager.setSwipeController(gameModelView);
         acceptWordButton = findViewById(R.id.acceptWordButton);
         continueButton = findViewById(R.id.continueButton);
         messageView = findViewById(R.id.messageView);
@@ -155,7 +155,7 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
                 if (gameModelView.getGameState().getValue() == GameState.PLAYING || gameModelView.getGameState().getValue() == GameState.TEAM_TRANSITION) {
                     if (motionEvent.getActionMasked() == MotionEvent.ACTION_DOWN) {
                         Log.d(TAG, "layout ACTION_DOWN");
-                        gameModelView.getIsWordHidden().setValue(false);
+                        gameModelView.setIsWordHidden(false);
 //                        isWordHidden = false;
                         if (coverAlphaAnimator.isRunning()) {
                             coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",(float)coverAlphaAnimator.getAnimatedValue(),0f);
@@ -167,7 +167,7 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
                         return true;
                     } else if (motionEvent.getActionMasked() == MotionEvent.ACTION_UP) {
                         Log.d(TAG, "layout ACTION_UP");
-                        gameModelView.getIsWordHidden().setValue(false);
+                        gameModelView.setIsWordHidden(true);
 //                        isWordHidden = true;
                         if (coverAlphaAnimator.isRunning()) {
                             coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",(float)coverAlphaAnimator.getAnimatedValue(),1f);
@@ -186,7 +186,7 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
         acceptWordButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                onAcceptWord();
+                startPlaying();
             }
         });
         continueButton.setOnClickListener(new View.OnClickListener() {
@@ -233,12 +233,19 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
                 } else if (newGameState == GameState.PLAYING) {
                     // Initialize the CountDownTimer from where it was before we stopped
                     timerView.setVisibility(View.VISIBLE);
+                    messageView.setVisibility(View.INVISIBLE);
+                    loadingIcon.setVisibility(View.INVISIBLE);
+                    successButton.setVisibility(View.VISIBLE);
+                    failureButton.setVisibility(View.VISIBLE);
+
                     countDownTimer = new CountDownTimer(gameModelView.getCountDownTimeRemaining().getValue(),1000) {
                         @SuppressLint("DefaultLocale")
                         @Override
                         public void onTick(long millisUntilFinished) {
-                            gameModelView.getCountDownTimeRemaining().setValue(millisUntilFinished);
-                            timerView.setText(String.format("%02d",Math.round(millisUntilFinished / 1000)));
+                            if (gameModelView.getGameState().getValue() == GameState.PLAYING) {
+                                gameModelView.setCountDownTimeRemaining(millisUntilFinished);
+                                timerView.setText(String.format("%02d",Math.round(millisUntilFinished / 1000)));
+                            }
                         }
 
                         @Override
@@ -269,8 +276,11 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
                     timerView.setVisibility(View.VISIBLE);
                 } else if (newGameState == GameState.TEAM_TRANSITION) {
 
+                    timerView.setVisibility(View.INVISIBLE);
+                    loadingIcon.setVisibility(View.INVISIBLE);
 
                     promptForContinue(getString(R.string.pass_phone_next));
+                    timerView.setVisibility(View.INVISIBLE);
 
                     if (gameModelView.getIsWordHidden().getValue())
                         wordCover.setAlpha(1f);
@@ -294,6 +304,8 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
                     newSet.applyTo(layout);
                 } else if (newGameState == GameState.WORD_TRANSITION) {
                     promptForContinue(getString(R.string.pass_phone_across));
+                    timerView.setVisibility(View.INVISIBLE);
+                    loadingIcon.setVisibility(View.INVISIBLE);
 
                     Log.v(TAG, "Restarting in Word Transition!");
                     wordHolder.setText(gameModelView.getWordList().getValue()[gameModelView.getWordIdx().getValue()]);
@@ -325,7 +337,7 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
                 roundView.setText(String.format("%c%s",'#',Integer.toString(newRound)));
 
                 // Alternate which team begins each round
-                gameModelView.getIsTeam2().setValue((newRound % 2) == 0);
+                gameModelView.setIsTeam2((newRound % 2) == 0);
             }
         });
         gameModelView.getTotalScores().observe(this, new Observer<Integer[]>() {
@@ -366,36 +378,11 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
             @Override
             public void onChanged(Integer newPP) {
 
-                ppSpinnerView.setSpinner(gameModelView.getCurrPP().getValue());
+                ppSpinnerView.setSpinner(newPP);
 
                 if (newPP == 10) {
                     ppSpinnerView.resetSpinner();
                 }
-
-                // The word was NEVER guessed and there are not more tries left
-                if (newPP < 1) {
-
-                    TextView currentView = adapter.getCurrentView().findViewById(R.id.singleTextView);
-                    String currWord = currentView.getText().toString();
-                    gameModelView.storeResult(currWord);
-                    gameModelView.scoreIncorrectAnswer();
-
-                    coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",1f,0f);
-                    coverAlphaAnimator.setDuration(500);
-                    coverAlphaAnimator.start();
-
-                    // Increment the round number if both sets of opposing players have played
-                    if (gameModelView.getIsPartnerB().getValue())
-                        gameModelView.incCurrRound();
-
-                    gameModelView.flipPartnerLetter();
-
-                } else {// The word has not yet been correctly guessed but there are still chances left
-                    // Switch teams and decrement possible points
-                    gameModelView.switchTeams();
-                    // Transition to next team
-                }
-
 
             }
         });
@@ -455,31 +442,10 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
         snackbar.show();
     }
 
-    /**
-     * Callback Method implementing the OneDirectionViewPager which is called upon a swipe being performed.
-     * In this case we are using it to update the counts of how many times each set of opposing players has skipped a word
-     * @param newIndex the index of the OneDirectionViewPager after being swiped.
-     */
-    @Override
-    public void onSwiped(int newIndex) {
-        Log.v(TAG, "onSwiped: " + gameModelView.getWordIdx().getValue() + "->" + newIndex);
-        gameModelView.getWordIdx().setValue(newIndex);
-        if (gameModelView.getIsPartnerB().getValue()) {
-            gameModelView.incCurrSkipCountB();
-//            currSkipCountB++;
-        } else {
-            gameModelView.incCurrSkipCountA();
-//            currSkipCountA++;
-        }
-    }
 
     @Override
     protected void onResume() {
         super.onResume();
-        DownloadFragment downloadFragment = (DownloadFragment) getSupportFragmentManager().findFragmentByTag(GK.DOWNLOAD_FRAGMENT);
-        if (downloadFragment != null && downloadFragment.isComplete()) {
-            loadingIcon.setVisibility(View.INVISIBLE);
-        }
         setToFullScreen();
     }
 
@@ -497,15 +463,9 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
         getWindow().getDecorView().setSystemUiVisibility(value);
     }
 
-    // State transition called when the AcceptButton is pressed
-    private void onAcceptWord() {
-        Log.v(TAG, "Word Accepted");
-        startPlaying();
-    }
-
     // State transition to the actual guessing/playing stage
     private void startPlaying() {
-        gameModelView.getGameState().setValue(GameState.PLAYING);
+        gameModelView.setGameState(GameState.PLAYING);
 
         acceptWordButton.setVisibility(View.INVISIBLE);
         wordHolder.setText(gameModelView.getWordList().getValue()[viewPager.getCurrentItem()]);
@@ -516,7 +476,7 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
         transition.addListener(new Transition.TransitionListener() {
             @Override
             public void onTransitionStart(@NonNull Transition transition) {
-                gameModelView.getIsWordHidden().setValue(true);
+                gameModelView.setIsWordHidden(true);
             }
 
             @Override
@@ -577,8 +537,7 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
         }
 
 
-        // Get rid of the timer and reset it for next time we use it.
-        timerView.setVisibility(View.INVISIBLE);
+        // Reset the timer for next time we use it.
         countDownTimer.cancel();
         gameModelView.resetCountDownTimeRemaining();
 
@@ -603,6 +562,25 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
             ppSpinnerView.spinToNext();
             gameModelView.decCurrPP();
 
+            // The word was NEVER guessed and there are not more tries left
+            if (gameModelView.getCurrPP().getValue() < 1) {
+
+                gameModelView.storeResult(currWord);
+                gameModelView.scoreIncorrectAnswer();
+
+                coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",1f,0f);
+                coverAlphaAnimator.setDuration(500);
+                coverAlphaAnimator.start();
+
+                // Increment the round number if both sets of opposing players have played
+                if (gameModelView.getIsPartnerB().getValue())
+                    gameModelView.incCurrRound();
+
+                gameModelView.flipPartnerLetter();
+
+            } else {// The word has not yet been correctly guessed but there are still chances left
+                gameModelView.switchTeams();
+            }
 
 
         }
@@ -610,7 +588,7 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
         // Check if end of game
         if (gameModelView.getCurrRound().getValue() > NUM_ROUNDS) {
             // Game is Over
-            gameModelView.getGameState().setValue(GameState.GAME_OVER);
+            gameModelView.setGameState(GameState.GAME_OVER);
             startWinnerScreen();
 
         } else { // If not the end of the game
@@ -710,8 +688,6 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
         } else if (gameModelView.getGameState().getValue() == GameState.WORD_TRANSITION) {
             // The other two players now start giving hints and a new word is approved
 
-//            layout.setBackgroundColor(Color.WHITE);
-
             Transition transition = new AutoTransition();
             transition.addListener(new Transition.TransitionListener() {
                 @Override
@@ -729,7 +705,7 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
                     Log.v(TAG, "nextWord");
                     viewPager.setCurrentItem(viewPager.getCurrentItem() + 1, true);
                     gameModelView.incWordIdx();
-                    gameModelView.getGameState().setValue(GameState.WORD_APPROVAL);
+                    gameModelView.setGameState(GameState.WORD_APPROVAL);
                 }
 
                 @Override
@@ -771,24 +747,7 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
 
 
 
-    /**
-     * Callback method from the OneDirectionViewPager interface
-     * @return whether or not to permit the word-swiper to swipe at the moment
-     */
-    @Override
-    public boolean canSwipe() {
-        boolean inApprovalState = (gameModelView.getGameState().getValue() == GameState.WORD_APPROVAL);
-        Log.v(TAG, "canSwipe: " + inApprovalState);
-        if (!inApprovalState) {
-            return false;
-        }
-        // Returns whether or not the current word can be skipped.
-        if (gameModelView.getIsPartnerB().getValue()) {
-            return (gameModelView.getCurrPP().getValue() == 10) && gameModelView.getCurrSkipCountB().getValue() < 5;
-        } else {
-            return (gameModelView.getCurrPP().getValue() == 10) && gameModelView.getCurrSkipCountA().getValue() < 5;
-        }
-    }
+
 
 
     /**
@@ -839,7 +798,6 @@ public class GameActivity extends AppCompatActivity implements OneDirectionViewP
     private void onCountDownCompleted() {
         Log.v(TAG, "Timer Complete!");
         // Simulate a Incorrect Button press
-        Button incorrectButton = findViewById(R.id.failureButton);
-        guessMade(incorrectButton);
+        guessMade(failureButton);
     }
 }
