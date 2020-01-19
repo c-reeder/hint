@@ -66,6 +66,12 @@ public class BeginActivity extends AppCompatActivity implements TutorialDialogFr
         Button beginButton = findViewById(R.id.beginButton);
 
 
+        // Fill in last used team names
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        nameText1.setText(sharedPreferences.getString(GK.TEAM_NAME_1, ""));
+        nameText2.setText(sharedPreferences.getString(GK.TEAM_NAME_2, ""));
+
+
         // Setup Radio buttons in the order corresponding to the system language
         if (langGroup.getChildCount() == 0) {
             AppCompatRadioButton englishButton = new AppCompatRadioButton(this);
@@ -278,9 +284,10 @@ public class BeginActivity extends AppCompatActivity implements TutorialDialogFr
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(GK.TEAM_NAME_1, nameText1.getText().toString());
         editor.putString(GK.TEAM_NAME_2, nameText2.getText().toString());
+        editor.apply();
+
+
         Intent intent = new Intent(this, TutorialActivity.class);
-//        intent.putExtra(GK.TEAM_NAME_1, nameText1.getText().toString());
-//        intent.putExtra(GK.TEAM_NAME_2, nameText2.getText().toString());
         RadioButton selectedDiff = findViewById(diffGroup.getCheckedRadioButtonId());
         RadioButton selectedLang = findViewById(langGroup.getCheckedRadioButtonId());
         if (selectedDiff.getId() == R.id.easyButton) {
@@ -313,6 +320,7 @@ public class BeginActivity extends AppCompatActivity implements TutorialDialogFr
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(GK.TEAM_NAME_1, nameText1.getText().toString());
         editor.putString(GK.TEAM_NAME_2, nameText2.getText().toString());
+        editor.apply();
 
         Intent intent = new Intent(this, GameActivity.class);
         RadioButton selectedDiff = findViewById(diffGroup.getCheckedRadioButtonId());

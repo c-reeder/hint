@@ -93,22 +93,23 @@ public class GameModelView extends AndroidViewModel implements OneDirectionViewP
 
         ConnectivityManager cm = (ConnectivityManager) getApplication().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-//        if (netInfo != null && netInfo.isConnected()) {
-//            //Define behavior to occur upon receiving the JSON word data
-//            jsonTask = new JSONTask() {
-//                @Override
-//                protected void onPostExecute(String result) {
-//                    onDownloadComplete(result);
-//                }
-//            };
-//            String requestURL = dev.handcraftedsoftware.hint.BuildConfig.url + "/words/" + language.getValue() + "/" + difficulty.getValue();
-//            jsonTask.execute(requestURL);
-//            Log.v(TAG,"request URL: " + requestURL);
-//        } else {
-//            Log.e(TAG, "Not connected to network");
-//        }
+        if (netInfo != null && netInfo.isConnected()) {
+            //Define behavior to occur upon receiving the JSON word data
+            jsonTask = new JSONTask() {
+                @Override
+                protected void onPostExecute(String result) {
+                    onDownloadComplete(result);
+                }
+            };
+            String requestURL = dev.handcraftedsoftware.hint.BuildConfig.url + "/words/" + language.getValue() + "/" + difficulty.getValue();
+            jsonTask.execute(requestURL);
+            Log.v(TAG,"request URL: " + requestURL);
+        } else {
+            Log.e(TAG, "Not connected to network");
+        }
 
-        onDownloadComplete("[\"Pond\",\"uncomfortable\",\"dude\",\"mascot\",\"cargo\",\"telephone booth\",\"albatross\",\"wheat\",\"paper clips\",\"photograph\",\"car dealership\",\"wipe\",\"snatch\",\"winter\",\"ratchet\",\"passport\",\"tiptoe\",\"lemon\",\"seat\",\"disc jockey\",\"succeed\",\"treatment\"]");
+//        // For testing
+//        onDownloadComplete("[\"Pond\",\"uncomfortable\",\"dude\",\"mascot\",\"cargo\",\"telephone booth\",\"albatross\",\"wheat\",\"paper clips\",\"photograph\",\"car dealership\",\"wipe\",\"snatch\",\"winter\",\"ratchet\",\"passport\",\"tiptoe\",\"lemon\",\"seat\",\"disc jockey\",\"succeed\",\"treatment\"]");
     }
 
     private void onDownloadComplete(String result) {
@@ -134,14 +135,22 @@ public class GameModelView extends AndroidViewModel implements OneDirectionViewP
 
     public MutableLiveData<String> getTeamName1() {
         if (teamName1 == null) {
-            teamName1 = new MutableLiveData<String>(sharedPreferences.getString(GK.TEAM_NAME_1, getApplication().getString(R.string.team1)));
+            String name = sharedPreferences.getString(GK.TEAM_NAME_1, getApplication().getString(R.string.team1));
+            if (name.equals("")) {
+                name = getApplication().getString(R.string.team1);
+            }
+            teamName1 = new MutableLiveData<String>(name);
         }
         return teamName1;
     }
 
     public MutableLiveData<String> getTeamName2() {
         if (teamName2 == null) {
-            teamName2 = new MutableLiveData<String>(sharedPreferences.getString(GK.TEAM_NAME_2, getApplication().getString(R.string.team2)));
+            String name = sharedPreferences.getString(GK.TEAM_NAME_2, getApplication().getString(R.string.team2));
+            if (name.equals("")) {
+                name = getApplication().getString(R.string.team2);
+            }
+            teamName2 = new MutableLiveData<String>(name);
         }
         return teamName2;
     }

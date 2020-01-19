@@ -524,8 +524,15 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
         // Reset the timer for next time we use it.
         gameModelView.resetCountDownTimer();
 
-        TextView currentView = adapter.getCurrentView().findViewById(R.id.singleTextView);
-        String currWord = currentView.getText().toString();
+        TextView currentView;
+        String currWord;
+        try {
+             currentView = adapter.getCurrentView().findViewById(R.id.singleTextView);
+             currWord = currentView.getText().toString();
+        } catch (Exception ex) {
+            // Rotation right at time == 0 could cause NullPtr here
+            return;
+        }
         // If the guess was correct
         if (view.getId() == R.id.successButton) {
 
@@ -610,10 +617,10 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
             winnerIntent.putExtra(GK.WINNER_TEAM_NAME, gameModelView.getTeamName2().getValue());
 
         // Attach the team names and necessary scoring values to the Winner Screen intent
-        winnerIntent.putExtra(GK.A_SCORES_1, gameModelView.getaScores1().getValue());
-        winnerIntent.putExtra(GK.A_SCORES_2, gameModelView.getaScores2().getValue());
-        winnerIntent.putExtra(GK.B_SCORES_1, gameModelView.getbScores1().getValue());
-        winnerIntent.putExtra(GK.B_SCORES_2, gameModelView.getbScores2().getValue());
+        winnerIntent.putExtra(GK.A_SCORES_1, convertToSimpleIntArray(gameModelView.getaScores1().getValue()));
+        winnerIntent.putExtra(GK.A_SCORES_2, convertToSimpleIntArray(gameModelView.getaScores2().getValue()));
+        winnerIntent.putExtra(GK.B_SCORES_1, convertToSimpleIntArray(gameModelView.getbScores1().getValue()));
+        winnerIntent.putExtra(GK.B_SCORES_2, convertToSimpleIntArray(gameModelView.getbScores2().getValue()));
         winnerIntent.putExtra(GK.A_WORDS, gameModelView.getaWords().getValue());
         winnerIntent.putExtra(GK.B_WORDS, gameModelView.getbWords().getValue());
         winnerIntent.putExtra(GK.TOTAL_SCORE_1, gameModelView.getTotalScores().getValue()[0]);
@@ -781,5 +788,13 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
         Log.v(TAG, "Timer Complete!");
         // Simulate a Incorrect Button press
         guessMade(failureButton);
+    }
+
+    private int[] convertToSimpleIntArray(Integer[] inArr) {
+        int[] outArr = new int[inArr.length];
+        for (int i = 0; i < outArr.length; i++) {
+            outArr[i] = inArr[i].intValue();
+        }
+        return outArr;
     }
 }

@@ -39,6 +39,8 @@ public class ScoreActivity extends AppCompatActivity {
     private int[] bScores2;
     private int totalScore1;
     private int totalScore2;
+    private String teamName1;
+    private String teamName2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -119,6 +121,24 @@ public class ScoreActivity extends AppCompatActivity {
         } else {
             Log.d(TAG, "totalScore2 not passed correctly!");
         }
+
+        if (parentIntent.getStringExtra(GK.TEAM_NAME_1) != null) {
+            teamName1 = parentIntent.getStringExtra(GK.TEAM_NAME_1);
+        } else {
+            teamName1 = getString(R.string.team1);
+        }
+
+        if (parentIntent.getStringExtra(GK.TEAM_NAME_2) != null) {
+            teamName2 = parentIntent.getStringExtra(GK.TEAM_NAME_2);
+        } else {
+            teamName2 = getString(R.string.team2);
+        }
+
+        //Set Team Names
+        TextView teamNameView1 = findViewById(R.id.teamNameView1);
+        TextView teamNameView2 = findViewById(R.id.teamNameView2);
+        teamNameView1.setText(teamName1);
+        teamNameView2.setText(teamName2);
 
         TableLayout scoreTable = findViewById(R.id.scoreTable);
         for (int i = 0; i < NUM_ROUNDS; i++) {

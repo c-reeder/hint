@@ -5,7 +5,8 @@
     android:id="@+id/activity_turn"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="dev.handcraftedsoftware.hint.GameActivity">
+    tools:context="dev.handcraftedsoftware.hint.GameActivity"
+    android:keepScreenOn="true" >
 
     <dev.handcraftedsoftware.hint.OneDirectionViewPager
         android:id="@+id/pager"

@@ -16,6 +16,7 @@ import androidx.core.graphics.drawable.DrawableCompat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.transition.Explode;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Display;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import android.view.View;
 import androidx.appcompat.widget.AppCompatImageView;
 
 
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -42,6 +44,8 @@ public class WinnerActivity extends AppCompatActivity {
 
     private Bundle scoreExtras;
 
+    private static final String TAG = "WinnerActivity";
+
     static {
         AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
     }
@@ -56,25 +60,42 @@ public class WinnerActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_winner);
 
+        Intent parentIntent = getIntent();
         // For testing purposes only
-        Intent parentIntent = new Intent();
-        parentIntent.putExtra(GK.A_SCORES_1,new int[]{10, 9, 10, 0, 10, 9});
-        parentIntent.putExtra(GK.A_SCORES_2,new int[]{0, 0, 0, 10,0, 0});
-        parentIntent.putExtra(GK.B_SCORES_1,new int[]{0, 9, 0, 0, 10, 9});
-        parentIntent.putExtra(GK.B_SCORES_2,new int[]{9, 0, 9, 10, 0, 0});
-        parentIntent.putExtra(GK.A_WORDS,new String[]{"bunk bed", "stove", "condition", "sweater", "rope", "edit"});
-        parentIntent.putExtra(GK.B_WORDS,new String[]{"flight", "president", "bushes", "tomorrow", "pastry", "disc golf (frisbee golf)"});
-        parentIntent.putExtra(GK.TOTAL_SCORE_1, 76);
-        parentIntent.putExtra(GK.TOTAL_SCORE_2, 38);
-        parentIntent.putExtra(GK.TEAM_NAME_1, "Team 1");
-        parentIntent.putExtra(GK.TEAM_NAME_2, "Team 2");
-        parentIntent.putExtra(GK.DIFFICULTY, "easy");
-        parentIntent.putExtra(GK.LANGUAGE, "English");
-        parentIntent.putExtra(GK.WINNER_TEAM_NAME, "Team 1");
+//        Intent parentIntent = new Intent();
+//        parentIntent.putExtra(GK.A_SCORES_1,new int[]{10, 9, 10, 0, 10, 9});
+//        parentIntent.putExtra(GK.A_SCORES_2,new int[]{0, 0, 0, 10,0, 0});
+//        parentIntent.putExtra(GK.B_SCORES_1,new int[]{0, 9, 0, 0, 10, 9});
+//        parentIntent.putExtra(GK.B_SCORES_2,new int[]{9, 0, 9, 10, 0, 0});
+//        parentIntent.putExtra(GK.A_WORDS,new String[]{"bunk bed", "stove", "condition", "sweater", "rope", "edit"});
+//        parentIntent.putExtra(GK.B_WORDS,new String[]{"flight", "president", "bushes", "tomorrow", "pastry", "disc golf (frisbee golf)"});
+//        parentIntent.putExtra(GK.TOTAL_SCORE_1, 76);
+//        parentIntent.putExtra(GK.TOTAL_SCORE_2, 38);
+//        parentIntent.putExtra(GK.TEAM_NAME_1, "Team 1");
+//        parentIntent.putExtra(GK.TEAM_NAME_2, "Team 2");
+//        parentIntent.putExtra(GK.DIFFICULTY, "easy");
+//        parentIntent.putExtra(GK.LANGUAGE, "English");
+//        parentIntent.putExtra(GK.WINNER_TEAM_NAME, "Team 1");
+
+
+        Log.d(TAG, "GK.A_SCORES_1: " + parentIntent.getIntArrayExtra(GK.A_SCORES_1));
+        Log.d(TAG, "GK.A_SCORES_2: " + parentIntent.getIntArrayExtra(GK.A_SCORES_2));
+        Log.d(TAG, "GK.B_SCORES_1: " + parentIntent.getIntArrayExtra(GK.B_SCORES_1));
+        Log.d(TAG, "GK.B_SCORES_2: " + parentIntent.getIntArrayExtra(GK.B_SCORES_2));
+        Log.d(TAG, "GK.A_WORDS: " + parentIntent.getStringArrayExtra(GK.A_WORDS));
+        Log.d(TAG, "GK.B_WORDS: " + parentIntent.getStringArrayExtra(GK.B_WORDS));
+        Log.d(TAG, "GK.TOTAL_SCORE_1: " + parentIntent.getIntExtra(GK.TOTAL_SCORE_1,0));
+        Log.d(TAG, "GK.TOTAL_SCORE_2: " + parentIntent.getIntExtra(GK.TOTAL_SCORE_2, 0));
+        Log.d(TAG, "GK.TEAM_NAME_1: " + parentIntent.getStringExtra(GK.TEAM_NAME_1));
+        Log.d(TAG, "GK.TEAM_NAME_2: " + parentIntent.getStringExtra(GK.TEAM_NAME_2));
+        Log.d(TAG, "GK.DIFFICULTY: " + parentIntent.getStringExtra(GK.DIFFICULTY));
+        Log.d(TAG, "GK.LANGUAGE: " + parentIntent.getStringExtra(GK.LANGUAGE));
 
 
 //        Intent parentIntent = getIntent();
+
         scoreExtras = parentIntent.getExtras();
+        Log.d(TAG, "Passing: " + Arrays.toString(parentIntent.getIntArrayExtra(GK.A_SCORES_1)));
         final TextView winnerView = findViewById(R.id.winnerText);
 
         if (parentIntent.getStringExtra(GK.WINNER_TEAM_NAME) != null) {
