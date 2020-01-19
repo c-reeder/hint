@@ -79,6 +79,12 @@ public class GameModelView extends AndroidViewModel implements OneDirectionViewP
         previousCorrect = new MutableLiveData<Boolean>();
         ticker = new MutableLiveData<Long>();
         countDownTimeRemaining = new MutableLiveData<Long>(31000L);
+        currSkipCountA = new MutableLiveData<Integer>(0);
+        currSkipCountB = new MutableLiveData<Integer>(0);
+        wordIdx = new MutableLiveData<Integer>(0);
+        wordList = new MutableLiveData<String[]>();
+        gameState = new MutableLiveData<GameState>(GameState.AWAITING_WORDS);
+
         init();
     }
 
@@ -87,20 +93,22 @@ public class GameModelView extends AndroidViewModel implements OneDirectionViewP
 
         ConnectivityManager cm = (ConnectivityManager) getApplication().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
-        if (netInfo != null && netInfo.isConnected()) {
-            //Define behavior to occur upon receiving the JSON word data
-            jsonTask = new JSONTask() {
-                @Override
-                protected void onPostExecute(String result) {
-                    onDownloadComplete(result);
-                }
-            };
-            String requestURL = dev.handcraftedsoftware.hint.BuildConfig.url + "/words/" + language.getValue() + "/" + difficulty.getValue();
-            jsonTask.execute(requestURL);
-            Log.v(TAG,"request URL: " + requestURL);
-        } else {
-            Log.e(TAG, "Not connected to network");
-        }
+//        if (netInfo != null && netInfo.isConnected()) {
+//            //Define behavior to occur upon receiving the JSON word data
+//            jsonTask = new JSONTask() {
+//                @Override
+//                protected void onPostExecute(String result) {
+//                    onDownloadComplete(result);
+//                }
+//            };
+//            String requestURL = dev.handcraftedsoftware.hint.BuildConfig.url + "/words/" + language.getValue() + "/" + difficulty.getValue();
+//            jsonTask.execute(requestURL);
+//            Log.v(TAG,"request URL: " + requestURL);
+//        } else {
+//            Log.e(TAG, "Not connected to network");
+//        }
+
+        onDownloadComplete("[\"Pond\",\"uncomfortable\",\"dude\",\"mascot\",\"cargo\",\"telephone booth\",\"albatross\",\"wheat\",\"paper clips\",\"photograph\",\"car dealership\",\"wipe\",\"snatch\",\"winter\",\"ratchet\",\"passport\",\"tiptoe\",\"lemon\",\"seat\",\"disc jockey\",\"succeed\",\"treatment\"]");
     }
 
     private void onDownloadComplete(String result) {
@@ -147,9 +155,6 @@ public class GameModelView extends AndroidViewModel implements OneDirectionViewP
     }
 
     public MutableLiveData<String[]> getWordList() {
-        if (wordList == null) {
-            wordList = new MutableLiveData<String[]>();
-        }
         return wordList;
     }
 
@@ -172,7 +177,12 @@ public class GameModelView extends AndroidViewModel implements OneDirectionViewP
     }
 
     public void decCurrPP() {
-        currPP.setValue(currPP.getValue() - 1);
+        if (currPP.getValue() == 1) {
+            gameState.setValue(GameState.WORD_TRANSITION);
+            currPP.setValue(10);
+        } else {
+            currPP.setValue(currPP.getValue() - 1);
+        }
     }
 
     public MutableLiveData<Boolean> getIsPartnerB() {
@@ -201,9 +211,6 @@ public class GameModelView extends AndroidViewModel implements OneDirectionViewP
     }
 
     public MutableLiveData<Integer> getCurrSkipCountA() {
-        if (currSkipCountA == null) {
-            currSkipCountA = new MutableLiveData<Integer>(0);
-        }
         return currSkipCountA;
     }
     public void incCurrSkipCountA() {
@@ -214,9 +221,6 @@ public class GameModelView extends AndroidViewModel implements OneDirectionViewP
     }
 
     public MutableLiveData<Integer> getCurrSkipCountB() {
-        if (currSkipCountB == null) {
-            currSkipCountB = new MutableLiveData<Integer>(0);
-        }
         return currSkipCountB;
     }
 
@@ -225,9 +229,6 @@ public class GameModelView extends AndroidViewModel implements OneDirectionViewP
     }
 
     public MutableLiveData<GameState> getGameState() {
-        if (gameState == null) {
-            gameState = new MutableLiveData<GameState>(GameState.AWAITING_WORDS);
-        }
         return gameState;
     }
 
@@ -256,14 +257,15 @@ public class GameModelView extends AndroidViewModel implements OneDirectionViewP
 
 
     public MutableLiveData<Integer> getWordIdx() {
-        if (wordIdx == null) {
-            wordIdx = new MutableLiveData<Integer>(0);
-        }
         return wordIdx;
     }
 
     public void setWordIdx(int newWordIdx) {
         wordIdx.setValue(newWordIdx);
+    }
+
+    public String getCurrentWord() {
+        return wordList.getValue()[wordIdx.getValue()];
     }
 
     public void incWordIdx() {
@@ -352,10 +354,10 @@ public class GameModelView extends AndroidViewModel implements OneDirectionViewP
         isPartnerB.setValue(!isPartnerB.getValue());
     }
 
-    public void scoreIncorrectAnswer() {
-        currPP.setValue(10);
-
-    }
+//    public void scoreIncorrectAnswer() {
+//        currPP.setValue(10);
+//
+//    }
 
 
     /**

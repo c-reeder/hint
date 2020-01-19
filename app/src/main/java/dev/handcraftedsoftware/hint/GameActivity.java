@@ -239,7 +239,7 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
                     viewPager.setVisibility(View.INVISIBLE);
                     wordHolder.setVisibility(View.VISIBLE);
 
-                    wordHolder.setText(gameModelView.getWordList().getValue()[viewPager.getCurrentItem()]);
+                    wordHolder.setText(gameModelView.getCurrentWord());
 
                     Transition transition = new AutoTransition();
                     transition.addListener(new Transition.TransitionListener() {
@@ -417,11 +417,11 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
             @Override
             public void onChanged(Integer newPP) {
 
-                ppSpinnerView.setSpinner(newPP);
 
-                if (newPP == 10) {
-                    ppSpinnerView.resetSpinner();
-                }
+                ppSpinnerView.setSpinner(newPP);
+//                if (newPP == 10) {
+//                    ppSpinnerView.resetSpinner();
+//                }
             }
         });
         gameModelView.getTicker().observe(this, new Observer<Long>() {
@@ -547,15 +547,13 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
 
             // If the guess was incorrect
         } else if (view.getId() == R.id.failureButton) {
-            // Decrement current possible points
-            ppSpinnerView.spinToNext();
-            gameModelView.decCurrPP();
 
+            gameModelView.decCurrPP();
             // The word was NEVER guessed and there are not more tries left
-            if (gameModelView.getCurrPP().getValue() < 1) {
+            if (gameModelView.getCurrPP().getValue() == 10) {
 
                 gameModelView.storeResult(currWord);
-                gameModelView.scoreIncorrectAnswer();
+//                gameModelView.scoreIncorrectAnswer();
 
                 coverAlphaAnimator = ObjectAnimator.ofFloat(wordCover,"alpha",1f,0f);
                 coverAlphaAnimator.setDuration(500);
@@ -571,6 +569,7 @@ public class GameActivity extends AppCompatActivity implements View.OnTouchListe
                 gameModelView.switchTeams();
             }
 
+            // Decrement current possible points
 
         }
 
