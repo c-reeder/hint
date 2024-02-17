@@ -1,4 +1,6 @@
 The free version of the "Hint" app contains ads from Google AdMob. Google AdMob collects/shares both device and user data as specified in their documentation.
 https://developers.google.com/admob/android/privacy/play-data-disclosure#data_collected_and_shared_automatically
 
+The paid version of "Hint" does not have ads and thus does not collect/share information.
+
 Our app doesn't collect/share any data besides through Google AdMob.
