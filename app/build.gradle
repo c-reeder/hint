@@ -54,6 +54,7 @@ android {
             versionNameSuffix "-paid"
         }
     }
+    namespace 'dev.handcraftedsoftware.hint'
 }
 
 dependencies {
